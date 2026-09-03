@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A4 formula sheet — 5CTA0</title>
+  <meta name="description" content="What to put on the allowed A4 for the 5CTA0 written exam. Formulas that actually appear on 2019–2022 papers.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</head>
+<body>
+<div class="frame">
+  <div class="mast">
+    <a href="./index.html">5CTA0 · Statistical Signal Processing</a>
+    <span>A4 sheet</span>
+  </div>
+
+  <h1>Write this on the A4</h1>
+  <p class="answer">Typed or handwritten, both sides allowed. Copy it by hand once. Skip anything you can re-derive in 30 seconds. The 2026–27 guide does <b>not</b> promise a provided formula sheet.</p>
+  <div class="byline">Only formulas that showed up on 2019–2022 papers. Q-tables are given when needed — do not copy one.</div>
+
+  <p class="aviso">Do not waste space on: a 2-tap Wiener layout (legacy 2019), a full BT/WOSA derivation, Pascal’s PMF, or MAP algebra for a posterior the paper will hand you.</p>
+
+  <h2>Probability</h2>
+  $$P(B\mid A)=\frac{P(A\mid B)P(B)}{P(A\mid B)P(B)+P(A\mid B^c)P(B^c)}$$
+  <p>Binomial \(\binom{n}{x}p^x(1-p)^{n-x}\). Geometric (first success at \(x\)): \(p(1-p)^{x-1}\).</p>
+  $$P(Y>y_{\mathrm{th}})=\tfrac12\bigl[1-\mathrm{erf}\bigl((y_{\mathrm{th}}-\mu)/(\sigma\sqrt{2})\bigr)\bigr],\quad Q(z)=\int_z^\infty\frac{e^{-u^2/2}}{\sqrt{2\pi}}\,du$$
+  <p>\(\mathrm{Var}=E[X^2]-\mu^2\). \(\mathrm{Var}(aX+b)=a^2\mathrm{Var}(X)\). \(\mathrm{Cov}=E[XY]-\mu_X\mu_Y\), \(\rho=\mathrm{Cov}/(\sigma_X\sigma_Y)\in[-1,1]\).</p>
+
+  <h2>Processes</h2>
+  <p>WSS: constant mean, \(r[n_1,n_2]=r[n_1-n_2]\). Valid ACF: even, \(r[0]\ge|r[\ell]|\), \(P(e^{j\theta})\ge 0\).</p>
+  $$P(e^{j\theta})=r[0]+2\sum_{k\ge 1}r[k]\cos(k\theta)$$
+  <p>White: \(r[\ell]=\sigma^2\delta[\ell]\leftrightarrow P=\sigma^2\). Filtered: \(P_y=|H|^2 P_x\).</p>
+  <p>Factorization: \(P(z)=\sigma_i^2 L(z)L(z^{-1})\), keep poles and zeros of \(L\) inside the unit circle, \(l[0]=1\). \(\cos\theta=(z+z^{-1})/2\). \(|1-\alpha e^{-j\theta}|^2=1+\alpha^2-2\alpha\cos\theta\).</p>
+  <p>Ergodic in the mean: time average \(=\) ensemble, <i>and</i> variance of that estimator \(\to 0\). Random constant \(X(t)=A\): WSS, not ergodic.</p>
+
+  <h2>Estimation</h2>
+  <p>MSE \(=\mathrm{Var}+b(\theta)^2\). IID: \(p(\mathbf{x};\theta)=\prod p(x[n];\theta)\). MLE: \(\partial\ln p/\partial\theta=0\) if interior, else check the boundary. Invariance: \(\widehat{h(\theta)}=h(\hat\theta_{\mathrm{ML}})\).</p>
+  $$\mathcal{I}(\theta)=-E\Bigl[\frac{\partial^2\ln p}{\partial\theta^2}\Bigr],\qquad \mathrm{Var}(\hat\theta)\ge\frac1{\mathcal{I}},\qquad N\text{ iid}\Rightarrow N\,i(\theta)$$
+  <p>Transform: \([h'(\theta)]^2/\mathcal{I}\). WGN: \(\sigma^2/\sum(\partial s/\partial\theta)^2\). Efficient iff \(\partial\ln p/\partial\theta=\mathcal{I}(\theta)(g-\theta)\).</p>
+  <p class="aviso">If the support of \(p(x;\theta)\) depends on \(\theta\), the CRLB does not exist. Do not grind Fisher.</p>
+  <p>LS: \(\hat\theta=(H^\top H)^{-1}H^\top x\). BLUE: \((H^\top C^{-1}H)^{-1}H^\top C^{-1}x\). Gauss–Newton: \(\theta_{k+1}=\theta_k+(H_k^\top H_k)^{-1}H_k^\top(x-s(\theta_k))\).</p>
+  <p>MMSE \(=E[\theta\mid x]\) (posterior mean). MAP \(=\arg\max p(\theta\mid x)\) (mode). BPSK \(X=\pm1\) eq.prob in \(\mathcal N(0,\sigma^2)\): MMSE \(=\tanh(y/\sigma^2)\), MAP \(=\mathrm{sign}(y)\). Gamma(2, \(\beta\)): mean \(2/\beta\), mode \(1/\beta\).</p>
+  <p>1-step predictor / YW: \(Rw=r\), \(J_{\min}=r[0]-w^\top r\), \(w=-a_1\).</p>
+
+  <h2>Spectra</h2>
+  <p>Periodogram \(\frac1N\bigl|\sum x[n]e^{-jn\theta}\bigr|^2\): asymptotically unbiased, var \(\propto P^2\), inconsistent. Correlogram uses the biased ACF or the PSD can go negative.</p>
+  <p>Bartlett, \(K\) non-overlap blocks: var \(\propto 1/K\), bias up. Welch/WOSA: overlap, var <b>not</b> \(1/K\). Blackman–Tukey: lag window, consistent. Main lobe = resolution. Side lobes = leakage. Zero-padding = interpolation, not resolution.</p>
+  $$P_{\mathrm{AR}}=\frac{\sigma_i^2}{\bigl|1+\sum a_k e^{-jk\theta}\bigr|^2},\qquad a_1=-\frac{r[1]}{r[0]},\quad\sigma_i^2=r[0]+a_1 r[1]$$
+  <p>AR(2): Toeplitz in \(r[0],r[1]\). MA(\(q\)): \(P=\) correlogram of lags \(|\ell|\le q\). Two real roots \(\Rightarrow\) keep min-phase \(|b|&lt;1\).</p>
+
+  <h2>Detection</h2>
+  $$L=\frac{p(x\mid\mathcal H_1)}{p(x\mid\mathcal H_0)}\gtrless\gamma$$
+  <p>NP: fix \(P_{\mathrm{FA}}=\alpha\) from the \(\mathcal H_0\) tail only, then max \(P_D\). Bayes 0-1: \(\gamma=P_0/P_1\).</p>
+  <p>\(P_{\mathrm{FA}}=P(\text{decide }H_1\mid H_0)\). \(P_D=P(\text{decide }H_1\mid H_1)\). \(P_M=1-P_D\). Shade: FA is \(\mathcal H_0\) density on the \(\mathcal H_1\) side; miss is \(\mathcal H_1\) density on the \(\mathcal H_0\) side.</p>
+  <p>Mean-shift Gaussian: one threshold, right tail. Unequal-variance Gaussians / Laplace vs Gauss: two thresholds, <b>outer</b> tails if \(\mathcal H_1\) is heavier. Faster exponential / narrower Laplace: <b>inner</b> region — the inequality flips. Energy detector: \(\sum x_n^2\).</p>
+  <p>Matched filter maximises output SNR. \(h[n]=s[N-1-n]\) (or \(s[-n]\)), sample at the end of the pulse. ROC: \(P_D\) vs \(P_{\mathrm{FA}}\), above the diagonal; more separable \(\Rightarrow\) steeper.</p>
+
+  <h2>How to copy it</h2>
+  <ol>
+    <li>One block per side-column. Tiny writing is fine; you will look at it.</li>
+    <li>Write the Yule–Walker 2×2 and the energy log-LRT once each. Those two eat time if you rebuild them.</li>
+    <li>Write \(\tanh(y/\sigma^2)\) and “support of \(p\) depends on \(\theta\) \(\Rightarrow\) no CRLB” in a corner. They are free points.</li>
+    <li>The night before: sit Nov 2022 or the 2022 resit in 3 hours with only this sheet.</li>
+  </ol>
+
+  <div class="pager">
+    <a href="./08-detection.html">← detection</a>
+    <a class="next" href="./exams.html">past papers →</a>
+  </div>
+  <p class="foot">5CTA0 Q1 2026–27 · from the course reader, lectures and official keys.</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}]});</script>
+</body>
+</html>

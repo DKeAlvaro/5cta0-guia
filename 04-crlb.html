@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fisher information and CRLB — 5CTA0</title>
+  <meta name="description" content="From-zero CRLB chapter for 5CTA0: Fisher information, the regularity trap, the scalar proof, iid and WGN shortcuts, transforms, efficiency and MVUE, plus the SLT3 exponential-in-WGN bound.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</head>
+<body>
+<div class="frame">
+  <div class="mast">
+    <a href="./index.html">5CTA0 · Statistical Signal Processing</a>
+    <span>block 2</span>
+  </div>
+
+  <h1>No unbiased estimator beats \(1/\mathcal{I}(\theta)\).</h1>
+  <p class="answer">Fisher information is the expected curvature of the log-likelihood. The Cramér–Rao lower bound says that every unbiased estimator has variance at least \(1/\mathcal{I}(\theta)\), <b>if</b> the support of the PDF does not depend on \(\theta\). An unbiased estimator that attains the bound is efficient, hence the MVUE.</p>
+  <div class="byline">Block 2b · reader ch. 6 · VL5 · resit 24/01/2022 · 04/11/2019 · SLT3</div>
+
+  <div class="cifras">
+    <div><span class="n">\(\mathcal{I}\ge 0\)</span><span>Fisher is a<br>positive number</span></div>
+    <div><span class="n">\(\mathrm{Var}\ge 1/\mathcal{I}\)</span><span>not \(\ge\mathcal{I}\)<br>not \(\ge\hat\theta\)</span></div>
+    <div><span class="n">support</span><span>independent of \(\theta\)<br>or no CRLB</span></div>
+  </div>
+
+  <ul class="toc">
+    <li><a href="#fisher">Fisher and the bound</a><span class="tag">definitions</span></li>
+    <li><a href="#regularity">Regularity</a><span class="tag exam">exam trap</span></li>
+    <li><a href="#proof">Proof of the scalar CRLB</a><span class="tag">every step</span></li>
+    <li><a href="#shortcuts">IID, WGN, exponential in WGN</a><span class="tag exam">SLT3</span></li>
+    <li><a href="#transform">Transforms, vector, efficiency</a><span class="tag">MVUE</span></li>
+  </ul>
+
+  <h2 id="fisher">Fisher information</h2>
+  <p>Unbiased estimators cannot be arbitrarily sharp. The data PDF, as a function of \(\theta\), has a certain curvature. That curvature is Fisher information. More information \(\Rightarrow\) lower bound on variance.</p>
+  <p>Two equivalent definitions (reader (6.2)–(6.3)):</p>
+  $$\mathcal{I}(\theta)
+  =\mathbb{E}\left[\left(\frac{\partial\ln p(\mathbf{x};\theta)}{\partial\theta}\right)^2\right]
+  =-\mathbb{E}\left[\frac{\partial^2\ln p(\mathbf{x};\theta)}{\partial\theta^2}\right].$$
+  <p>The second is almost always easier: differentiate twice, take expectation, flip sign. \(\mathcal{I}(\theta)\ge 0\). It is <b>not</b> strictly negative (2022 exam 2a trap). The <i>expected second derivative of the log-likelihood</i> is negative; Fisher is the positive number \(-\mathbb{E}[\partial^2\ln p/\partial\theta^2]\).</p>
+  <p><b>CRLB.</b> For every unbiased estimator \(g(\mathbf{x})\), if regularity holds,</p>
+  $$\mathrm{Var}[g(\mathbf{x})]\ge\frac{1}{\mathcal{I}(\theta)}.$$
+  <p>An unbiased estimator that <b>attains</b> the bound is <b>efficient</b>. Efficient \(\Rightarrow\) MVUE. MVUE need not be efficient (bound not attained).</p>
+  <p class="aviso">“Variance of any unbiased estimator is lower bounded by the Fisher information, \(\mathrm{Var}\ge\mathcal{I}(\theta)\)” is false: it is \(1/\mathcal{I}\). For \(N\) iid observations \(\mathcal{I}_N(\theta)=N i(\theta)\), so the bound shrinks as \(1/N\).</p>
+
+  <h2 id="regularity">Regularity: the exam trap</h2>
+  <p>You must interchange derivative and integral:</p>
+  $$\frac{d}{d\theta}\int p(\mathbf{x};\theta)\,d\mathbf{x}
+  =\int\frac{\partial}{\partial\theta}p(\mathbf{x};\theta)\,d\mathbf{x}.$$
+  <p>This holds when the <b>support of \(p(\mathbf{x};\theta)\) does not depend on \(\theta\)</b>, the parameter space is an open interval, and the derivative exists and is finite (reader 6.2). If the support <b>does</b> depend on \(\theta\), Leibniz’s rule adds boundary terms:</p>
+  $$\frac{d}{d\theta}\int_{a(\theta)}^{b(\theta)}f(x,\theta)\,dx
+  =f(b(\theta),\theta)b'(\theta)-f(a(\theta),\theta)a'(\theta)+\int_{a(\theta)}^{b(\theta)}\partial_\theta f\,dx.$$
+  <p>Slides (EstimationTheory part 1) do the same with \(\mathrm{Unif}(1,\theta)\), \(p=1/\theta\) on \([1,\theta]\): Leibniz leaves the extra \(g(\theta)/\theta\), so derivative and integral do not commute.</p>
+  <p class="aviso">If you see \(x\in[0,\theta]\) or \(x\ge\theta\): stop. No CRLB. MLE is usually \(\max\) or \(\min\). Do not grind Fisher.</p>
+
+  <div class="drill">
+    <h3>Support depends on \(\theta\) <span class="tag exam">resit 24/01/2022 · 2e</span></h3>
+    <p>One observation with</p>
+    $$p(x;\theta)=\frac{2}{\theta}x,\qquad 0\le x\le\theta$$
+    <p>(and 0 else). Can you derive a CRLB for unbiased estimators of \(\theta\)? Why, or why not?</p>
+    <details>
+      <summary>Solution</summary>
+      <p>Support is \([0,\theta]\), which depends on \(\theta\). Regularity fails: you cannot pass \(d/d\theta\) under the integral. Official key: “The CRLB cannot be derived because the domain of integration depends on the parameter \(\theta\). Thus, the regularity condition is violated.” Gold-standard trap. Same story as \(\mathrm{Unif}[0,\theta]\) in the previous chapter.</p>
+    </details>
+  </div>
+
+  <h2 id="proof">Proof of the scalar CRLB</h2>
+  <p>Reader 6.2, every step. Unbiased: \(\int(g(\mathbf{x})-\theta)p(\mathbf{x};\theta)\,d\mathbf{x}=0\). Differentiate in \(\theta\), use regularity, and \(\int p=1\):</p>
+  $$\int(g-\theta)\frac{\partial p}{\partial\theta}\,d\mathbf{x}-\int p\,d\mathbf{x}=0
+  \qquad\Rightarrow\qquad
+  \int(g-\theta)\frac{\partial p}{\partial\theta}\,d\mathbf{x}=1.$$
+  <p>Identity \(\partial p/\partial\theta=p\cdot\partial\ln p/\partial\theta\):</p>
+  $$\int(g-\theta)\,p\,\frac{\partial\ln p}{\partial\theta}\,d\mathbf{x}=1.$$
+  <p>Rewrite as an inner product of \((g-\theta)\sqrt{p}\) and \((\partial\ln p/\partial\theta)\sqrt{p}\). Cauchy–Schwarz:</p>
+  $$1\le\int(g-\theta)^2 p\,d\mathbf{x}\cdot\int\left(\frac{\partial\ln p}{\partial\theta}\right)^2 p\,d\mathbf{x}
+  =\mathrm{Var}[g]\cdot\mathcal{I}(\theta).$$
+  <p>Hence \(\mathrm{Var}[g]\ge 1/\mathcal{I}(\theta)\).</p>
+  <p>Equality in Cauchy–Schwarz iff the two functions are proportional, i.e.</p>
+  $$\frac{\partial\ln p}{\partial\theta}=a(\theta)\big(g(\mathbf{x})-\theta\big)$$
+  <p>with \(a\) independent of \(\mathbf{x}\). Differentiate again, take \(\mathbb{E}\), use unbiasedness: \(a(\theta)=\mathcal{I}(\theta)\). That is the <b>efficiency condition</b> below.</p>
+  <p><b>Why the two Fisher formulae match.</b> \(\int p=1\Rightarrow\int\partial p/\partial\theta=0\Rightarrow\mathbb{E}[\partial\ln p/\partial\theta]=0\). Differentiate again:</p>
+  $$\mathbb{E}\left[\left(\frac{\partial\ln p}{\partial\theta}\right)^2\right]+\mathbb{E}\left[\frac{\partial^2\ln p}{\partial\theta^2}\right]=0.$$
+
+  <h2 id="shortcuts">IID, WGN, and a geometric signal</h2>
+
+  <h3>IID: Fisher adds</h3>
+  $$\ln p(\mathbf{x};\theta)=\sum_{n=0}^{N-1}\ln p(x[n];\theta)
+  \qquad\Rightarrow\qquad
+  \mathcal{I}_N(\theta)=N i(\theta),\qquad
+  i(\theta)=-\mathbb{E}\left[\frac{\partial^2\ln p(x[n];\theta)}{\partial\theta^2}\right].$$
+  <p>CRLB shrinks as \(1/N\). Official resit 2022 2a: “for IID observations the CRLB decreases linearly with the number of observations” is the correct MCQ (the bound is \(1/(N i)\), so yes, linear in \(1/N\)).</p>
+
+  <h3>Signal in WGN — CRLB without the full PDF</h3>
+  <p>Reader 6.5. \(x_n=s[n;\theta]+w_n\), \(w_n\) WGN variance \(\sigma^2\). Then</p>
+  $$\mathrm{Var}[g]\ge\frac{\sigma^2}{\sum_{n=0}^{N-1}\big(\partial s[n;\theta]/\partial\theta\big)^2}.$$
+  <p>Sketch: \(\ln p=-\frac{1}{2\sigma^2}\sum(x_n-s_n)^2+\mathrm{const}\). Differentiate twice. The expectation of each \((x_n-s_n)\) is 0, leftover \(\frac{1}{\sigma^2}\sum(\partial s/\partial\theta)^2\). DC: \(s[n;A]=A\), \(\partial s/\partial A=1\), CRLB \(=\sigma^2/N\).</p>
+
+  <h3>Exponential signal in WGN <span class="tag exam">SLT3 2025–26 · 3.1</span></h3>
+  <p>\(x[n]=A r^n+w[n]\), \(r&gt;0\) known, WGN variance \(\sigma^2\). Use the WGN shortcut with \(s[n]=A r^n\), \(\partial s/\partial A=r^n\):</p>
+  $$\mathcal{I}(A)=\frac{1}{\sigma^2}\sum_{n=0}^{N-1}r^{2n}.$$
+  <p>Geometric sum: if \(r\neq 1\), \(\sum_{n=0}^{N-1}(r^2)^n=(r^{2N}-1)/(r^2-1)\). Official:</p>
+  $$\mathrm{Var}(\hat{A})\ge\sigma^2\frac{r^2-1}{r^{2N}-1}.$$
+  <p>For \(0&lt;r&lt;1\) both numerator and denominator are negative; equivalent positive form \(\sigma^2(1-r^2)/(1-r^{2N})\). For \(r=1\) the sum is \(N\), CRLB \(=\sigma^2/N\).</p>
+  <p><b>An efficient estimator exists.</b> Score:</p>
+  $$\frac{\partial\ln p}{\partial A}=\frac{1}{\sigma^2}\sum_n(x[n]-A r^n)r^n
+  =\frac{\sum_n r^{2n}}{\sigma^2}\left(\frac{\sum_n x[n] r^n}{\sum_n r^{2n}}-A\right).$$
+  <p>So \(g(\mathbf{x})=\hat{A}=\dfrac{\sum_n x[n] r^n}{\sum_n r^{2n}}\) is efficient, variance \(=\) CRLB. Setting the score to 0 shows it is also the MLE (SLT3 2024–25 Ex. 3.1d).</p>
+  <p><b>\(N\to\infty\)</b> (official 2025 3.1c):</p>
+  $$\lim_{N\to\infty}\mathrm{Var}(\hat{A})=\begin{cases}
+  0 &amp; r\ge 1,\\
+  \sigma^2(1-r^2) &amp; 0\lt r\lt 1.
+  \end{cases}$$
+  <p>If \(|r|&lt;1\) the signal dies; extra samples are almost pure noise and the variance <b>floors</b>. If \(r\ge 1\) energy grows (or stays, \(r=1\)) and variance \(\to 0\).</p>
+
+  <div class="drill">
+    <h3>Rayleigh CRLB <span class="tag exam">04/11/2019 · 3b</span></h3>
+    <p>IID, \(x\ge 0\),</p>
+    $$p(x;\theta)=\frac{x}{\theta^2}\exp\left[-\frac{x^2}{2\theta^2}\right],\qquad \mathbb{E}[x^2]=2\theta^2.$$
+    <p>\(N\) samples. Compute \(\mathcal{I}(\theta)\) as \(-\mathbb{E}[\partial^2\ln p/\partial\theta^2]\) and write the CRLB. (MLE was \(\hat{\theta}_{\mathrm{ML}}=\sqrt{\frac{1}{2N}\sum x^2[n]}\).)</p>
+    <details>
+      <summary>Solution</summary>
+      <p>\(\ln p(\mathbf{x};\theta)=\sum_n\ln x[n]-2N\ln\theta-\frac{1}{2\theta^2}\sum_n x^2[n]\). First derivative \(-2N/\theta+(1/\theta^3)\sum x^2[n]\). Second:</p>
+      $$\frac{\partial^2}{\partial\theta^2}\ln p=\frac{2N}{\theta^2}-\frac{3}{\theta^4}\sum_n x^2[n].$$
+      $$\mathcal{I}(\theta)=-\frac{2N}{\theta^2}+\frac{3}{\theta^4}\cdot N\cdot 2\theta^2=\frac{4N}{\theta^2},\qquad\mathrm{Var}[\hat{\theta}]\ge\frac{\theta^2}{4N}.$$
+      <p class="aviso">Official key writes \(\mathrm{VAR}(\hat{\theta})\ge\hat{\theta}^2/(4N)\). Wrong object: the bound depends on the true parameter, not on the estimate. Report \(\theta^2/(4N)\). The score is not linear in \((\hat{\theta}_{\mathrm{ML}}-\theta)\), so the MLE is not finite-sample efficient.</p>
+    </details>
+  </div>
+
+  <div class="drill">
+    <h3>Exponential in WGN, from the shortcut <span class="tag exam">SLT3 2025–26 · 3.1</span></h3>
+    <p>\(x[n]=A r^n+w[n]\), \(r&gt;0\) known, WGN variance \(\sigma^2\), \(n=0,\ldots,N-1\). Write the CRLB for unbiased estimators of \(A\). Exhibit an efficient estimator. What is \(\lim_{N\to\infty}\mathrm{Var}(\hat{A})\)?</p>
+    <details>
+      <summary>Solution</summary>
+      <p>WGN shortcut: \(\mathcal{I}(A)=\sigma^{-2}\sum_{n=0}^{N-1} r^{2n}\). Geometric sum, \(r\neq 1\): official \(\mathrm{Var}(\hat{A})\ge\sigma^2(r^2-1)/(r^{2N}-1)\). Equivalent positive form for \(0&lt;r&lt;1\): \(\sigma^2(1-r^2)/(1-r^{2N})\). For \(r=1\): \(\sigma^2/N\).</p>
+      <p>Score factors as \(\mathcal{I}(A)\big(\hat{A}-A\big)\) with \(\hat{A}=\sum_n x[n] r^n\big/\sum_n r^{2n}\). Efficient, hence MLE, variance = CRLB.</p>
+      $$\lim_{N\to\infty}\mathrm{Var}(\hat{A})=\begin{cases}0&amp; r\ge 1,\\\sigma^2(1-r^2)&amp; 0\lt r\lt 1.\end{cases}$$
+      <p>If the geometric dies, extra samples do not help past a floor. Official 2025 3.1c.</p>
+    </details>
+  </div>
+
+  <h2 id="transform">Transforms, the vector bound, efficiency</h2>
+
+  <h3>Transformed parameter</h3>
+  <p>\(\alpha=h(\theta)\) one-to-one, unbiased for \(\alpha\). Same Cauchy–Schwarz with an extra \(h'(\theta)\):</p>
+  $$\mathrm{Var}[\hat{\alpha}]\ge\frac{\big(h'(\theta)\big)^2}{\mathcal{I}(\theta)}.$$
+  <p>Vector: \(\boldsymbol{\alpha}=h(\boldsymbol{\theta})\), Jacobian \(J=\partial h/\partial\boldsymbol{\theta}\) (\(r\times p\)),</p>
+  $$\mathbf{C}_{\hat{\boldsymbol{\alpha}}}\ge J\,\mathbf{I}(\boldsymbol{\theta})^{-1} J^\top.$$
+  <p>Affine \(h(\theta)=a\theta+b\): efficiency is preserved. Nonlinear: generally not (the \(\bar{x}^2\) example in the previous chapter: \(\mathbb{E}[\bar{x}^2]=A^2+\sigma^2/N\)).</p>
+
+  <h3>Vector CRLB</h3>
+  <p>Reader 6.7. \(\mathbf{C}_{\hat{\boldsymbol{\theta}}}\ge\mathbf{I}(\boldsymbol{\theta})^{-1}\) in the PSD sense: \(\mathbf{a}^\top(\mathbf{C}-\mathbf{I}^{-1})\mathbf{a}\ge 0\) for all \(\mathbf{a}\neq 0\). In particular the diagonals \(\mathrm{Var}[\hat{\theta}_i]\ge[\mathbf{I}^{-1}]_{ii}\).</p>
+  $$[\mathbf{I}]_{ij}
+  =\mathbb{E}\left[\frac{\partial\ln p}{\partial\theta_i}\frac{\partial\ln p}{\partial\theta_j}\right]
+  =-\mathbb{E}\left[\frac{\partial^2\ln p}{\partial\theta_i\partial\theta_j}\right].$$
+  <p><b>DC and variance together</b> (reader Example 6.2). Off-diagonals 0, so</p>
+  $$\mathbf{I}(A,\sigma^2)=\begin{bmatrix}N/\sigma^2&amp;0\\0&amp;N/(2\sigma^4)\end{bmatrix},
+  \qquad
+  \mathbf{I}^{-1}=\begin{bmatrix}\sigma^2/N&amp;0\\0&amp;2\sigma^4/N\end{bmatrix}.$$
+  <p>Unknown extra parameter \(\sigma^2\) does <b>not</b> worsen the bound on \(A\) here (orthogonal scores). That is special, not general.</p>
+
+  <h3>Efficiency condition and MVUE</h3>
+  <p>Reader (6.20) / VL5. An unbiased estimator \(g(\mathbf{x})\) is efficient iff</p>
+  $$\frac{\partial\ln p(\mathbf{x};\theta)}{\partial\theta}=\mathcal{I}(\theta)\big(g(\mathbf{x})-\theta\big).$$
+  <p>Recipe on an exam:</p>
+  <ol>
+    <li>Write \(\ln p\), differentiate once (the score).</li>
+    <li>Try to factor the score as \((\text{function of }\theta\text{ only})\times\big(g(\mathbf{x})-\theta\big)\).</li>
+    <li>If you can, \(g\) is the efficient estimator, \(\mathcal{I}(\theta)\) is that prefactor, \(\mathrm{Var}[g]=1/\mathcal{I}(\theta)\). You do <b>not</b> need a second derivative.</li>
+    <li>If you cannot, no efficient estimator exists. You can still compute \(\mathcal{I}\) from \(-\mathbb{E}[\partial^2\ln p/\partial\theta^2]\) and quote the bound. Find the MLE by setting the score to 0.</li>
+  </ol>
+  <p>Vector: \(\nabla_{\boldsymbol{\theta}}\ln p=\mathbf{I}(\boldsymbol{\theta})(g(\mathbf{x})-\boldsymbol{\theta})\).</p>
+  <p>Finding the MVUE in general is hard. Two routes this course actually uses:</p>
+  <ul>
+    <li>Efficiency identity \(\Rightarrow\) you have the MVUE.</li>
+    <li>Linear model in Gaussian noise (next LS chapter) \(\Rightarrow\) closed-form efficient estimator.</li>
+  </ul>
+  <p>There is no MVUE-finding machine for arbitrary PDFs.</p>
+  <p>Worked check, DC in WGN (previous chapter): the score was already \(\frac{N}{\sigma^2}(\bar{x}-A)\). Prefactor \(\mathcal{I}(A)=N/\sigma^2\), \(g=\bar{x}\). Efficient, MVUE, variance \(\sigma^2/N\).</p>
+  <p>Worked check, exponential rate: score \(N/\lambda-\sum_i x_i\). You cannot factor this as \(\mathcal{I}(\lambda)(g-\lambda)\) with \(g\) independent of \(\lambda\). No finite-sample efficient estimator. Second derivative \(-N/\lambda^2\), so \(\mathcal{I}(\lambda)=N/\lambda^2\) and CRLB \(=\lambda^2/N\). The MVUE \((N-1)/\sum x_i\) has variance \(\lambda^2/(N-2)&gt;\lambda^2/N\).</p>
+
+  <div class="drill">
+    <h3>Does the score factor? <span class="tag">efficiency identity</span></h3>
+    <p>IID exponential \(p(x;\lambda)=\lambda e^{-\lambda x}\), \(N\) samples. Write the score. Can you factor it as \(\mathcal{I}(\lambda)(g(\mathbf{x})-\lambda)\) with \(g\) free of \(\lambda\)? Compute \(\mathcal{I}(\lambda)\) from the second derivative and quote the CRLB.</p>
+    <details>
+      <summary>Solution</summary>
+      <p>\(\ln p=N\ln\lambda-\lambda\sum_i x_i\). Score \(N/\lambda-S\) with \(S=\sum_i x_i\). Second derivative \(-N/\lambda^2\), so \(\mathcal{I}(\lambda)=N/\lambda^2\) and \(\mathrm{Var}\ge\lambda^2/N\). If the score factored as \(\mathcal{I}(\lambda)(g-\lambda)\) with \(g\) free of \(\lambda\), then</p>
+      $$g=\lambda+\frac{N/\lambda-S}{N/\lambda^2}=2\lambda-\frac{\lambda^2}{N}S,$$
+      <p>which still depends on \(\lambda\). No finite-sample efficient estimator. Contrast DC in WGN, where the score is already \(\frac{N}{\sigma^2}(\bar{x}-A)\).</p>
+    </details>
+  </div>
+
+  <p class="aviso">MLE does not always achieve the CRLB — only if the efficiency identity holds, or asymptotically. Fisher is \(\ge 0\), not “strictly negative”. Attaining the CRLB means efficient, not “variance lower than CRLB” (that is impossible under regularity).</p>
+
+  <div class="pager">
+    <a href="./03-mle.html">← maximum likelihood</a>
+    <a class="next" href="./05-bayes.html">MMSE and MAP →</a>
+  </div>
+  <p class="foot">5CTA0 Q1 2026–27 · from the course reader, lectures and official keys.</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}]});</script>
+</body>
+</html>

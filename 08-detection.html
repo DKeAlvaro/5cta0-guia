@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detection theory — 5CTA0</title>
+  <meta name="description" content="From-zero 5CTA0 chapter on binary hypothesis testing, LRT, Neyman–Pearson vs Bayes, ROC, four standard detectors, and the matched filter. Official numbers from 2019–2020 keys.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</head>
+<body>
+<div class="frame">
+  <div class="mast">
+    <a href="./index.html">5CTA0 · Statistical Signal Processing</a>
+    <span>block 4</span>
+  </div>
+
+  <h1>Which tail is the whole exam.</h1>
+  <p class="answer">Estimation outputs a number. Detection outputs a label: \(\mathcal H_0\) or \(\mathcal H_1\). The two densities overlap, so every rule makes mistakes. The optimal rule is always a <b>likelihood ratio test</b>. Neyman–Pearson picks the threshold from \(P_{\mathrm{FA}}=\alpha\). Bayes picks it from costs and priors. After algebra you test a scalar. Which side of that scalar is \(\mathcal H_1\) is <b>not</b> always the right tail.</p>
+  <div class="byline">Block 4 · reader ch. 14 · VL15 · official keys Jan 2019 Q3, Nov 2019 Q4, Jan 2020 Q5, resit 24 Jan 2020 Q4. 2022 Laplacian / Bayes has no official key in those files.</div>
+
+  <div class="cifras">
+    <div><span class="n">\(L\gtrless\gamma\)</span><span>always an LRT<br>then a scalar \(T\)</span></div>
+    <div><span class="n">\(\mathcal H_0\) only</span><span>NP threshold from \(\alpha\)<br>Bayes uses costs</span></div>
+    <div><span class="n">\(s[N-1-n]\)</span><span>matched filter<br>not \(h=s\)</span></div>
+  </div>
+
+  <ul class="toc">
+    <li><a href="#four">Four events and the LRT</a><span class="tag">from zero</span></li>
+    <li><a href="#np">NP vs Bayes, ROC</a><span class="tag exam">threshold</span></li>
+    <li><a href="#lrt">Four standard LRTs</a><span class="tag exam">write these</span></li>
+    <li><a href="#erf">\(Q\), erf, official numbers</a><span class="tag exam">2019–2020</span></li>
+    <li><a href="#mf">Matched filter</a><span class="tag">\(h[n]=s[N-1-n]\)</span></li>
+  </ul>
+
+  <p>Exam block, every year: write \(L=p(\mathbf x\mid\mathcal H_1)/p(\mathbf x\mid\mathcal H_0)\), simplify to \(T\gtrless\lambda'\), <b>re-derive the inequality</b>, shade, then \(Q\) / erf / exponential CDF.</p>
+
+  <h2 id="four">Four events</h2>
+  <p>Model: \(\mathcal H_0:\ \mathbf x\sim p(\mathbf x\mid\mathcal H_0)\), \(\mathcal H_1:\ \mathbf x\sim p(\mathbf x\mid\mathcal H_1)\). A detector partitions observation space into \(\mathcal X_0\cup\mathcal X_1=\mathbb R^N\). If \(\mathbf x\in\mathcal X_i\), decide \(\mathcal H_i\).</p>
+  <table>
+    <tr><th></th><th>true \(\mathcal H_0\)</th><th>true \(\mathcal H_1\)</th></tr>
+    <tr><td>decide \(\mathcal H_0\)</td><td>true negative (TN)</td><td>miss / false negative / type II</td></tr>
+    <tr><td>decide \(\mathcal H_1\)</td><td>false alarm / type I</td><td>detection / true positive</td></tr>
+  </table>
+  <p>Row = decision, column = truth. Memorise by axes, not by the words “positive / negative”.</p>
+  $$P_D=\int_{\mathcal X_1}p(\mathbf x\mid\mathcal H_1)\,d\mathbf x,\qquad P_{\mathrm{FA}}=\int_{\mathcal X_1}p(\mathbf x\mid\mathcal H_0)\,d\mathbf x,\qquad P_M=1-P_D.$$
+  <p>If the test on a 1-D statistic is “decide \(\mathcal H_1\) when \(T&gt;\lambda'\)” (usual <b>right-tail</b> mean-shift):</p>
+  $$P_{\mathrm{FA}}=1-F_{T\mid\mathcal H_0}(\lambda'),\qquad P_D=1-F_{T\mid\mathcal H_1}(\lambda').$$
+  <p class="aviso">The inequality can flip. If \(\mathcal H_1\) is the <b>narrower</b> density (small variance, large exponential rate), large \(|x|\) favours \(\mathcal H_0\), and you decide \(\mathcal H_1\) when the statistic is <b>small</b>. Then \(P_{\mathrm{FA}}\) is a <b>left</b> tail of \(p(\,\cdot\mid\mathcal H_0)\). Re-derive \(\gtrless\); do not memorise “right tail”.</p>
+  <p>Shading, always:</p>
+  <ul>
+    <li>\(P_{\mathrm{FA}}\) = \(\mathcal H_0\) density on the \(\mathcal H_1\)-decision side.</li>
+    <li>\(P_D\) = \(\mathcal H_1\) density on the \(\mathcal H_1\)-decision side.</li>
+    <li>\(P_M\) = \(\mathcal H_1\) density on the \(\mathcal H_0\)-decision side.</li>
+  </ul>
+  <p>Reader Fig. 14.4 (mean-shift, decide \(\mathcal H_1\) if \(\bar x&gt;\lambda'\)): left panel \(P_{\mathrm{FA}}\) shades the <b>right tail of \(p(\bar x\mid\mathcal H_0)\)</b> (centred at 0). Right panel \(P_D\) shades the right tail of \(p(\bar x\mid\mathcal H_1)\) (centred at \(A\)). The reader’s OCR caption on the left panel wrongly says “under \(\mathcal H_1\)”. Trust the figure, not the OCR.</p>
+  <p>You cannot move the threshold to improve both error types. Liberal (threshold toward the noise mean): more hits and more FAs. Conservative (threshold toward the signal mean): fewer FAs and more misses.</p>
+
+  <h2>Likelihood ratio test</h2>
+  <p>Regardless of NP or Bayes, the optimal test compares the likelihood ratio to a threshold:</p>
+  $$\Lambda(\mathbf x)=L(\mathbf x)=\frac{p(\mathbf x\mid\mathcal H_1)}{p(\mathbf x\mid\mathcal H_0)}\;\underset{\mathcal H_0}{\overset{\mathcal H_1}{\gtrless}}\;\gamma.$$
+  <p>Decide \(\mathcal H_1\) if \(L\ge\gamma\), else \(\mathcal H_0\). \(L\) is a <b>scalar</b> even if \(\mathbf x\in\mathbb R^N\). \(\ln L\) is monotone, so the log-LRT is equivalent for \(\gamma&gt;0\). After simplification one compares a sufficient statistic \(T(\mathbf x)\) to a new threshold \(\lambda'\). That \(\lambda'\) is <b>not</b> \(\gamma\); it absorbs constants, \(\sigma^2\), \(N\), \(\ln\gamma\).</p>
+  <p class="aviso">Some old keys write \(L=p(\mathcal H_0)/p(\mathcal H_1)\) (Jan 2019 Answers_oldexams). Use \(L=p_1/p_0\). The probability table in that key is the standard right-tail one; the inverted ratio is a typesetting bug, not a different test.</p>
+
+  <h2 id="np">Neyman–Pearson vs Bayes</h2>
+  <h3>Neyman–Pearson</h3>
+  <p>Maximise \(P_D\) subject to \(P_{\mathrm{FA}}\le\alpha\). The optimum is an LRT. Any other region with the same \(P_{\mathrm{FA}}\) has strictly smaller \(P_D\).</p>
+  <ol>
+    <li>Write \(L(\mathbf x)\) and simplify to \(T(\mathbf x)\gtrless\lambda'\). Watch the inequality direction.</li>
+    <li>Under \(\mathcal H_0\), find the distribution of \(T\). Set \(\lambda'\) so that \(P(T\text{ on the }\mathcal H_1\text{ side}\mid\mathcal H_0)=\alpha\). For Gaussians this is a \(Q\)-function inversion. <b>Only the \(\mathcal H_0\) law enters here.</b></li>
+    <li>Under \(\mathcal H_1\), compute \(P_D=P(T\text{ on the }\mathcal H_1\text{ side}\mid\mathcal H_1)\).</li>
+  </ol>
+  <p>Lowering \(\gamma\) enlarges \(\mathcal X_1\): both \(P_D\) and \(P_{\mathrm{FA}}\) increase.</p>
+
+  <h3>Bayes</h3>
+  <p>Priors \(P_0=P(\mathcal H_0)\), \(P_1=1-P_0\). Cost \(C_{i,j}=\) cost of deciding \(\mathcal H_i\) when \(\mathcal H_j\) is true. Minimising Bayes risk again yields an LRT, now with a <b>known</b> threshold</p>
+  $$\gamma=\frac{(C_{1,0}-C_{0,0})P_0}{(C_{0,1}-C_{1,1})P_1}.$$
+  <p>Usually \(C_{1,1}=C_{0,0}=0\). Then \(\gamma=C_{1,0}P_0/(C_{0,1}P_1)\). Minimum probability of error: \(C_{0,1}=C_{1,0}=1\), so \(\gamma=P_0/P_1\) and \(\mathcal R=P_0 P_{\mathrm{FA}}+P_1 P_M\). Equivalent MAP: pick the hypothesis with larger posterior.</p>
+  <p class="aviso">NP vs Bayes \(\gamma\). NP: \(\lambda'\) from \(P_{\mathrm{FA}}=\alpha\) using <b>only</b> \(p(\,\cdot\mid\mathcal H_0)\). Bayes: \(\gamma\) from costs and priors, no \(\alpha\). “Bayesian detection maximises Bayes risk” is false (it minimises). Do not set \(\gamma=1\) unless the costs and priors actually give that.</p>
+
+  <h2>ROC</h2>
+  <p>Plot \(P_D\) vs \(P_{\mathrm{FA}}\) as \(\gamma\) runs from \(0\) (always say \(\mathcal H_1\): \(P_D=P_{\mathrm{FA}}=1\)) to \(\infty\) (always say \(\mathcal H_0\): both 0).</p>
+  <ul>
+    <li>NP ROC is the upper boundary of the feasible \((P_{\mathrm{FA}},P_D)\) set. Concave, non-decreasing, through \((0,0)\) and \((1,1)\).</li>
+    <li>Slope at a point equals the LR threshold that realises that point: \(dP_D/dP_{\mathrm{FA}}=\gamma\).</li>
+    <li>Diagonal \(P_D=P_{\mathrm{FA}}\) = coin-flip / identical densities. Better detectors bow toward the top-left \((0,1)\).</li>
+    <li>If a test sits <b>below</b> the diagonal, swap \(\mathcal X_0\) and \(\mathcal X_1\) (flip the inequality). That is why exponential / Laplace problems say “design so that \(P_D&gt;P_{\mathrm{FA}}\)”.</li>
+  </ul>
+
+  <h2 id="lrt">Four standard LRTs</h2>
+  <p>IID samples. Always start from \(L=\prod_n p(x_n\mid\mathcal H_1)/p(x_n\mid\mathcal H_0)\), take \(\ln\), dump constants into \(\gamma\).</p>
+
+  <h3>1. Mean-shift Gaussian — threshold on \(\bar x\)</h3>
+  $$\mathcal H_0:\ x_n\sim\mathcal N(0,\sigma^2),\qquad\mathcal H_1:\ x_n\sim\mathcal N(A,\sigma^2),\quad A&gt;0.$$
+  $$\begin{aligned}
+  L(\mathbf x)
+  &=\exp\Bigl(-\frac1{2\sigma^2}\sum_n\bigl[(x_n-A)^2-x_n^2\bigr]\Bigr)
+  =\exp\Bigl(-\frac1{2\sigma^2}(NA^2-2NA\bar x)\Bigr),\\
+  \bar x
+  &\;\underset{\mathcal H_0}{\overset{\mathcal H_1}{\gtrless}}\;
+  \frac{\sigma^2}{NA}\ln\gamma+\frac A2=\lambda'.
+  \end{aligned}$$
+  <p>Right-tail test on the sample mean. Under \(\mathcal H_0\), \(\bar x\sim\mathcal N(0,\sigma^2/N)\); under \(\mathcal H_1\), \(\bar x\sim\mathcal N(A,\sigma^2/N)\).</p>
+  $$P_{\mathrm{FA}}=Q\Bigl(\frac{\lambda'}{\sigma/\sqrt N}\Bigr),\qquad P_D=Q\Bigl(\frac{\lambda'-A}{\sigma/\sqrt N}\Bigr).$$
+  <p>NP: \(\lambda'=(\sigma/\sqrt N)\,Q^{-1}(\alpha)\). Same algebra as the matched filter when the “mean” is a known waveform \(s_n\) instead of a DC (see below).</p>
+
+  <h3>2. Unequal-variance Gaussians — sum of squares</h3>
+  <p>Nov 2019 Q4, official key.</p>
+  $$\mathcal H_0:\ x[n]\sim\mathcal N(0,\sigma_0^2),\qquad\mathcal H_1:\ x[n]\sim\mathcal N(0,\sigma_1^2),\quad\sigma_1&gt;\sigma_0.$$
+  <p>Both centred at 0; \(\mathcal H_1\) is <b>wider</b>. Large \(|x|\) favours \(\mathcal H_1\).</p>
+  $$p(\mathbf x\mid\mathcal H_i)=(2\pi\sigma_i^2)^{-N/2}\exp\Bigl(-\frac1{2\sigma_i^2}\sum_{n=0}^{N-1}x[n]^2\Bigr).$$
+  $$L=\Bigl(\frac{\sigma_0}{\sigma_1}\Bigr)^N\exp\Bigl[\Bigl(\frac1{2\sigma_0^2}-\frac1{2\sigma_1^2}\Bigr)\sum_n x[n]^2\Bigr].$$
+  <p>Log-LRT (official with-answers key; the Answers_oldexams file drops the squares — typesetting bug):</p>
+  $$\ln L=N\ln\frac{\sigma_0}{\sigma_1}-\frac{\sum x[n]^2}{2\sigma_1^2}+\frac{\sum x[n]^2}{2\sigma_0^2}\;\gtrless\;\ln\gamma.$$
+  <p>Because \(1/\sigma_0^2&gt;1/\sigma_1^2\), the coefficient of \(\sum x^2\) is positive \(\Rightarrow\) decide \(\mathcal H_1\) when \(\sum x[n]^2\) is <b>large</b> (two-sided tails in 1-D). Energy detector, not a mean detector.</p>
+  <p>Single sample, \(L=1\): the PDFs cross at \(\pm x_{\mathrm{th}}\). Narrow tall peak \(=\mathcal H_0\), wide short peak \(=\mathcal H_1\). \(\mathcal X_1\) is <b>outside</b> the lines.</p>
+  $$P_D=2\int_{x_{\mathrm{th}}}^\infty p(x\mid\mathcal H_1)\,dx,\qquad P_{\mathrm{FA}}=2\int_{x_{\mathrm{th}}}^\infty p(x\mid\mathcal H_0)\,dx.$$
+  <p>Official numbers. \(\sigma_1=3\sigma_0\), \(x_{\mathrm{th}}=\sigma_1=3\sigma_0\). Given for \(x\sim\mathcal N(0,\sigma^2)\):</p>
+  $$\Pr(0\le x\le\sigma)=0.341,\quad\Pr(\sigma\le x\le 2\sigma)=0.136,\quad\Pr(2\sigma\le x\le 3\sigma)=0.021.$$
+  <p>Under \(\mathcal H_1\), \(x_{\mathrm{th}}=\sigma_1\) is <b>one</b> own-standard-deviation out:</p>
+  $$P_D=2\bigl(0.5-0.341\bigr)=2\cdot 0.159=0.318.$$
+  <p>Under \(\mathcal H_0\), \(x_{\mathrm{th}}=3\sigma_0\) is <b>three</b> own-sd out:</p>
+  $$\Pr(0\le x\le 3\sigma_0)=0.341+0.136+0.021=0.498,\qquad P_{\mathrm{FA}}=2(0.5-0.498)=0.004.$$
+  <p>Official: \(P_D=0.318\), \(P_{\mathrm{FA}}=0.004\).</p>
+
+  <h3>3. Laplacian, different rates — sum of \(|x|\)</h3>
+  <p>2022 4c, <b>no official key</b>. Algebra follows the printed exam (including the flipped \(\gtrless\)).</p>
+  $$p(x\mid\mathcal H_0)=\tfrac12 e^{-|x|},\qquad p(x\mid\mathcal H_1)=e^{-2|x|}.$$
+  <p>\(\mathcal H_1\) has larger rate \(\Rightarrow\) <b>narrower</b> Laplace. Large \(|x|\) favours \(\mathcal H_0\). One sample: \(L(x)=2e^{-|x|}\). IID:</p>
+  $$L(\mathbf x)=2^N\exp\Bigl(-\sum_{n=0}^{N-1}|x_n|\Bigr).$$
+  $$2^N e^{-\sum|x_n|}\;\underset{\mathcal H_0}{\overset{\mathcal H_1}{\gtrless}}\;\gamma\qquad\Rightarrow\qquad -\sum|x_n|\;\underset{\mathcal H_0}{\overset{\mathcal H_1}{\gtrless}}\;\ln\gamma-N\ln 2.$$
+  <p>Multiply by \(-1\) (<b>flip the inequality</b>):</p>
+  $$\sum_{n=0}^{N-1}|x_n|\;\underset{\mathcal H_1}{\overset{\mathcal H_0}{\gtrless}}\;N\ln 2-\ln\gamma=:\gamma'.$$
+  <p>Decide \(\mathcal H_0\) when the sum of absolute values is <b>large</b>. That is the printed 2022 4c inequality. Threshold \(\gamma'=\ln(2^N/\gamma)\).</p>
+  <p>For \(N=1\), \(Y=|X|\) is exponential: \(p(y\mid\mathcal H_0)=e^{-y}\), \(p(y\mid\mathcal H_1)=2e^{-2y}\), \(y&gt;0\), and \(y\;\underset{\mathcal H_1}{\overset{\mathcal H_0}{\gtrless}}\;\gamma'\). At \(\gamma'=1\), decide \(\mathcal H_1\) for <b>small</b> \(y\) (left of 1).</p>
+  <ul>
+    <li>\(P_{\mathrm{FA}}=P(y&lt;1\mid\mathcal H_0)=\int_0^1 e^{-y}\,dy\): shade under the solid \(e^{-y}\) from 0 to 1.</li>
+    <li>\(P_M=P(y&gt;1\mid\mathcal H_1)=\int_1^\infty 2e^{-2y}\,dy\): shade under the dashed \(2e^{-2y}\) from 1 to \(\infty\).</li>
+  </ul>
+  <p>Do not shade the usual right tail. Numerical 2022 4e–g values (\(P_{\mathrm{FA}}=0.1\Rightarrow P_D=0.19\), Bayes \(y=\ln 3\)) are derived from the printed exam; there is <b>no official key</b> for those numbers. Do not treat them as published letters.</p>
+
+  <h3>4. Exponential rates — threshold on \(x\)</h3>
+  <p>Jan 2020 Q5, official key.</p>
+  $$\mathcal H_0:\ p(x)=\lambda_0 e^{-\lambda_0 x},\qquad\mathcal H_1:\ p(x)=\lambda_1 e^{-\lambda_1 x},\qquad x\ge 0,\ \lambda_1&gt;\lambda_0&gt;0.$$
+  <p>\(\mathcal H_1\) decays faster \(\Rightarrow\) more mass near 0. Large \(x\) favours \(\mathcal H_0\).</p>
+  $$L(x)=\frac{\lambda_1}{\lambda_0}\exp\bigl[-(\lambda_1-\lambda_0)x\bigr].$$
+  <p>\(L&gt;\gamma\) iff \(x\) is <b>smaller</b> than a threshold (inequality flips). For \(\gamma=1\):</p>
+  $$x_{\mathrm{th}}=\frac{\ln(\lambda_1/\lambda_0)}{\lambda_1-\lambda_0}.$$
+  <p>Official numbers \(\lambda_1=2\), \(\lambda_0=0.1\): \(x_{\mathrm{th}}=\ln 20/1.9\approx 1.58\).</p>
+  <p>CDF of \(\mathrm{Exp}(\lambda)\): \(P(X\le x_{\mathrm{th}})=1-e^{-\lambda x_{\mathrm{th}}}\). Because we decide \(\mathcal H_1\) when \(x&lt;x_{\mathrm{th}}\):</p>
+  $$P_D=1-e^{-\lambda_1 x_{\mathrm{th}}},\qquad P_{\mathrm{FA}}=1-e^{-\lambda_0 x_{\mathrm{th}}}.$$
+  <p>(Official writes \(\int_{-\infty}^{x_{\mathrm{th}}}\) but the exponential lives on \(x\ge 0\); the closed form is right.) Hint on the paper: design so \(P_D&gt;P_{\mathrm{FA}}\) — that is the left-tail choice.</p>
+
+  <h2 id="erf">\(P_D\) and \(P_{\mathrm{FA}}\) with \(Q\), erf, and exponential CDFs</h2>
+  <p>Gaussian, right-tail test \(x&gt;\lambda'\), \(x\sim\mathcal N(\mu,\sigma^2)\):</p>
+  $$P(x&gt;\lambda')=Q\Bigl(\frac{\lambda'-\mu}{\sigma}\Bigr)=\frac12\Bigl[1-\operatorname{erf}\Bigl(\frac{\lambda'-\mu}{\sigma\sqrt 2}\Bigr)\Bigr].$$
+  <p>Two-sided energy test \(|x|&gt;x_{\mathrm{th}}\), zero-mean: <b>double</b> the one-sided tail.</p>
+  <p>Exponential / Laplace folded to \(y&gt;0\), rate \(\lambda\), CDF \(1-e^{-\lambda y}\):</p>
+  <ul>
+    <li>Decide \(\mathcal H_1\) on the right (\(y&gt;\lambda'\)): \(P=e^{-\lambda\lambda'}\) (survival).</li>
+    <li>Decide \(\mathcal H_1\) on the left (\(y&lt;\lambda'\)): \(P=1-e^{-\lambda\lambda'}\) (CDF).</li>
+  </ul>
+
+  <h3>Official erf table — Jan 2019 Q3 = SLT7.1</h3>
+  <p>\(\mathcal H_0=\mathcal N(0,1)\), \(\mathcal H_1=\mathcal N(\mu_1,\sigma_1)\), threshold \(\lambda'\), right-tail.</p>
+  $$P_{\mathrm{FA}}=\tfrac12\bigl[1-\operatorname{erf}(\lambda'/\sqrt 2)\bigr],\qquad P_D=\tfrac12\bigl[1-\operatorname{erf}((\lambda'-\mu_1)/(\sigma_1\sqrt 2))\bigr].$$
+  <p>The table they give is \(\operatorname{erf}(Z/\sqrt 2)\) vs \(Z\), so you look up \(Z=(\lambda'-\mu)/\sigma\) directly. Values used in the key: \(Z=1\Rightarrow\operatorname{erf}=0.683\), \(Z=2\Rightarrow\operatorname{erf}=0.954\), and \(\operatorname{erf}\) is odd.</p>
+  <table>
+    <tr><th>\(\lambda'\)</th><th>\(\mu_1\)</th><th>\(\sigma_1\)</th><th>\(P_D\)</th><th>\(P_{\mathrm{FA}}\)</th></tr>
+    <tr><td>1</td><td>1</td><td>1</td><td>0.5</td><td>0.159</td></tr>
+    <tr><td>1</td><td>3</td><td>1</td><td>0.977</td><td>0.159</td></tr>
+    <tr><td>1</td><td>3</td><td>2</td><td>0.842</td><td>0.159</td></tr>
+    <tr><td>2</td><td>3</td><td>1</td><td>0.842</td><td>0.023</td></tr>
+  </table>
+  <p>How, first row: \(\lambda'=1\), \(\mathcal H_0\): \(Z=1\), \(\operatorname{erf}=0.683\), \(P_{\mathrm{FA}}=\frac12(1-0.683)=0.1585\approx 0.159\). Row \(\lambda'=1,\mu_1=3,\sigma_1=1\): \(Z=(1-3)/1=-2\), \(\operatorname{erf}(-2)=-0.954\), \(P_D=\frac12(1-(-0.954))=0.977\). Last row \(P_{\mathrm{FA}}\): \(Z=2\), \(\frac12(1-0.954)=0.023\).</p>
+  <p class="aviso">\(P_{\mathrm{FA}}\) does <b>not</b> depend on \(\mu_1,\sigma_1\). Raising \(\mu_1\) at fixed threshold raises \(P_D\) only. Raising \(\sigma_1\) at fixed threshold <b>drops</b> \(P_D\) here (more \(\mathcal H_1\) mass leaks left of \(\lambda'\)). Raising \(\lambda'\) drops both.</p>
+
+  <h2>Worked: resit 24 Jan 2020 Q4 — Laplace vs \(\mathcal N(0,1)\)</h2>
+  <p>Official key. \(p(y\mid\mathcal H_1)=\frac14 e^{-|y|/2}\) (Laplace), \(p(y\mid\mathcal H_0)=(2\pi)^{-1/2}e^{-y^2/2}\). Set \(L=1\):</p>
+  $$\frac{\tfrac14 e^{-|y|/2}}{(2\pi)^{-1/2}e^{-y^2/2}}=1\Rightarrow -|y|+y^2=2\ln 4-\ln(2\pi)\Rightarrow y_{\mathrm{th}}=\pm 1.5884.$$
+  <p>Decide \(\mathcal H_1\) (Laplace, heavier tails) for <b>large</b> \(|y|\). Shade: \(P_M\) is the centre of the Laplace between \(\pm y_{\mathrm{th}}\); \(P_{\mathrm{FA}}\) is the Gaussian tails outside \(\pm y_{\mathrm{th}}\).</p>
+  $$P_D=\int_{1.5884}^\infty\tfrac12 e^{-y/2}\,dy=e^{-1.5884/2}=0.4519,$$
+  $$P_{\mathrm{FA}}=2Q(1.5884)=2\times 0.0559=0.1118.$$
+  <p>(The integral uses evenness / the one-sided Laplace piece; equivalent to \(2\int_{y_{\mathrm{th}}}^\infty\frac14 e^{-y/2}\,dy\).) Official: \(y_{\mathrm{th}}=\pm 1.5884\), \(P_D=0.4519\), \(P_{\mathrm{FA}}=0.1118\).</p>
+
+  <h2 id="mf">Matched filter</h2>
+  <p>Detect a <b>known</b> length-\(N\) waveform \(s_n\) in WGN:</p>
+  $$\mathcal H_0:\ x_n=w_n,\qquad\mathcal H_1:\ x_n=s_n+w_n,\qquad w_n\sim\mathrm{IID}\ \mathcal N(0,\sigma^2).$$
+  <p>Mean-shift with a vector mean \(s\), not a DC. LRT:</p>
+  $$\ln L=\frac1{\sigma^2}\sum_{n=0}^{N-1}x_n s_n-\frac1{2\sigma^2}\sum_n s_n^2\;\gtrless\;\ln\gamma\qquad\Rightarrow\qquad\sum_{n=0}^{N-1}x_n s_n\;\underset{\mathcal H_0}{\overset{\mathcal H_1}{\gtrless}}\;\sigma^2\ln\gamma+\tfrac12\sum_n s_n^2=\lambda'.$$
+  <p>Left side = correlator (inner product \(\mathbf x^\top\mathbf s\)). Implement as an FIR filter, sample at the end:</p>
+  $$y_n=\sum_{l=0}^{N-1}x_l h_{n-l},\qquad h_n=s_{N-1-n}\quad\text{(time-reversed }s\text{)}.$$
+  <p>Then \(y_{N-1}=\sum_l x_l s_l\). Compare \(y_{N-1}\) to \(\lambda'\).</p>
+  <p>Why this maximises SNR. \(\mathrm{SNR}=\mathbb E^2[y_{N-1}\mid\mathcal H_1]/\mathrm{Var}[y_{N-1}\mid\mathcal H_0]=(\mathbf h^\top\mathbf s)^2/(\sigma^2\,\mathbf h^\top\mathbf h)\). Cauchy–Schwarz: \((\mathbf h^\top\mathbf s)^2\le(\mathbf h^\top\mathbf h)(\mathbf s^\top\mathbf s)\), equality iff \(\mathbf h=c\mathbf s\). Among all linear filters, the matched filter is SNR-optimal.</p>
+  <p>Resit 2020 / 2022 4a, official: “SNR at the output is maximised” is the true statement. \(h[n]=s[n]\) without time-reversal is false unless you correlate instead of convolve. The filter also exists for coloured noise after whitening; “only for uncorrelated noise” is not the definition.</p>
+
+  <h2>Traps</h2>
+  <ol>
+    <li><b>Which tail.</b> \(\mathcal H_1\) wider / heavier-tailed \(\Rightarrow\) decide \(\mathcal H_1\) on large \(|x|\). \(\mathcal H_1\) narrower / faster exponential \(\Rightarrow\) decide \(\mathcal H_1\) on small \(x\). Flipping \(\ln\) of a decaying exponential flips \(\gtrless\).</li>
+    <li>\(\mathcal H_0\) is just the label in the PDF. In Nov 2019 the energy detector has \(\mathcal H_1=\) larger variance.</li>
+    <li>NP vs Bayes threshold. Do not mix \(\alpha\) with costs.</li>
+    <li>\(P_{\mathrm{FA}}\) is always under \(\mathcal H_0\), over \(\mathcal X_1\). Not “the overlap”. Not under \(\mathcal H_1\).</li>
+    <li>Log-LRT for Gaussians of unequal variance uses \(\sum x_n^2\), not \(\sum x_n\).</li>
+    <li>Matched filter is \(h[n]=s[N-1-n]\), sampled at \(n=N-1\).</li>
+    <li>Inverted LRT in some old keys. Write \(L=p_1/p_0\).</li>
+  </ol>
+
+  <div class="drill">
+    <h3>NP numbers, exponential <span class="tag exam">Jan 2020 · 5b</span></h3>
+    <p>Jan 2020 Q5b, official. Same exponentials as above, \(\lambda_0=0.1\). Find \(x_{\mathrm{th}}\) so that \(P_{\mathrm{FA}}=0.1\). Then find \(\lambda_1\) so that \(P_D=0.9\) at that threshold. Decide \(\mathcal H_1\) for small \(x\).</p>
+    <details>
+      <summary>Solution</summary>
+      <p>\(P_{\mathrm{FA}}=1-e^{-0.1\,x_{\mathrm{th}}}=0.1\Rightarrow x_{\mathrm{th}}=-10\ln 0.9\approx 1.053\approx 1.05\).</p>
+      <p>\(P_D=1-e^{-\lambda_1\cdot 1.05}=0.9\Rightarrow\lambda_1=\ln 10/1.05\approx 2.19\).</p>
+      <p>Official: \(x_{\mathrm{th}}=1.05\), \(\lambda_1=2.19\). Same paper, ROC points: \(P_{\mathrm{FA}}=0.5\Rightarrow x_{\mathrm{th}}\approx 6.93\), \(P_D\approx 1\); \(P_{\mathrm{FA}}=0.9\Rightarrow x_{\mathrm{th}}\approx 23\), \(P_D\approx 1\). Larger \(\lambda_1\) lifts the ROC toward the top-left.</p>
+    </details>
+  </div>
+
+  <div class="drill">
+    <h3>Matched filter MC <span class="tag exam">resit 24 Jan 2020 · 4a</span></h3>
+    <p>Resit 24 Jan 2020 4a, official. Detect a known pulse in WGN. Which statement is true? (a) SNR at the output is maximised. (b) \(h[n]=s[n]\). (c) The matched filter exists only for uncorrelated noise.</p>
+    <details>
+      <summary>Solution</summary>
+      <p>Official: <b>(a)</b>. Impulse response is \(s[-n]\) or \(s[N-1-n]\), not \(s[n]\), unless you correlate instead of convolve. A matched filter exists for coloured noise too, via whitening.</p>
+    </details>
+  </div>
+
+  <div class="drill">
+    <h3>Which region, unequal variance <span class="tag exam">Nov 2019 · 4</span></h3>
+    <p>One sample, \(\mathcal H_0:\mathcal N(0,\sigma_0^2)\), \(\mathcal H_1:\mathcal N(0,\sigma_1^2)\) with \(\sigma_1&gt;\sigma_0\). Thresholds at \(\pm x_{\mathrm{th}}\) where \(L=1\). Shade \(P_{\mathrm{FA}}\) and \(P_D\). What is the sufficient statistic for \(N\) samples?</p>
+    <details>
+      <summary>Solution</summary>
+      <p>Decide \(\mathcal H_1\) in the <b>outer tails</b> (wider density). \(P_{\mathrm{FA}}\): two tails of the <b>narrow</b> \(\mathcal H_0\) Gaussian outside \(\pm x_{\mathrm{th}}\). \(P_D\): two tails of the wide \(\mathcal H_1\) Gaussian outside \(\pm x_{\mathrm{th}}\). Statistic: \(\sum x[n]^2\). Official Nov 2019 numbers at \(x_{\mathrm{th}}=\sigma_1=3\sigma_0\): \(P_D=0.318\), \(P_{\mathrm{FA}}=0.004\).</p>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="./07-spectra.html">← spectral estimation</a>
+    <a class="next" href="./a4.html">A4 sheet →</a>
+  </div>
+  <p class="foot">5CTA0 Q1 2026–27 · from the course reader, lectures and official keys.</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}]});</script>
+</body>
+</html>

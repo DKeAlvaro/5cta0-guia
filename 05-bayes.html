@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MMSE, MAP, and priors — 5CTA0</title>
+  <meta name="description" content="From-zero Bayesian estimation for the 5CTA0 exam: posterior, MMSE as the mean, MAP as the mode, shrinkage, the tanh estimator, and the 21/01/2019 key correction.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</head>
+<body>
+<div class="frame">
+  <div class="mast">
+    <a href="./index.html">5CTA0 · Statistical Signal Processing</a>
+    <span>block 2</span>
+  </div>
+
+  <h1>MMSE is the mean. MAP is the mode.</h1>
+  <p class="answer">Classical estimation treats \(\theta\) as a fixed unknown. Bayesian estimation draws \(\theta\) from a prior, updates to a posterior, then picks one number from that posterior. Square cost gives the mean. Hit-or-miss gives the mode. They are different functions.</p>
+  <div class="byline">Block 2c · reader ch. 10 · VL10 · 21/01/2019, 04/11/2019, 24/01/2022, Nov 2022 · SLT4</div>
+
+  <div class="cifras">
+    <div><span class="n">\(\mathbb{E}[\theta\mid x]\)</span><span>MMSE<br>posterior mean</span></div>
+    <div><span class="n">mode</span><span>MAP<br>posterior peak</span></div>
+    <div><span class="n">\(\tanh\)</span><span>\(X=\pm 1\)<br>soft estimate</span></div>
+  </div>
+
+  <ul class="toc">
+    <li><a href="#prior">Prior, posterior, three costs</a><span class="tag">from zero</span></li>
+    <li><a href="#worked">Exam posteriors</a><span class="tag exam">write these</span></li>
+    <li><a href="#bpsk">\(X=\pm 1\) in Gaussian noise</a><span class="tag exam">tanh</span></li>
+  </ul>
+
+  <h2 id="prior">The parameter is a random variable</h2>
+  <p>You never see \(\theta\). You see data \(\mathbf{x}\) that depend on \(\theta\). Classically the dependence is a PDF parametrized by a constant, written \(p(\mathbf{x};\theta)\) with a semicolon. Bayesian estimation puts a <i>prior</i> \(p(\theta)\) on the parameter, writes the same formula as a <i>likelihood</i> \(p(\mathbf{x}\mid\theta)\) with a bar, and updates by Bayes:</p>
+  $$
+  p(\theta\mid\mathbf{x})=\frac{p(\mathbf{x}\mid\theta)\,p(\theta)}{p(\mathbf{x})}=\frac{p(\mathbf{x}\mid\theta)\,p(\theta)}{\int p(\mathbf{x}\mid\theta)\,p(\theta)\,d\theta}.
+  $$
+  <p>The denominator does not depend on \(\theta\). For finding an estimator you can drop it and work with \(p(\mathbf{x}\mid\theta)p(\theta)\), or with the log \(\ln p(\mathbf{x}\mid\theta)+\ln p(\theta)\).</p>
+  <p>The number you return is an estimate of <i>this realization</i> of \(\theta\), after seeing \(\mathbf{x}\). Performance is a cost \(C(e)\) of the error \(e=\hat\theta-\theta\), averaged under the joint \(p(\theta,\mathbf{x})\): the Bayes risk \(\mathbb{E}[C(e)]\). Because \(p(\mathbf{x})\ge 0\), it is enough to minimize the <i>posterior</i> risk \(\int C(\hat\theta-\theta)\,p(\theta\mid\mathbf{x})\,d\theta\) for each \(\mathbf{x}\).</p>
+
+  <h2>Three costs, three estimators</h2>
+  <table>
+    <tr><th>Cost</th><th>\(C(e)\)</th><th>Estimator</th></tr>
+    <tr><th>Square (MMSE)</th><td>\(\|e\|_2^2\)</td><td>mean of \(p(\theta\mid\mathbf{x})\)</td></tr>
+    <tr><th>Absolute (MAE)</th><td>\(\|e\|_1\)</td><td>median of \(p(\theta\mid\mathbf{x})\)</td></tr>
+    <tr><th>Hit-or-miss</th><td>0 if \(\|e\|_\infty&lt;\varepsilon\), else 1</td><td>mode (MAP), as \(\varepsilon\to 0\)</td></tr>
+  </table>
+
+  <h3>MMSE is \(\mathbb{E}[\theta\mid\mathbf{x}]\)</h3>
+  <p>Differentiate the posterior square risk in the free variable \(\hat\theta\):</p>
+  $$
+  \frac{\partial}{\partial\hat\theta}\int(\hat\theta-\theta)^2\,p(\theta\mid\mathbf{x})\,d\theta
+  =2\int(\hat\theta-\theta)\,p(\theta\mid\mathbf{x})\,d\theta=0.
+  $$
+  <p>The integral of the posterior is 1, so</p>
+  $$
+  \hat\theta_{\mathrm{MMSE}}=\int\theta\,p(\theta\mid\mathbf{x})\,d\theta=\mathbb{E}[\theta\mid\mathbf{x}].
+  $$
+  <p>If \(\theta\) is discrete the integral becomes a sum: \(\mathbb{E}[\theta\mid\mathbf{x}]=\sum_i \theta_i\,\Pr(\theta=\theta_i\mid\mathbf{x})\). That is the \(X=\pm 1\) problem below.</p>
+
+  <h3>MAP is the mode</h3>
+  <p>A uniform / hit-or-miss cost is 1 minus the posterior mass in an \(\varepsilon\)-window around \(\hat\theta\). For small \(\varepsilon\), put the window on the peak:</p>
+  $$
+  \hat\theta_{\mathrm{MAP}}=\arg\max_\theta p(\theta\mid\mathbf{x})=\arg\max_\theta p(\mathbf{x}\mid\theta)\,p(\theta).
+  $$
+  <p>If the log is differentiable and the max is <i>interior</i> to the support of the prior, a necessary condition is</p>
+  $$
+  \frac{\partial}{\partial\theta}\big(\ln p(\mathbf{x}\mid\theta)+\ln p(\theta)\big)=0.
+  $$
+  <p>If the unconstrained critical point falls outside the support, the maximum is on the <i>boundary</i>. A compact uniform prior is the exam case of that.</p>
+  <p>MAE: the derivative of the absolute cost is \(\mathrm{sign}(\hat\theta-\theta)\). Splitting the integral, it vanishes iff \(\hat\theta\) is a median. You almost never need MAE on this exam.</p>
+
+  <p class="aviso">MMSE is not “the maximum of the posterior”. That is MAP. Resit 2022 2d: the official correct statement is “MMSE is the mean”. “MMSE and MAP always differ” is also false: a symmetric unimodal posterior (Gaussian) has mean = median = mode.</p>
+
+  <p>Skewed posterior: three different numbers. MAP sits at the peak, MAE at the median, MMSE is pulled toward the tail.</p>
+
+  <h2 id="worked">Gaussian prior, Gaussian likelihood</h2>
+  <p>DC in WGN: \(x[n]=\theta+w[n]\), \(w[n]\sim\mathcal{N}(0,\sigma^2)\) iid, prior \(\theta\sim\mathcal{N}(\mu_\theta,\sigma_\theta^2)\). The likelihood is</p>
+  $$
+  p(\mathbf{x}\mid\theta)\propto\exp\Big(-\frac{1}{2\sigma^2}\sum_{n=0}^{N-1}(x[n]-\theta)^2\Big).
+  $$
+  <p>Split \(x[n]-\theta=(x[n]-\bar x)+(\bar x-\theta)\). Cross terms vanish, leftover \(N(\bar x-\theta)^2\). The posterior kernel is therefore</p>
+  $$
+  \exp\Big(-\frac{N}{2\sigma^2}(\theta-\bar x)^2-\frac{1}{2\sigma_\theta^2}(\theta-\mu_\theta)^2\Big).
+  $$
+  <p>Expand the quadratics. The coefficient of \(\theta^2\) is the posterior precision; the coefficient of \(\theta\) locates the mean:</p>
+  $$
+  \frac{1}{\sigma_{\theta\mid\mathbf{x}}^2}=\frac{N}{\sigma^2}+\frac{1}{\sigma_\theta^2},\qquad
+  \mu_{\theta\mid\mathbf{x}}=\sigma_{\theta\mid\mathbf{x}}^2\Big(\frac{N\bar x}{\sigma^2}+\frac{\mu_\theta}{\sigma_\theta^2}\Big).
+  $$
+  <p>The posterior is Gaussian, so MMSE = MAP = MAE \(=\mu_{\theta\mid\mathbf{x}}\). Precisions add. The posterior mean is a precision-weighted average of the sample mean and the prior mean.</p>
+  <ul>
+    <li>\(\sigma_\theta^2\ll\sigma^2\): trust the prior, \(\hat\theta\to\mu_\theta\).</li>
+    <li>\(\sigma_\theta^2\gg\sigma^2\), or \(N\to\infty\): trust the data, \(\hat\theta\to\bar x\) (MAP \(\approx\) MLE).</li>
+  </ul>
+  <p>Same calculation with a cosine regressor (SLT4 2024–25 Ex.&nbsp;4.3). Prior \(A\sim\mathcal{N}(0,\sigma_A^2)\), WGN variance \(\sigma^2\):</p>
+  $$
+  \hat A_{\mathrm{MMSE}}
+  =\frac{\sum_n\cos(2\pi f_0 n)\,x[n]/\sigma^2}{\sum_n\cos^2(2\pi f_0 n)/\sigma^2+1/\sigma_A^2}.
+  $$
+  <p>Large \(\sigma_A^2\): \(\to\) the LS / MLE amplitude. Small \(\sigma_A^2\): shrinks to 0. (The SLT display of the posterior exponential has a sign OCR error; keep the mean formula.)</p>
+
+  <h2>Exponential prior, exponential likelihood</h2>
+  <p>Exam Nov 2022 2f–g. Prior \(p(\theta)=a e^{-a\theta}\) for \(\theta\ge 0\). One observation \(p(x\mid\theta)=\theta e^{-\theta x}\) for \(x\ge 0\). The exam <i>gives</i> the posterior</p>
+  $$
+  p(\theta\mid x)=(x+a)^2\,\theta\,e^{-(x+a)\theta},\qquad\theta\ge 0.
+  $$
+  <p>This is Gamma / Erlang, shape 2, rate \(b=x+a\). Check the constant: \(\int_0^\infty\theta e^{-b\theta}\,d\theta=1/b^2\), so \(b^2\theta e^{-b\theta}\) is a PDF.</p>
+  <p>MMSE is the Gamma mean, shape/rate:</p>
+  $$
+  \hat\theta_{\mathrm{MMSE}}=\mathbb{E}[\theta\mid x]=b^2\int_0^\infty\theta^2 e^{-b\theta}\,d\theta=b^2\cdot\frac{2}{b^3}=\frac{2}{b}=\frac{2}{x+a}.
+  $$
+  <p>(Substitute \(u=b\theta\) if you do not want to quote the Gamma moment. \(\int_0^\infty u^2 e^{-u}\,du=2\).)</p>
+  <p>MAP: \(\ln p(\theta\mid x)=\mathrm{const}+\ln\theta-b\theta\), derivative \(1/\theta-b=0\), so</p>
+  $$
+  \hat\theta_{\mathrm{MAP}}=\frac{1}{x+a}.
+  $$
+  <p>Mode of Gamma(2, \(b\)) is \(1/b\). The posterior is skewed: MMSE \(\neq\) MAP.</p>
+
+  <h2>Uniform prior on an interval</h2>
+  <p>Exam 21/01/2019 Q2. Likelihood \(p(x\mid\lambda)=\lambda e^{-\lambda x}\) (\(x\ge 0\)). Prior \(p(\lambda)=\tfrac12\) on \([0,2]\), 0 else. Part (a) of that paper is an \(N\)-sample MLE; the Bayesian parts in the published key are written as functions of a <i>single</i> \(x\). Treat them as \(N=1\) unless the question keeps the sum.</p>
+
+  <h3>MAP: project the MLE onto \([0,2]\)</h3>
+  <p>The prior is flat on \((0,2)\), so maximizing the posterior on that interval is maximizing the likelihood on that interval. For one sample, \(\ln p(x\mid\lambda)=\ln\lambda-\lambda x\), derivative \(1/\lambda-x=0\), unconstrained MLE \(\hat\lambda_{\mathrm{ML}}=1/x\). Second derivative \(-1/\lambda^2&lt;0\): a maximum.</p>
+  <p>The function \(\ln\lambda-\lambda x\) is increasing for \(\lambda&lt;1/x\). If \(1/x&gt;2\), i.e. \(x&lt;1/2\), it is still increasing on the whole of \((0,2]\), so the constrained maximum is the right endpoint.</p>
+  $$
+  \hat\lambda_{\mathrm{MAP}}=\begin{cases}
+  2 &amp; x\lt 1/2,\\[4pt]
+  1/x &amp; x\ge 1/2.
+  \end{cases}
+  $$
+  <p>For \(N\) iid samples the unconstrained MLE is \(N/\sum_i x_i\). Project that onto \([0,2]\):</p>
+  $$
+  \hat\lambda_{\mathrm{MAP}}=\min\Big(2,\;\max\Big(0,\;\frac{N}{\sum_i x_i}\Big)\Big).
+  $$
+  <p class="aviso">The 21/01/2019 key writes only \(\hat\lambda_{\mathrm{MAP}}=N/\sum_i x_i\). That is the MLE, and it is MAP <i>only when it already lies in</i> \([0,2]\). A compact uniform prior puts MAP on the boundary whenever the unconstrained MLE sits outside the support. Write the projection.</p>
+
+  <h3>MMSE: integrate on \([0,2]\)</h3>
+  <p>The prior constant \(1/2\) cancels in the posterior mean. For a single \(x\),</p>
+  $$
+  \hat\lambda_{\mathrm{MMSE}}=\mathbb{E}[\lambda\mid x]
+  =\frac{\int_0^2\lambda\cdot\lambda e^{-\lambda x}\,d\lambda}{\int_0^2\lambda e^{-\lambda x}\,d\lambda}
+  =\frac{\int_0^2\lambda^2 e^{-x\lambda}\,d\lambda}{\int_0^2\lambda e^{-x\lambda}\,d\lambda}.
+  $$
+  <p>Antiderivatives, integrate by parts (or differentiate the Gamma integral in the rate):</p>
+  $$
+  \int\lambda e^{-x\lambda}\,d\lambda=-e^{-x\lambda}\Big(\frac{\lambda}{x}+\frac{1}{x^2}\Big),\qquad
+  \int\lambda^2 e^{-x\lambda}\,d\lambda=-e^{-x\lambda}\Big(\frac{\lambda^2}{x}+\frac{2\lambda}{x^2}+\frac{2}{x^3}\Big).
+  $$
+  <p>Denominator, bounds \(0\) to \(2\):</p>
+  $$
+  Z=\Big[-e^{-x\lambda}\Big(\frac{\lambda}{x}+\frac{1}{x^2}\Big)\Big]_0^2
+  =\frac{1}{x^2}-e^{-2x}\frac{2x+1}{x^2}
+  =\frac{1-(2x+1)e^{-2x}}{x^2}.
+  $$
+  <p>Numerator:</p>
+  $$
+  \int_0^2\lambda^2 e^{-x\lambda}\,d\lambda
+  =\frac{2}{x^3}-e^{-2x}\frac{4x^2+4x+2}{x^3}
+  =\frac{2-(4x^2+4x+2)e^{-2x}}{x^3}.
+  $$
+  <p>Ratio, cancel one \(x\):</p>
+  $$
+  \hat\lambda_{\mathrm{MMSE}}
+  =\frac{2}{x}\cdot\frac{1-(2x^2+2x+1)e^{-2x}}{1-(2x+1)e^{-2x}}.
+  $$
+  <p class="aviso">The published 21/01/2019 last line is
+  \(\frac{2}{x}\Big(1-\frac{x^2 e^{-2x}}{1-e^{-2x}(2x+1)}\Big)\), which equals
+  \(\frac{2}{x}\frac{1-(x+1)^2 e^{-2x}}{1-(2x+1)e^{-2x}}\).
+  That replaces \(2x^2+2x+1\) by \(x^2+2x+1\). The algebra is wrong. Use the formula above. Intermediate fragments in that key that mix \(p(x)\) are unreliable too.</p>
+
+  <h2>Shifted exponential</h2>
+  <p>SLT4 2024–25 Ex.&nbsp;4.2. The posterior is already given:</p>
+  $$
+  p(\theta\mid x)=\begin{cases}e^{-(\theta-x)} &amp; \theta\ge x,\\ 0 &amp; \theta\lt x.\end{cases}
+  $$
+  <p>MMSE, substitute \(u=\theta-x\):</p>
+  $$
+  \mathbb{E}[\theta\mid x]=\int_x^\infty\theta\,e^{-(\theta-x)}\,d\theta=\int_0^\infty(u+x)e^{-u}\,du=1+x.
+  $$
+  <p>Official: \(\hat\theta_{\mathrm{MMSE}}=1+x\). The density is strictly decreasing on \([x,\infty)\), so the mode is the left endpoint: \(\hat\theta_{\mathrm{MAP}}=x\). Clean example that MMSE \(\neq\) MAP.</p>
+
+  <h2>DC in WGN, exponential prior</h2>
+  <p>SLT4 2025–26 Ex.&nbsp;4.2. \(x[n]=A+w[n]\), WGN variance \(\sigma^2\),</p>
+  $$
+  p(A)=\lambda e^{-\lambda A}\ (A&gt;0),\qquad 0\ (A&lt;0).
+  $$
+  <p>For \(A&gt;0\),</p>
+  $$
+  \ln\big(p(\mathbf{x}\mid A)p(A)\big)=-\frac{1}{2\sigma^2}\sum_{n=0}^{N-1}(x[n]-A)^2-\lambda A+\mathrm{const}.
+  $$
+  $$
+  \frac{\partial}{\partial A}=\frac{1}{\sigma^2}\sum_{n=0}^{N-1}(x[n]-A)-\lambda=\frac{N}{\sigma^2}(\bar x-A)-\lambda\stackrel{!}{=}0,
+  $$
+  $$
+  A=\bar x-\frac{\sigma^2\lambda}{N}.
+  $$
+  <p>Prior support \(A\ge 0\): if that critical point is negative, the maximum is at 0.</p>
+  $$
+  \hat A_{\mathrm{MAP}}=\max\Big(0,\;\bar x-\frac{\sigma^2\lambda}{N}\Big).
+  $$
+  <p>Compared with the MLE \(\bar x\), the exponential prior shrinks toward 0 by \(\sigma^2\lambda/N\). Large \(N\): MAP \(\approx\) MLE. Small \(N\): trust the prior, and the hard wall \(A\ge 0\).</p>
+  <p>The cousin on 04/11/2019 Q3c is Rayleigh scale with the same exponential prior. The stationarity condition is the cubic \(\lambda\theta^3+2N\theta^2-\sum x^2[n]=0\). No tidy closed form; official: “\(\hat\theta_{\mathrm{MAP}}\) depends on \(\lambda\)”. Also project onto \(\theta&gt;0\).</p>
+
+  <h2 id="bpsk">\(X=\pm 1\) in Gaussian noise</h2>
+  <p>SLT4 2025–26 Ex.&nbsp;4.3 and resit 24/01/2022 2f–h. Same official key.</p>
+  <p>Model: \(Y=X+N\), \(X\in\{+1,-1\}\) equally likely, \(N\sim\mathcal{N}(0,\sigma^2)\) independent of \(X\). So \(Y\mid X=x\sim\mathcal{N}(x,\sigma^2)\).</p>
+
+  <h3>Posteriors</h3>
+  $$
+  p(y)=\frac{1}{2\sqrt{2\pi\sigma^2}}\Big(e^{-(y-1)^2/(2\sigma^2)}+e^{-(y+1)^2/(2\sigma^2)}\Big).
+  $$
+  $$
+  \Pr[X=1\mid Y=y]=\frac{e^{-(y-1)^2/(2\sigma^2)}}{e^{-(y-1)^2/(2\sigma^2)}+e^{-(y+1)^2/(2\sigma^2)}},
+  $$
+  $$
+  \Pr[X=-1\mid Y=y]=\frac{e^{-(y+1)^2/(2\sigma^2)}}{e^{-(y-1)^2/(2\sigma^2)}+e^{-(y+1)^2/(2\sigma^2)}}.
+  $$
+
+  <h3>MMSE \(=\tanh(y/\sigma^2)\)</h3>
+  <p>\(X\) is discrete, so the posterior mean is a sum:</p>
+  $$
+  \hat X_{\mathrm{MMSE}}=\mathbb{E}[X\mid Y]
+  =(+1)\Pr[X=1\mid Y]+(-1)\Pr[X=-1\mid Y]
+  =\Pr[X=1\mid Y]-\Pr[X=-1\mid Y].
+  $$
+  $$
+  \hat X_{\mathrm{MMSE}}
+  =\frac{e^{-(y-1)^2/(2\sigma^2)}-e^{-(y+1)^2/(2\sigma^2)}}{e^{-(y-1)^2/(2\sigma^2)}+e^{-(y+1)^2/(2\sigma^2)}}.
+  $$
+  <p>Divide numerator and denominator by \(e^{-(y+1)^2/(2\sigma^2)}\):</p>
+  $$
+  =\frac{e^{-[(y-1)^2-(y+1)^2]/(2\sigma^2)}-1}{e^{-[(y-1)^2-(y+1)^2]/(2\sigma^2)}+1}.
+  $$
+  <p>Expand the squares: \((y-1)^2-(y+1)^2=(y^2-2y+1)-(y^2+2y+1)=-4y\). The exponent is</p>
+  $$
+  -\frac{-4y}{2\sigma^2}=\frac{2y}{\sigma^2},
+  $$
+  so
+  $$
+  \hat X_{\mathrm{MMSE}}=\frac{e^{2y/\sigma^2}-1}{e^{2y/\sigma^2}+1}.
+  $$
+  <p>The identity printed on the exam is \((e^{2u}-1)/(e^{2u}+1)=\tanh u\) with \(u=y/\sigma^2\):</p>
+  $$
+  \hat X_{\mathrm{MMSE}}=\tanh\Big(\frac{y}{\sigma^2}\Big).
+  $$
+  <p>Official (16). Soft estimate in \((-1,1)\), not \(\pm 1\). Large \(|y|/\sigma^2\): saturates at \(\pm 1\).</p>
+  <p>(The other division, by \(e^{-(y-1)^2/(2\sigma^2)}\), produces \((1-e^{-2y/\sigma^2})/(1+e^{-2y/\sigma^2})\), which is the same \(\tanh\).)</p>
+
+  <h3>MAP: threshold at 0</h3>
+  $$
+  \frac{\Pr[X=1\mid Y]}{\Pr[X=-1\mid Y]}
+  =\frac{e^{-(y-1)^2/(2\sigma^2)}}{e^{-(y+1)^2/(2\sigma^2)}}
+  =e^{-[(y-1)^2-(y+1)^2]/(2\sigma^2)}
+  =e^{2y/\sigma^2}.
+  $$
+  <p>Decide \(+1\) iff this ratio \(&gt;1\) iff \(e^{2y/\sigma^2}&gt;1\) iff \(y&gt;0\).</p>
+  $$
+  \hat X_{\mathrm{MAP}}=\begin{cases}+1 &amp; y\gt 0,\\ -1 &amp; y\lt 0,\end{cases}
+  \qquad y_{\mathrm{th}}=0.
+  $$
+  <p>Equal prior, symmetric Gaussians: MAP \(=\mathrm{sign}(y)\). The tie at 0 has probability zero.</p>
+  <p>The printed resit 2.h writes \(e^{-2y/\sigma^2}\) in one line and then \(2y/\sigma^2\gtrless 0\). Two sign slips that cancel. SLT4 2025–26 has \(e^{2y/\sigma^2}\). Final threshold \(y=0\) is official and correct.</p>
+  <p>\(\tanh(y/\sigma^2)\) and \(\mathrm{sign}(y)\) have the same sign and different magnitude. MAP is a hard decision. MMSE is a soft estimate (useful as an equalizer output).</p>
+
+  <h2>Drills</h2>
+  <p>Close the algebra above. Write yours. Then open the spoiler.</p>
+
+  <div class="drill">
+    <h3>Mean or mode? <span class="tag exam">resit 2022 · 2d</span></h3>
+    <p>Resit 2022 2d style. Which statements are true?</p>
+    <ol>
+      <li>The MMSE estimator is the maximum of the posterior PDF.</li>
+      <li>The MMSE estimator is the mean of the posterior PDF.</li>
+      <li>MMSE and MAP always differ.</li>
+    </ol>
+    <details>
+      <summary>Solution</summary>
+      <p>Only (b). (a) is MAP. (c) fails for a Gaussian posterior, where mean = mode. Official: MMSE is the mean.</p>
+    </details>
+  </div>
+
+  <div class="drill">
+    <h3>Gamma(2) posterior <span class="tag exam">Nov 2022 · 2f–g</span></h3>
+    <p>Nov 2022 2f–g. Posterior given: \(p(\theta\mid x)=(x+a)^2\theta e^{-(x+a)\theta}\) for \(\theta\ge 0\). Find \(\hat\theta_{\mathrm{MMSE}}\) and \(\hat\theta_{\mathrm{MAP}}\).</p>
+    <details>
+      <summary>Solution</summary>
+      <p>Shape 2, rate \(b=x+a\). Mean \(2/b\), mode \(1/b\):</p>
+      $$
+      \hat\theta_{\mathrm{MMSE}}=\frac{2}{x+a},\qquad\hat\theta_{\mathrm{MAP}}=\frac{1}{x+a}.
+      $$
+      <p>They differ (skew). No official numeric key for 2022; this is the Gamma calculation.</p>
+    </details>
+  </div>
+
+  <div class="drill">
+    <h3>Uniform \([0,2]\) <span class="tag exam">21/01/2019 · Q2</span></h3>
+    <p>Likelihood \(\lambda e^{-\lambda x}\), prior uniform on \([0,2]\).</p>
+    <ol>
+      <li>Write \(\hat\lambda_{\mathrm{MAP}}\) for one sample, including the boundary.</li>
+      <li>Write \(\hat\lambda_{\mathrm{MMSE}}=\mathbb{E}[\lambda\mid x]\) (the integral form and the closed form).</li>
+      <li>The published key’s last MMSE line uses \((x+1)^2\) in the numerator. What should it be?</li>
+    </ol>
+    <details>
+      <summary>Solution</summary>
+      <p>(a) Unconstrained MLE \(1/x\), then project:</p>
+      $$
+      \hat\lambda_{\mathrm{MAP}}=\begin{cases}2 &amp; x\lt 1/2,\\ 1/x &amp; x\ge 1/2.\end{cases}
+      $$
+      <p>For \(N\) samples, project \(N/\sum x_i\) onto \([0,2]\). The key’s \(\hat\lambda_{\mathrm{MAP}}=N/\sum x_i\) drops that projection.</p>
+      <p>(b) \(\mathbb{E}[\lambda\mid x]=\int_0^2\lambda^2 e^{-x\lambda}\,d\lambda\big/\int_0^2\lambda e^{-x\lambda}\,d\lambda\), which evaluates to</p>
+      $$
+      \frac{2}{x}\cdot\frac{1-(2x^2+2x+1)e^{-2x}}{1-(2x+1)e^{-2x}}.
+      $$
+      <p>(c) The factor \(2x^2+2x+1\), not \((x+1)^2=x^2+2x+1\).</p>
+    </details>
+  </div>
+
+  <div class="drill">
+    <h3>\(X=\pm 1\) <span class="tag exam">resit 2022 / SLT4 2025</span></h3>
+    <p>\(Y=X+N\), \(X=\pm 1\) equally likely, \(N\sim\mathcal{N}(0,\sigma^2)\) independent of \(X\). Derive \(\hat X_{\mathrm{MMSE}}\) and the MAP threshold. The identity \((e^{2u}-1)/(e^{2u}+1)=\tanh u\) is given.</p>
+    <details>
+      <summary>Solution</summary>
+      <p>Posterior mean:</p>
+      $$
+      \mathbb{E}[X\mid Y]=\frac{e^{-(y-1)^2/(2\sigma^2)}-e^{-(y+1)^2/(2\sigma^2)}}{e^{-(y-1)^2/(2\sigma^2)}+e^{-(y+1)^2/(2\sigma^2)}}.
+      $$
+      <p>\((y-1)^2-(y+1)^2=-4y\), so the ratio of exponentials is \(e^{2y/\sigma^2}\), and</p>
+      $$
+      \hat X_{\mathrm{MMSE}}=\frac{e^{2y/\sigma^2}-1}{e^{2y/\sigma^2}+1}=\tanh\Big(\frac{y}{\sigma^2}\Big).
+      $$
+      <p>MAP: the same ratio of posteriors is \(e^{2y/\sigma^2}&gt;1\) iff \(y&gt;0\). Threshold \(y_{\mathrm{th}}=0\), \(\hat X_{\mathrm{MAP}}=\mathrm{sign}(y)\). Official for both the resit and SLT4 2025–26.</p>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="./04-crlb.html">← CRLB</a>
+    <a class="next" href="./06-ls.html">least squares →</a>
+  </div>
+  <p class="foot">5CTA0 Q1 2026–27 · from the course reader, lectures and official keys.</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}]});</script>
+</body>
+</html>

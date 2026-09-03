@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Least squares and BLUE — 5CTA0</title>
+  <meta name="description" content="From-zero least squares for the 5CTA0 exam: linear model, geometry, weighted LS / BLUE, Gauss–Newton versus Newton, and the MLE vs LS vs BLUE vs MMSE vs MAP decision table.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</head>
+<body>
+<div class="frame">
+  <div class="mast">
+    <a href="./index.html">5CTA0 · Statistical Signal Processing</a>
+    <span>block 2</span>
+  </div>
+
+  <h1>Least squares is a projection.</h1>
+  <p class="answer">Pick a signal model and minimise residual energy. No PDF is required. Linear in \(\boldsymbol{\theta}\): the normal equation. Known noise covariance: weight by \(\mathbf{C}^{-1}\) and you have the BLUE. Gaussian on top of that: BLUE = MLE = MVUE.</p>
+  <div class="byline">Block 2d · reader ch. 8–9 · VL8–VL9 · 20/01/2020 Q4 · SLT3 / SLT4</div>
+
+  <div class="cifras">
+    <div><span class="n">LS</span><span>no PDF<br>\((H^\top H)^{-1}H^\top x\)</span></div>
+    <div><span class="n">BLUE</span><span>mean + cov<br>\(W=C^{-1}\)</span></div>
+    <div><span class="n">\(H^\top e=0\)</span><span>residual \(\perp\)<br>columns of \(H\)</span></div>
+  </div>
+
+  <ul class="toc">
+    <li><a href="#linear">Linear model</a><span class="tag">MLE = LS under WGN</span></li>
+    <li><a href="#ls">LS, geometry, BLUE</a><span class="tag">normal equation</span></li>
+    <li><a href="#worked">Worked SLT numbers</a><span class="tag exam">2.99 / square / OOK</span></li>
+    <li><a href="#choose">Which estimator?</a><span class="tag exam">decision table</span></li>
+  </ul>
+
+  <h2 id="linear">Linear in the parameters</h2>
+  <p>A linear <i>signal</i> model is linear in \(\boldsymbol{\theta}\), not necessarily in time:</p>
+  $$
+  \mathbf{s}=\mathbf{H}\boldsymbol{\theta},\qquad\mathbf{x}=\mathbf{H}\boldsymbol{\theta}+\mathbf{w}.
+  $$
+  <p>\(\mathbf{H}\) is \(N\times K\), known, full column rank. Polynomial trend: \(s[n]=\theta_0+\theta_1 n+\cdots+\theta_{K-1}n^{K-1}\), \(\mathbf{H}\) Vandermonde (\(0^0:=1\)). Two known-rate exponentials, sinusoid of known frequency: same idea, one column per unknown amplitude.</p>
+
+  <h3>Gaussian noise, covariance \(\mathbf{C}\)</h3>
+  <p>If additionally \(\mathbf{w}\sim\mathcal{N}(\mathbf{0},\mathbf{C})\),</p>
+  $$
+  \ln p=-\frac12\ln|2\pi\mathbf{C}|-\frac12(\mathbf{x}-\mathbf{H}\boldsymbol{\theta})^\top\mathbf{C}^{-1}(\mathbf{x}-\mathbf{H}\boldsymbol{\theta}).
+  $$
+  <p>The gradient of the quadratic is the score. Completing it (or matrix calculus) gives the efficiency identity:</p>
+  $$
+  \frac{\partial\ln p}{\partial\boldsymbol{\theta}}
+  =\mathbf{H}^\top\mathbf{C}^{-1}\mathbf{x}-\mathbf{H}^\top\mathbf{C}^{-1}\mathbf{H}\,\boldsymbol{\theta}
+  =\mathbf{H}^\top\mathbf{C}^{-1}\mathbf{H}\Big((\mathbf{H}^\top\mathbf{C}^{-1}\mathbf{H})^{-1}\mathbf{H}^\top\mathbf{C}^{-1}\mathbf{x}-\boldsymbol{\theta}\Big).
+  $$
+  <p>Fisher \(\mathbf{I}(\boldsymbol{\theta})=\mathbf{H}^\top\mathbf{C}^{-1}\mathbf{H}\), and the estimator in the parentheses is efficient, hence MLE, hence MVUE:</p>
+  $$
+  \hat{\boldsymbol{\theta}}=(\mathbf{H}^\top\mathbf{C}^{-1}\mathbf{H})^{-1}\mathbf{H}^\top\mathbf{C}^{-1}\mathbf{x},\qquad
+  \mathrm{Cov}(\hat{\boldsymbol{\theta}})=(\mathbf{H}^\top\mathbf{C}^{-1}\mathbf{H})^{-1}.
+  $$
+  <p>WGN special case \(\mathbf{C}=\sigma^2\mathbf{I}\):</p>
+  $$
+  \hat{\boldsymbol{\theta}}=(\mathbf{H}^\top\mathbf{H})^{-1}\mathbf{H}^\top\mathbf{x},\qquad
+  \mathbf{I}(\boldsymbol{\theta})=\frac{\mathbf{H}^\top\mathbf{H}}{\sigma^2}.
+  $$
+  <p>Same formula as linear LS. Under WGN, <b>MLE = LS = BLUE = MVUE</b>.</p>
+
+  <h3>Orthogonal columns</h3>
+  <p>Known Fourier frequencies, multiples of \(1/N\), WGN: columns of \(\mathbf{H}\) are orthogonal, \(\mathbf{H}^\top\mathbf{H}=(N/2)\mathbf{I}\), and the amplitudes decouple into DFT-style sums</p>
+  $$
+  \hat a_p=\frac{2}{N}\sum_{n=0}^{N-1}x[n]\cos\Big(2\pi\frac{k_p}{N}n\Big),\qquad
+  \hat b_p=\frac{2}{N}\sum_{n=0}^{N-1}x[n]\sin\Big(2\pi\frac{k_p}{N}n\Big).
+  $$
+  <p>Amplitude-and-phase form is nonlinear in the phase. Linearize with \(\cos(\alpha-\varphi)=\cos\alpha\cos\varphi+\sin\alpha\sin\varphi\), estimate \(a_p,b_p\), then \(c_p=\sqrt{a_p^2+b_p^2}\), \(\varphi_p=\mathrm{atan2}(b_p,a_p)\) (invariance).</p>
+  <p>SLT3 2024–25 Ex.&nbsp;3.3, two exponentials \(r_0=-1\), \(r_1=1\), \(N\) even:</p>
+  $$
+  \mathbf{H}=\begin{bmatrix}1&amp;1\\-1&amp;1\\1&amp;1\\\vdots&amp;\vdots\\-1&amp;1\end{bmatrix},\quad
+  \mathbf{H}^\top\mathbf{H}=N\mathbf{I},\quad
+  \hat A_0=\frac{1}{N}\sum_{n=0}^{N-1}(-1)^n x[n],\quad
+  \hat A_1=\frac{1}{N}\sum_{n=0}^{N-1}x[n].
+  $$
+
+  <h2 id="ls">Least squares without a PDF</h2>
+  <p>LS does not use a PDF. You pick \(s[n](\theta)\) and minimise the residual energy</p>
+  $$
+  J(\theta)=\sum_{n=0}^{N-1}\big(x[n]-s[n](\theta)\big)^2=\|\mathbf{x}-\mathbf{s}(\theta)\|^2.
+  $$
+  <p>No claim of optimality, no variance formula, unless you add assumptions later (WGN \(\Rightarrow\) LS coincides with MLE; known \(\mathbf{C}\) \(\Rightarrow\) WLS / BLUE).</p>
+  <p class="aviso">Exam says “no noise statistics” / “no PDF”: LS. Official 20/01/2020 Q4a: “Least squares, since it requires no function for the noise.” If the covariance <i>is</i> known, do not stay with ordinary LS — that is BLUE, next section.</p>
+
+  <h3>Linear LS, every step</h3>
+  <p>\(\mathbf{s}=\mathbf{H}\boldsymbol{\theta}\), \(N&gt;K\), \(\mathbf{H}\) full rank.</p>
+  $$
+  \begin{aligned}
+  J(\boldsymbol{\theta})
+  &amp;=\|\mathbf{x}-\mathbf{H}\boldsymbol{\theta}\|^2
+  =(\mathbf{x}-\mathbf{H}\boldsymbol{\theta})^\top(\mathbf{x}-\mathbf{H}\boldsymbol{\theta})\\
+  &amp;=\mathbf{x}^\top\mathbf{x}-2\mathbf{x}^\top\mathbf{H}\boldsymbol{\theta}+\boldsymbol{\theta}^\top\mathbf{H}^\top\mathbf{H}\boldsymbol{\theta}.
+  \end{aligned}
+  $$
+  <p>\(\mathbf{H}^\top\mathbf{H}\) is symmetric. Differentiate: \(\partial(\boldsymbol{\theta}^\top\mathbf{A}\boldsymbol{\theta})/\partial\boldsymbol{\theta}=2\mathbf{A}\boldsymbol{\theta}\), \(\partial(\mathbf{b}^\top\boldsymbol{\theta})/\partial\boldsymbol{\theta}=\mathbf{b}\).</p>
+  $$
+  \frac{\partial J}{\partial\boldsymbol{\theta}}=-2\mathbf{H}^\top\mathbf{x}+2\mathbf{H}^\top\mathbf{H}\boldsymbol{\theta}\stackrel{!}{=}0
+  \qquad\Rightarrow\qquad
+  \mathbf{H}^\top\mathbf{H}\,\hat{\boldsymbol{\theta}}=\mathbf{H}^\top\mathbf{x}.
+  $$
+  <p>That is the <i>normal equation</i>. Invert:</p>
+  $$
+  \hat{\boldsymbol{\theta}}_{\mathrm{LS}}=(\mathbf{H}^\top\mathbf{H})^{-1}\mathbf{H}^\top\mathbf{x}.
+  $$
+  <p>Scalar through the origin (\(\mathbf{H}=\mathbf{h}\) a vector — electric car; sinusoid amplitude below):</p>
+  $$
+  \hat\theta_{\mathrm{LS}}=\frac{\mathbf{h}^\top\mathbf{x}}{\mathbf{h}^\top\mathbf{h}}=\frac{\sum_n h[n]\,x[n]}{\sum_n h[n]^2}.
+  $$
+
+  <h2>Geometry</h2>
+  <p>Columns of \(\mathbf{H}\) span a \(K\)-dimensional subspace of \(\mathbb{R}^N\). The candidate signals \(\mathbf{s}=\mathbf{H}\boldsymbol{\theta}\) live in that subspace. \(J=\|\mathbf{e}\|^2\) with \(\mathbf{e}=\mathbf{x}-\mathbf{s}\). The shortest error is orthogonal to the subspace (orthogonality principle):</p>
+  $$
+  \mathbf{H}^\top(\mathbf{x}-\mathbf{H}\hat{\boldsymbol{\theta}})=\mathbf{0},
+  $$
+  <p>which is again the normal equation. The fitted signal is the orthogonal projection of the data onto \(\mathrm{col}(\mathbf{H})\):</p>
+  $$
+  \mathbf{P}=\mathbf{H}(\mathbf{H}^\top\mathbf{H})^{-1}\mathbf{H}^\top,\qquad
+  \hat{\mathbf{s}}=\mathbf{P}\mathbf{x},\qquad
+  \mathbf{e}=(\mathbf{I}-\mathbf{P})\mathbf{x}\perp\mathrm{col}(\mathbf{H}).
+  $$
+  <p>\(\mathbf{P}\) is symmetric and idempotent: \(\mathbf{P}^\top=\mathbf{P}\), \(\mathbf{P}^2=\mathbf{P}\).</p>
+  <p class="aviso">Resit 2022 2c: “the solution vector \(\hat{\boldsymbol{\theta}}\) is orthogonal to the span of the columns of \(\mathbf{H}\)” is false. \(\hat{\mathbf{s}}=\mathbf{H}\hat{\boldsymbol{\theta}}\) <i>lies in</i> the span; the <i>residual</i> is orthogonal to the span. Official correct MCQ that year was (a) (nonlinear LS is sometimes linearizable). Linearization-by-transform was “no longer part of the content” in that grading; Gauss–Newton still is.</p>
+
+  <h2>Weighted LS and BLUE</h2>
+  <p>Replace the Euclidean inner product by a positive-definite weight \(\mathbf{W}\):</p>
+  $$
+  J=(\mathbf{x}-\mathbf{H}\boldsymbol{\theta})^\top\mathbf{W}(\mathbf{x}-\mathbf{H}\boldsymbol{\theta}),
+  \qquad
+  \hat{\boldsymbol{\theta}}_{\mathrm{WLS}}=(\mathbf{H}^\top\mathbf{W}\mathbf{H})^{-1}\mathbf{H}^\top\mathbf{W}\mathbf{x}.
+  $$
+  <p>If \(\mathbb{E}[\mathbf{x}]=\mathbf{H}\boldsymbol{\theta}\) (linear mean), WLS is unbiased for any PD \(\mathbf{W}\):</p>
+  $$
+  \mathbb{E}[\hat{\boldsymbol{\theta}}_{\mathrm{WLS}}]
+  =(\mathbf{H}^\top\mathbf{W}\mathbf{H})^{-1}\mathbf{H}^\top\mathbf{W}\,\mathbf{H}\boldsymbol{\theta}
+  =\boldsymbol{\theta}.
+  $$
+  <p>Let \(\mathbf{C}_x=\mathrm{Cov}(\mathbf{x})\). Then \(\hat{\boldsymbol{\theta}}=\mathbf{A}\mathbf{x}\) with \(\mathbf{A}=(\mathbf{H}^\top\mathbf{W}\mathbf{H})^{-1}\mathbf{H}^\top\mathbf{W}\), so</p>
+  $$
+  \mathbf{C}_{\hat{\boldsymbol{\theta}}}
+  =\mathbf{A}\,\mathbf{C}_x\,\mathbf{A}^\top
+  =(\mathbf{H}^\top\mathbf{W}\mathbf{H})^{-1}\mathbf{H}^\top\mathbf{W}\,\mathbf{C}_x\,\mathbf{W}\mathbf{H}\,(\mathbf{H}^\top\mathbf{W}\mathbf{H})^{-1}.
+  $$
+  <p>Choose \(\mathbf{W}=\mathbf{C}_x^{-1}\). The sandwich collapses:</p>
+  $$
+  \mathbf{H}^\top\mathbf{W}\,\mathbf{C}_x\,\mathbf{W}\mathbf{H}
+  =\mathbf{H}^\top\mathbf{C}_x^{-1}\mathbf{C}_x\mathbf{C}_x^{-1}\mathbf{H}
+  =\mathbf{H}^\top\mathbf{C}_x^{-1}\mathbf{H},
+  $$
+  $$
+  \mathbf{C}_{\hat{\boldsymbol{\theta}}}=(\mathbf{H}^\top\mathbf{C}_x^{-1}\mathbf{H})^{-1}.
+  $$
+  <p>Gauss–Markov: this is the smallest covariance among <i>all linear unbiased</i> estimators. Write any other linear unbiased estimator as \(\mathbf{A}'=\mathbf{A}+\mathbf{B}\) with \(\mathbf{B}\mathbf{H}=\mathbf{0}\) (unbiasedness). The extra term \(\mathbf{B}\mathbf{C}_x\mathbf{B}^\top\) is PSD, so you cannot beat \(\mathbf{A}\) inside the linear class. That estimator is the BLUE:</p>
+  $$
+  \hat{\boldsymbol{\theta}}_{\mathrm{BLUE}}=(\mathbf{H}^\top\mathbf{C}^{-1}\mathbf{H})^{-1}\mathbf{H}^\top\mathbf{C}^{-1}\mathbf{x}.
+  $$
+  <p>Same formula as the Gaussian linear-model MLE. BLUE only needs mean and covariance, not Gaussianity, and only claims optimality inside the linear class. If the noise <i>is</i> Gaussian, BLUE = MLE = MVUE.</p>
+  <p>If \(\mathbf{C}=\sigma^2\mathbf{I}\), BLUE = ordinary LS.</p>
+  <p class="aviso">If \(\mathbf{C}\) is known, ordinary LS ignores information you have. Use \(\mathbf{W}=\mathbf{C}^{-1}\). Ordinary LS is BLUE only when the noise is white (or already whitened).</p>
+
+  <h2 id="worked">Worked SLT numbers</h2>
+
+  <h3>Sinusoid amplitude — SLT4 2024–25 Ex.&nbsp;4.1</h3>
+  <p>\(y[n]=\alpha\sin(\omega n)+w[n]\), \(\omega\) known. Scalar LS with \(h[n]=\sin(\omega n)\):</p>
+  $$
+  J(\alpha)=\sum_i\big(y[n_i]-\alpha\sin(\omega n_i)\big)^2,
+  $$
+  $$
+  \frac{\partial J}{\partial\alpha}=-2\sum_i\big(y[n_i]-\alpha\sin(\omega n_i)\big)\sin(\omega n_i)\stackrel{!}{=}0,
+  $$
+  $$
+  \alpha_{\mathrm{LS}}=\frac{\sum_i\sin(\omega n_i)\,y[n_i]}{\sum_i\sin^2(\omega n_i)}.
+  $$
+  <p>Data: \(\omega=2\), \(y[1..8]=2.31,-2.01,-1.33,3.23,-1.28,-1.66,3.28,-0.88\). Official: \(\alpha_{\mathrm{LS}}=2.99\). Direct evaluation \(\sum\sin(2n)\,y[n]=12.2785\), \(\sum\sin^2(2n)=4.1045\), ratio \(2.991\).</p>
+
+  <h3>Square-wave amplitude — SLT4 2025–26 Ex.&nbsp;4.1</h3>
+  $$
+  s[n]=\begin{cases}A &amp; 0\le n\le M-1,\\ -A &amp; M\le n\le N-1.\end{cases}
+  $$
+  $$
+  J(A)=\sum_{n=0}^{M-1}(x[n]-A)^2+\sum_{n=M}^{N-1}(x[n]+A)^2.
+  $$
+  $$
+  \frac{dJ}{dA}=-2\sum_{n=0}^{M-1}(x[n]-A)+2\sum_{n=M}^{N-1}(x[n]+A)=0.
+  $$
+  <p>Collect \(A\): the first sum contributes \(M A-\sum_{n=0}^{M-1}x[n]\) after dividing by 2 and flipping sign; the second contributes \((N-M)A+\sum_{n=M}^{N-1}x[n]\). Together</p>
+  $$
+  N A-\sum_{n=0}^{M-1}x[n]+\sum_{n=M}^{N-1}x[n]=0,
+  \qquad
+  \hat A=\frac{1}{N}\sum_{n=0}^{M-1}x[n]-\frac{1}{N}\sum_{n=M}^{N-1}x[n].
+  $$
+  <p>If \(x[n]=s[n]+\)WGN, \(\mathbb{E}[\hat A]=A\), \(\mathrm{Var}[\hat A]=\sigma^2/N\), so \(\hat A\sim\mathcal{N}(A,\sigma^2/N)\). Official (4). Linear model with \(\mathbf{H}=[+1,\ldots,+1,-1,\ldots,-1]^\top\), so under WGN this LSE is also the MLE / MVUE.</p>
+
+  <h3>OOK amplitude, BLUE — SLT3 2025–26 Ex.&nbsp;3.3</h3>
+  <p>\(x[n]=A\cos(2\pi f_1 n)+w[n]\), \(\mathbf{C}=\sigma^2\mathbf{I}\). Then BLUE = LS, \(\mathbf{H}=[1,\cos(2\pi f_1),\ldots,\cos(2\pi f_1(N-1))]^\top\):</p>
+  $$
+  \hat A_{\mathrm{BLUE}}=\frac{\sum_{n=0}^{N-1}\cos(2\pi f_1 n)\,x[n]}{\sum_{n=0}^{N-1}\cos^2(2\pi f_1 n)},
+  \qquad
+  \mathrm{Var}[\hat A]=\frac{\sigma^2}{\sum_n\cos^2(2\pi f_1 n)}.
+  $$
+  <p>\(\mathbb{E}[\hat A\mid s_1]=A\), \(\mathbb{E}[\hat A\mid s_0]=0\), same variance under both. Threshold in the middle: \(\gamma=A/2\). Minimize variance \(\Leftrightarrow\) maximize \(\sum\cos^2\): official best frequency in \([0,1/2)\) is \(f_1=0\), \(\mathrm{Var}\to\sigma^2/N\) (a DC; max signal energy). A communications engineer may still not want \(f_1=0\); the estimation question is only about variance.</p>
+
+  <h2>Nonlinear LS: Gauss–Newton and Newton</h2>
+  <p>If \(s(\boldsymbol{\theta})\) is nonlinear, \(J\) need not have a closed-form min. Two course devices.</p>
+  <p><b>A. Transform / separate.</b> If \(\boldsymbol{\alpha}=g(\boldsymbol{\theta})\) makes \(\mathbf{s}=\mathbf{H}\boldsymbol{\alpha}\), do linear LS in \(\boldsymbol{\alpha}\), invert \(g\) (phase via \(a,b\) above).</p>
+  <p><b>B. Iterate.</b> Gauss–Newton linearizes the <i>signal</i> about the current guess \(\boldsymbol{\theta}_k\):</p>
+  $$
+  \mathbf{s}(\boldsymbol{\theta})\approx\mathbf{s}(\boldsymbol{\theta}_k)+\mathbf{H}_k(\boldsymbol{\theta}-\boldsymbol{\theta}_k),\qquad
+  [\mathbf{H}_k]_{n,i}=\frac{\partial s[n;\boldsymbol{\theta}]}{\partial\theta_i}\Big|_{\boldsymbol{\theta}_k}.
+  $$
+  <p>Then one linear LS step for the increment:</p>
+  $$
+  \boldsymbol{\theta}_{k+1}=\boldsymbol{\theta}_k+(\mathbf{H}_k^\top\mathbf{H}_k)^{-1}\mathbf{H}_k^\top\big(\mathbf{x}-\mathbf{s}(\boldsymbol{\theta}_k)\big).
+  $$
+  <p>Newton–Raphson iterates on \(J\) itself:</p>
+  $$
+  \boldsymbol{\theta}_{k+1}=\boldsymbol{\theta}_k-(\nabla^2 J)^{-1}\nabla J.
+  $$
+  <p>The Hessian of \(J\) includes second derivatives of \(s\). Gauss–Newton approximates that Hessian by \(2\mathbf{H}^\top\mathbf{H}\) (the factor 2 cancels with \(\nabla J\)) and drops residual \(\times\) second-derivative terms.</p>
+  <p class="aviso">Resit 2022 2c: “only Gauss–Newton, not Newton–Raphson” is false. Both are legal. Gauss–Newton uses the Jacobian of \(s\). Newton uses \(\nabla^2 J\). Do not swap the two formulae.</p>
+
+  <h3>Exam 20/01/2020 Q4</h3>
+  <p>\(s[n]=A e^{\phi n}\), \(\phi&lt;0\). (a) LS, no noise PDF. (b) \(\phi\) known: linear in \(A\),</p>
+  $$
+  \hat A_{\mathrm{LS}}=\frac{\sum_{n=0}^{N} x[n]e^{\phi n}}{\sum_{n=0}^{N}e^{2\phi n}}.
+  $$
+  <p>(The key writes the sums \(n=0..N\).) (c) Both unknown: \(J(\phi,A)=\sum_n(x[n]-A e^{\phi n})^2\),</p>
+  $$
+  \nabla J=\begin{bmatrix}
+  \sum_n 2A n e^{\phi n}(A e^{\phi n}-x[n])\\
+  \sum_n 2 e^{\phi n}(A e^{\phi n}-x[n])
+  \end{bmatrix}.
+  $$
+  <p>(d) The question asked Gauss–Newton. The official key wrote Newton–Raphson on \(J\):</p>
+  $$
+  \begin{bmatrix}\phi_{k+1}\\ A_{k+1}\end{bmatrix}
+  =\begin{bmatrix}\phi_k\\ A_k\end{bmatrix}
+  -(\nabla^2 J)^{-1}\nabla J.
+  $$
+  <p>Teach both. Gauss–Newton Jacobian, row \(n\): \(\big[A_k n e^{\phi_k n},\; e^{\phi_k n}\big]\), then the increment formula with \(\mathbf{H}_k\). If the grader follows the 2020 key, the Hessian form is what they printed.</p>
+
+  <h2 id="choose">Which estimator?</h2>
+  <p>Learning goal: choose the method from the signal model and from what is known (noise stats? prior?).</p>
+  <ol>
+    <li>Is \(\theta\) random with a usable prior \(p(\theta)\)? Yes, and you can live with a posterior mean: <b>MMSE</b>. Yes, and you want a mode / easy optimization / hard constraint: <b>MAP</b>. Symmetric posterior (Gaussian): they coincide. No prior: classical.</li>
+    <li>Do you know the PDF of the data \(p(\mathbf{x};\theta)\)? Yes: <b>MLE</b>. If the efficiency identity factors, you also have the MVUE. Linear Gaussian: MLE is the closed form above. No PDF: <b>LS</b>.</li>
+    <li>Linear model \(\mathbf{x}=\mathbf{H}\boldsymbol{\theta}+\mathbf{w}\), known mean and covariance but not necessarily Gaussian: <b>BLUE</b> (\(\mathbf{W}=\mathbf{C}^{-1}\)). Best among linear unbiased estimators. If additionally Gaussian, BLUE = MLE = MVUE.</li>
+    <li>Linear model, white unknown-variance or no covariance: ordinary <b>LS</b> \((\mathbf{H}^\top\mathbf{H})^{-1}\mathbf{H}^\top\mathbf{x}\).</li>
+    <li>Nonlinear in \(\theta\): MLE / LS by transform if possible; else Gauss–Newton / Newton–Raphson. Bayesian: usually MAP (the MMSE integral is ugly).</li>
+  </ol>
+  <table>
+    <tr><th>Method</th><th>PDF</th><th>Prior</th><th>Claim</th></tr>
+    <tr><th>MLE</th><td>yes</td><td>no</td><td>asy. efficient; efficient if the identity holds. \(\arg\max p(x;\theta)\)</td></tr>
+    <tr><th>LS</th><td>no</td><td>no</td><td>none in general. \(\arg\min\|x-s\|^2\); linear: \((H^\top H)^{-1}H^\top x\)</td></tr>
+    <tr><th>BLUE</th><td>mean+cov</td><td>no</td><td>best <i>linear</i> unbiased. \((H^\top C^{-1}H)^{-1}H^\top C^{-1}x\)</td></tr>
+    <tr><th>MMSE</th><td>yes, as \(p(x\mid\theta)\)</td><td>yes</td><td>min posterior 2nd moment. \(\mathbb{E}[\theta\mid x]\)</td></tr>
+    <tr><th>MAP</th><td>yes</td><td>yes</td><td>min hit-or-miss cost. \(\arg\max p(\theta\mid x)\)</td></tr>
+  </table>
+  <p>Coincidences worth the A4:</p>
+  <ul>
+    <li>Linear + WGN: MLE = LS = BLUE = MVUE.</li>
+    <li>Linear + Gaussian noise with cov \(\mathbf{C}\): MLE = BLUE.</li>
+    <li>Gaussian prior + Gaussian likelihood: MMSE = MAP = MAE = posterior mean (shrinkage).</li>
+    <li>Uniform prior on an interval: MAP = MLE truncated to that interval (boundary).</li>
+    <li>Large \(N\): MAP \(\to\) MLE (prior washed out); MLE \(\to\) efficient / CRLB.</li>
+  </ul>
+  <p>Exam 20/01/2020 Q4a, official: unknown noise law, exponential signal \(\Rightarrow\) LS.</p>
+  <p>MCQ traps that sit next to this table: CRLB is \(1/\mathcal{I}\), not \(\mathcal{I}\); Fisher is \(\ge 0\), not “strictly negative”; MLE does not always achieve the CRLB; MLE can be found whenever the PDF is known, not only for linear models; Bayesian estimators <i>do</i> use the prior; uniform cost \(\to\) MAP, not MMSE; residual \(\perp\mathrm{col}(H)\), not \(\hat\theta\) itself.</p>
+
+  <h2>Drills</h2>
+
+  <div class="drill">
+    <h3>No noise PDF <span class="tag exam">20/01/2020 · Q4a</span></h3>
+    <p>20/01/2020 Q4a. \(s[n]=A e^{\phi n}\), \(\phi&lt;0\), iid samples, noise PDF not given. Which estimator, and why? If \(\phi\) is known, write \(\hat A\).</p>
+    <details>
+      <summary>Solution</summary>
+      <p>Least squares: it requires no function for the noise. Official Q4a. With \(\phi\) known the model is linear in \(A\), \(h[n]=e^{\phi n}\),</p>
+      $$
+      \hat A_{\mathrm{LS}}=\frac{\sum_n x[n]e^{\phi n}}{\sum_n e^{2\phi n}}.
+      $$
+      <p>Key writes the sums \(n=0..N\).</p>
+    </details>
+  </div>
+
+  <div class="drill">
+    <h3>Square wave <span class="tag exam">SLT4 2025–26 · 4.1</span></h3>
+    <p>SLT4 2025–26 Ex.&nbsp;4.1. \(s[n]=A\) on \(0\le n\le M-1\) and \(s[n]=-A\) on \(M\le n\le N-1\). Derive \(\hat A_{\mathrm{LS}}\). If the noise is WGN, give mean and variance.</p>
+    <details>
+      <summary>Solution</summary>
+      <p>Differentiate \(J(A)=\sum_{n=0}^{M-1}(x[n]-A)^2+\sum_{n=M}^{N-1}(x[n]+A)^2\):</p>
+      $$
+      \hat A=\frac{1}{N}\sum_{n=0}^{M-1}x[n]-\frac{1}{N}\sum_{n=M}^{N-1}x[n].
+      $$
+      <p>Under WGN, unbiased, \(\mathrm{Var}=\sigma^2/N\), so \(\hat A\sim\mathcal{N}(A,\sigma^2/N)\). Official (4). Also MLE / MVUE (linear model, white Gaussian).</p>
+    </details>
+  </div>
+
+  <div class="drill">
+    <h3>OOK / BLUE <span class="tag exam">SLT3 2025–26 · 3.3</span></h3>
+    <p>SLT3 2025–26 Ex.&nbsp;3.3. \(x[n]=A\cos(2\pi f_1 n)+w[n]\), \(\mathbf{C}=\sigma^2\mathbf{I}\). Write \(\hat A_{\mathrm{BLUE}}\) and its variance. Which \(f_1\in[0,1/2)\) minimises that variance?</p>
+    <details>
+      <summary>Solution</summary>
+      $$
+      \hat A_{\mathrm{BLUE}}=\frac{\sum_n\cos(2\pi f_1 n)\,x[n]}{\sum_n\cos^2(2\pi f_1 n)},
+      \qquad
+      \mathrm{Var}=\frac{\sigma^2}{\sum_n\cos^2(2\pi f_1 n)}.
+      $$
+      <p>Minimise variance \(\Leftrightarrow\) maximise \(\sum\cos^2\). Official: \(f_1=0\), variance \(\sigma^2/N\).</p>
+    </details>
+  </div>
+
+  <div class="drill">
+    <h3>Gauss–Newton vs Newton <span class="tag exam">20/01/2020 · Q4d</span></h3>
+    <p>\(s[n]=A e^{\phi n}\), both unknown. Write (i) the Gauss–Newton step, including the Jacobian row, and (ii) the Newton–Raphson step on \(J\). Which one did the 20/01/2020 key print?</p>
+    <details>
+      <summary>Solution</summary>
+      <p>(i) Jacobian row \(n\) at the current guess: \(\big[A_k n e^{\phi_k n},\; e^{\phi_k n}\big]\). Then</p>
+      $$
+      \boldsymbol{\theta}_{k+1}=\boldsymbol{\theta}_k+(\mathbf{H}_k^\top\mathbf{H}_k)^{-1}\mathbf{H}_k^\top\big(\mathbf{x}-\mathbf{s}(\boldsymbol{\theta}_k)\big).
+      $$
+      <p>(ii) Newton on \(J\):</p>
+      $$
+      \begin{bmatrix}\phi_{k+1}\\ A_{k+1}\end{bmatrix}
+      =\begin{bmatrix}\phi_k\\ A_k\end{bmatrix}-(\nabla^2 J)^{-1}\nabla J,
+      $$
+      <p>with \(\nabla J\) as in Q4c. The 2020 key printed (ii) even though the question said Gauss–Newton. Both are legal (resit 2022 2c).</p>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="./05-bayes.html">← MMSE and MAP</a>
+    <a class="next" href="./07-spectra.html">spectral estimation →</a>
+  </div>
+  <p class="foot">5CTA0 Q1 2026–27 · from the course reader, lectures and official keys.</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}]});</script>
+</body>
+</html>

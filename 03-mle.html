@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maximum likelihood — 5CTA0</title>
+  <meta name="description" content="From-zero MLE chapter for 5CTA0: estimator vs estimate, bias and MSE, likelihood, and every exam derivation (exponential, Rayleigh, DC in WGN, atan2, two groups, invariance, uniform boundary).">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</head>
+<body>
+<div class="frame">
+  <div class="mast">
+    <a href="./index.html">5CTA0 · Statistical Signal Processing</a>
+    <span>block 2</span>
+  </div>
+
+  <h1>Pick the \(\theta\) that makes this dataset most plausible.</h1>
+  <p class="answer">You never see \(\theta\). You see noisy data that depend on \(\theta\). An <b>estimator</b> is a recipe \(g(\mathbf{x})\). The <b>estimate</b> \(\hat{\theta}=g(\mathbf{x})\) is a random variable, because \(\mathbf{x}\) is. Maximum likelihood is the recipe that maximises the likelihood of the data you actually saw.</p>
+  <div class="byline">Block 2a · reader ch. 5–7 · VL4–VL7 · 21/01/2019, 04/11/2019, Nov 2022 · SLT3</div>
+
+  <div class="cifras">
+    <div><span class="n">\(\theta\)</span><span>parameter<br>fixed unknown</span></div>
+    <div><span class="n">\(g(\mathbf{x})\)</span><span>estimator<br>a function</span></div>
+    <div><span class="n">\(\hat{\theta}\)</span><span>estimate<br>a random variable</span></div>
+  </div>
+
+  <ul class="toc">
+    <li><a href="#words">Three words, bias, MSE</a><span class="tag">yardstick</span></li>
+    <li><a href="#likelihood">What a likelihood is</a><span class="tag">from zero</span></li>
+    <li><a href="#exam">Exam derivations</a><span class="tag exam">write these</span></li>
+    <li><a href="#invariance">Invariance and the boundary</a><span class="tag">traps</span></li>
+  </ul>
+
+  <h2 id="words">Parameter, estimator, estimate</h2>
+  <p>An experiment is a probabilistic mapping from the parameter to the observation: the PDF \(p(\mathbf{x};\theta)\). An estimator is a deterministic mapping the other way: \(g:\mathbf{x}\mapsto\hat{\theta}\). The recipe exists before you see the data. Talking about “the bias of \(\theta\)” is nonsense; bias is a property of \(g\).</p>
+
+  <table>
+    <tr><th>Object</th><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>Parameter</td><td>\(\theta\)</td><td>Classical: a fixed unknown. Bayesian: random. Not a function of the data.</td></tr>
+    <tr><td>Data</td><td>\(\mathbf{x}=(x[0],\ldots,x[N-1])^\top\)</td><td>Random. What you see.</td></tr>
+    <tr><td>Estimator</td><td>\(g(\mathbf{x})\)</td><td>The recipe. Sample mean, MLE, LS, \ldots</td></tr>
+    <tr><td>Estimate</td><td>\(\hat{\theta}=g(\mathbf{x})\)</td><td>What the recipe returns on this dataset.</td></tr>
+    <tr><td>Classical PDF</td><td>\(p(\mathbf{x};\theta)\)</td><td>Parametrized by a deterministic \(\theta\). Semicolon.</td></tr>
+    <tr><td>Bayesian likelihood</td><td>\(p(\mathbf{x}\mid\theta)\)</td><td>Same formula, \(\theta\) random. Bar. Next chapter after CRLB.</td></tr>
+    <tr><td>Log-likelihood</td><td>\(\ln p(\mathbf{x};\theta)\)</td><td>What you actually differentiate.</td></tr>
+    <tr><td>WGN</td><td>\(w[n]\sim\mathcal{N}(0,\sigma^2)\) iid</td><td>White Gaussian noise.</td></tr>
+  </table>
+
+  <p class="aviso">Slides sometimes write \(p(x\mid\theta)\) for classical MLE. On the exam, semicolon = classical (no prior), bar = Bayesian (prior exists). Mixing them is a free point lost. The reader misspells “Carmér-Rao”. It is <b>Cramér–Rao</b>.</p>
+
+  <h3>Running example: DC in WGN</h3>
+  <p>Reader Example 5.1 / VL4. Unknown DC voltage \(A\), \(N\) noisy samples:</p>
+  $$x_n=A+w_n,\qquad w_n\sim\mathcal{N}(0,\sigma^2)\ \text{iid},\quad n=0,\ldots,N-1.$$
+  $$p(\mathbf{x};A)=\frac{1}{(2\pi\sigma^2)^{N/2}}\exp\left[-\frac{1}{2\sigma^2}\sum_{n=0}^{N-1}(x_n-A)^2\right].$$
+  <p>Three recipes from the reader:</p>
+  $$\hat{A}=\frac{1}{N}\sum_{n=0}^{N-1}x_n,\qquad
+  \tilde{A}=x_0,\qquad
+  \bar{A}=\frac{1}{N-2}\left(2x_0+\sum_{n=1}^{N-2}x_n-2x_{N-1}\right).$$
+
+  <h3>Unbiasedness</h3>
+  $$\mathbb{E}[\hat{\theta}]=\theta\qquad\text{for all }\theta$$
+  <p>in the classical parameter range. “On average you hit the true value.” It does <b>not</b> say a single realization is close. All three DC recipes are unbiased:</p>
+  $$\mathbb{E}[\hat{A}]=\frac{1}{N}\sum_{n=0}^{N-1}\mathbb{E}[A+w_n]=A,$$
+  $$\mathbb{E}[\tilde{A}]=\mathbb{E}[x_0]=A,$$
+  $$\mathbb{E}[\bar{A}]=\frac{1}{N-2}\big(2A+(N-2)A-2A\big)=A.$$
+  <p>Unbiasedness does not pick a winner.</p>
+
+  <h3>Variance</h3>
+  $$\mathrm{Var}[\hat{\theta}]=\mathbb{E}\big[(\hat{\theta}-\mathbb{E}[\hat{\theta}])^2\big]=\mathbb{E}[\hat{\theta}^2]-\big(\mathbb{E}[\hat{\theta}]\big)^2.$$
+  <p>For iid \(x_n\) with \(\mathbb{E}[x_n]=A\), \(\mathrm{Var}[x_n]=\sigma^2\), so \(\mathbb{E}[x_n^2]=\sigma^2+A^2\), and independence gives \(\mathbb{E}[x_n x_m]=A^2\) for \(n\neq m\):</p>
+  $$
+  \begin{aligned}
+  \mathrm{Var}[\hat{A}]
+  &amp;=\mathbb{E}\left[\left(\frac{1}{N}\sum_n x_n\right)^2\right]-A^2\\
+  &amp;=\frac{1}{N^2}\left(\sum_n\mathbb{E}[x_n^2]+\sum_{n\neq i}\mathbb{E}[x_n]\mathbb{E}[x_i]\right)-A^2\\
+  &amp;=\frac{1}{N^2}\big(N(\sigma^2+A^2)+N(N-1)A^2\big)-A^2
+  =\frac{\sigma^2}{N}.
+  \end{aligned}
+  $$
+  <p>Reader: \(\mathrm{Var}[\tilde{A}]=\sigma^2\), \(\mathrm{Var}[\bar{A}]=\dfrac{(N+6)}{(N-2)^2}\sigma^2\). The sample mean wins by averaging noise. Do not confuse \(\bar{A}\) with the SLT estimator below: the reader puts a <b>minus</b> on the last sample and divides by \(N-2\).</p>
+
+  <h3>MSE = variance + bias squared</h3>
+  <p>The natural figure of merit is mean squared error \(\mathrm{MSE}(\hat{\theta})=\mathbb{E}\big[(\hat{\theta}-\theta)^2\big]\). Write \(b(\theta)=\mathbb{E}[\hat{\theta}]-\theta\) and split the error:</p>
+  $$\hat{\theta}-\theta=\big(\hat{\theta}-\mathbb{E}[\hat{\theta}]\big)+b(\theta).$$
+  $$
+  \begin{aligned}
+  \mathrm{MSE}
+  &amp;=\mathbb{E}\big[(\hat{\theta}-\mathbb{E}[\hat{\theta}]+b(\theta))^2\big]\\
+  &amp;=\mathbb{E}\big[(\hat{\theta}-\mathbb{E}[\hat{\theta}])^2\big]
+  +2b(\theta)\mathbb{E}[\hat{\theta}-\mathbb{E}[\hat{\theta}]]
+  +b(\theta)^2\\
+  &amp;=\mathrm{Var}[\hat{\theta}]+b(\theta)^2,
+  \end{aligned}
+  $$
+  <p>because the cross term is the expectation of a zero-mean quantity.</p>
+
+  <p class="aviso">Minimising MSE over <i>all</i> estimators is not a well-posed classical problem: the minimiser is allowed to depend on the unknown \(\theta\), so you get unrealizable estimators. Restrict to <b>unbiased</b> estimators (\(b=0\)), then MSE = variance, and you look for the <b>minimum-variance unbiased estimator (MVUE)</b>: unbiased, and \(\mathrm{Var}[\hat{\theta}]\le\mathrm{Var}[\tilde{\theta}]\) for every other unbiased \(\tilde{\theta}\), for all \(\theta\). An MVUE need not exist. When it does, it is unique.</p>
+  <p class="aviso">A slightly biased estimator can beat an unbiased one in MSE (bias–variance). The course still uses unbiasedness + CRLB as the classical yardstick. CRLB is the next chapter.</p>
+
+  <div class="drill">
+    <h3>Two DC estimators <span class="tag exam">SLT3 2024–25 · 3.2</span></h3>
+    <p>Model \(x[n]=A+w[n]\), \(n=0,\ldots,N-1\), \(\sigma^2=1\).</p>
+    $$\hat{A}_1=\frac{1}{N}\sum_{n=0}^{N-1}x[n],\qquad
+    \hat{A}_2=\frac{1}{N+2}\left[2x[0]+\sum_{n=1}^{N-2}x[n]+2x[N-1]\right].$$
+    <p>Are they unbiased? Variances? Which is better for \(N&gt;2\)?</p>
+    <details>
+      <summary>Solution</summary>
+      <p>\(\mathbb{E}[\hat{A}_1]=A\). For \(\hat{A}_2\), the endpoints have weight 2 and the middle \(N-2\) samples have weight 1:</p>
+      $$\mathbb{E}[\hat{A}_2]=\frac{1}{N+2}\big(2A+(N-2)A+2A\big)=\frac{(N+2)A}{N+2}=A.$$
+      <p>Both unbiased. Independent samples, \(\sigma^2=1\): \(\mathrm{Var}[\hat{A}_1]=1/N\), and</p>
+      $$\mathrm{Var}[\hat{A}_2]=\frac{1}{(N+2)^2}\big(4\cdot 1+(N-2)\cdot 1+4\cdot 1\big)=\frac{N+6}{(N+2)^2}.$$
+      $$\mathrm{Var}[\hat{A}_2]-\mathrm{Var}[\hat{A}_1]=\frac{N+6}{(N+2)^2}-\frac{1}{N}=\frac{2N-4}{N(N+2)^2}.$$
+      <p>For integer \(N&gt;2\) this is \(&gt;0\), so \(\hat{A}_1\) has smaller variance. Official conclusion: \(\hat{A}_1\) is better in almost all practical situations.</p>
+      <p class="aviso">This \(\hat{A}_2\) is <b>not</b> the reader’s third estimator: both endpoints have weight \(+2\), denominator \(N+2\). The official solution writes a minus in front of \(2A\) in one line and still claims \(=A\): OCR/algebra slip. The estimator in the <b>exercise</b> has \(+2x[N-1]\). The variance \((N+6)/(N+2)^2\) is the keepable part.</p>
+    </details>
+  </div>
+
+  <h2 id="likelihood">What a likelihood is</h2>
+  <p>Fix the data you actually observed. The function of \(\theta\)</p>
+  $$\mathcal{L}(\theta)=p(\mathbf{x};\theta)\qquad(\mathbf{x}\text{ frozen})$$
+  <p>is the <b>likelihood</b>. It is not a PDF in \(\theta\): \(\int\mathcal{L}(\theta)\,d\theta\) need not be 1. It answers: “if the true parameter were this \(\theta\), how plausible would <b>this</b> dataset be?”</p>
+  <p>IID samples: independence turns the joint into a product, the log into a sum.</p>
+  $$p(\mathbf{x};\theta)=\prod_{n=0}^{N-1}p(x[n];\theta),\qquad
+  \ln p(\mathbf{x};\theta)=\sum_{n=0}^{N-1}\ln p(x[n];\theta).$$
+  <p>The log is strictly increasing, so the maximiser is the same:</p>
+  $$\hat{\theta}_{\mathrm{ML}}=\arg\max_{\theta}p(\mathbf{x};\theta)=\arg\max_{\theta}\ln p(\mathbf{x};\theta).$$
+  <p>If \(\ln p\) is differentiable and the max is <b>interior</b>, a necessary condition is the <b>likelihood equation</b></p>
+  $$\left.\frac{\partial}{\partial\theta}\ln p(\mathbf{x};\theta)\right|_{\theta=\hat{\theta}_{\mathrm{ML}}}=0.$$
+  <p>Necessary, not sufficient: check it is a max (second derivative \(&lt;0\), or inspect the function). If the max is on the <b>boundary</b> of the parameter set, the derivative need not vanish — look at the function (uniform example below).</p>
+  <p>Exam recipe, every time:</p>
+  <ol>
+    <li>Write \(p(\mathbf{x};\theta)\). IID \(\Rightarrow\) product.</li>
+    <li>Take \(\ln\). Drop constants that do not depend on \(\theta\).</li>
+    <li>Differentiate. Set the score to 0. Solve for \(\theta\).</li>
+    <li>Second derivative \(&lt;0\), or argue the function. If support depends on \(\theta\), skip the derivative and look at the function.</li>
+  </ol>
+  <p><b>If an efficient estimator exists, it is the MLE.</b> The efficiency identity (next chapter) is \(\partial\ln p/\partial\theta=\mathcal{I}(\theta)(g(\mathbf{x})-\theta)\). At the MLE the left side is 0 and \(\mathcal{I}(\theta)&gt;0\), hence \(g(\mathbf{x})=\hat{\theta}_{\mathrm{ML}}\).</p>
+
+  <h3>Asymptotics</h3>
+  <p>Under the CRLB regularity conditions, as \(N\to\infty\):</p>
+  <ul>
+    <li><b>Consistent:</b> \(\Pr\big(|\hat{\theta}_{\mathrm{ML}}-\theta|&gt;\varepsilon\big)\to 0\).</li>
+    <li><b>Asymptotically unbiased:</b> \(\mathbb{E}[\hat{\theta}_{\mathrm{ML}}]\to\theta\).</li>
+    <li><b>Asymptotically efficient:</b> \(\mathrm{Var}[\hat{\theta}_{\mathrm{ML}}]\to\mathcal{I}(\theta)^{-1}\).</li>
+    <li><b>Asymptotically Gaussian:</b> \(\hat{\theta}_{\mathrm{ML}}\sim\mathcal{N}\big(\theta,\mathcal{I}(\theta)^{-1}\big)\). Vector: \(\hat{\boldsymbol{\theta}}_{\mathrm{ML}}\sim\mathcal{N}(\boldsymbol{\theta},\mathbf{I}(\boldsymbol{\theta})^{-1})\).</li>
+  </ul>
+  <p>Consistency is stronger than asymptotic unbiasedness: the random variable itself concentrates, not just its mean.</p>
+  <p class="aviso">VL slides write Chebyshev as \(\Pr[|\hat{\theta}-\theta|&gt;\varepsilon]\le\mathbb{E}[(\hat{\theta}-\theta)^2]/\varepsilon\). Chebyshev is \(\mathrm{MSE}/\varepsilon^2\). The square is missing; the conclusion (MSE \(\to 0\) \(\Rightarrow\) consistency) still holds.</p>
+  <p class="aviso">Finite-sample MLE can be biased (Gaussian variance \(1/N\) instead of \(1/(N-1)\); uniform max; Rayleigh scale; exponential rate). You still use it because of the asymptotics, and because if an efficient estimator exists it <b>is</b> the MLE.</p>
+
+  <h2 id="exam">Derivations the exam actually uses</h2>
+
+  <h3>Exponential rate <span class="tag exam">21/01/2019 · Q2a</span></h3>
+  <p>IID \(p(x;\lambda)=\lambda e^{-\lambda x}\) for \(x\ge 0\), \(\lambda&gt;0\) (reader App. B.1). Joint:</p>
+  $$p(\mathbf{x};\lambda)=\lambda^N\exp\left(-\lambda\sum_{i=0}^{N-1}x_i\right),$$
+  $$\ln p=N\ln\lambda-\lambda\sum_i x_i,$$
+  $$\frac{\partial}{\partial\lambda}\ln p=\frac{N}{\lambda}-\sum_i x_i
+  \stackrel{!}{=}0
+  \qquad\Rightarrow\qquad
+  \hat{\lambda}_{\mathrm{ML}}=\frac{N}{\sum_{i=0}^{N-1}x_i}=\frac{1}{\bar{x}}.$$
+  <p>Second derivative \(-N/\lambda^2&lt;0\): a maximum. Official key: \(\hat{\lambda}_{\mathrm{ML}}=N/\sum_i x_i\). Mean of one sample is \(1/\lambda\), so the MLE is “one over the sample mean”.</p>
+  <p>For \(N&gt;1\), \(\mathbb{E}[\hat{\lambda}_{\mathrm{ML}}]=N\lambda/(N-1)\neq\lambda\): <b>biased</b>, asymptotically unbiased. The score \(N/\lambda-\sum x_i\) cannot be written as \(\mathcal{I}(\lambda)(g(\mathbf{x})-\lambda)\) with \(g\) independent of \(\lambda\). No finite-sample efficient estimator. CRLB \(=\lambda^2/N\) (next chapter). The MVUE \((N-1)/\sum x_i\) has variance \(\lambda^2/(N-2)&gt;\lambda^2/N\).</p>
+
+  <h3>Rayleigh-type <span class="tag exam">04/11/2019 · Ex. 3</span></h3>
+  <p>IID, \(x\ge 0\),</p>
+  $$p(x;\theta)=\frac{x}{\theta^2}\exp\left[-\frac{x^2}{2\theta^2}\right].$$
+  <p>This is Rayleigh with scale \(\theta\); \(\mathbb{E}[x^2]=2\theta^2\). One sample:</p>
+  $$\ln p(x;\theta)=\ln x-2\ln\theta-\frac{x^2}{2\theta^2}.$$
+  <p>\(N\) iid:</p>
+  $$\ln p(\mathbf{x};\theta)=\sum_n\ln x[n]-2N\ln\theta-\frac{1}{2\theta^2}\sum_{n=0}^{N-1}x^2[n],$$
+  $$\frac{\partial}{\partial\theta}\ln p=-\frac{2N}{\theta}+\frac{1}{\theta^3}\sum_n x^2[n]
+  \stackrel{!}{=}0.$$
+  <p>Multiply by \(\theta^3\) (\(\theta&gt;0\)):</p>
+  $$-2N\theta^2+\sum_n x^2[n]=0
+  \qquad\Rightarrow\qquad
+  \hat{\theta}_{\mathrm{ML}}=\sqrt{\frac{1}{2N}\sum_{n=0}^{N-1}x^2[n]}.$$
+  <p>Official (9)/(3): same formula. Keep the positive square root (\(\theta&gt;0\)).</p>
+  <p class="aviso">Practice 28/10/2021 2b is the cousin \(p=\frac{x}{\theta}\exp(-x^2/(2\theta))\), i.e. \(\theta\) is the scale-squared: MLE \(\hat{\theta}=\frac{1}{2N}\sum x^2[n]\). Do not mix the two PDFs.</p>
+  <p>Same exam, part b, asked the CRLB. Second derivative of the log-likelihood:</p>
+  $$\frac{\partial^2}{\partial\theta^2}\ln p=\frac{2N}{\theta^2}-\frac{3}{\theta^4}\sum_n x^2[n].$$
+  $$\mathcal{I}(\theta)=-\mathbb{E}\left[\frac{\partial^2}{\partial\theta^2}\ln p\right]
+  =-\frac{2N}{\theta^2}+\frac{3}{\theta^4}\cdot N\cdot\mathbb{E}[x^2].$$
+  <p>\(\mathbb{E}[x^2]=2\theta^2\) (integrate, or: \(x/\theta\) is standard Rayleigh, \(\mathbb{E}[(x/\theta)^2]=2\)). So</p>
+  $$\mathcal{I}(\theta)=-\frac{2N}{\theta^2}+\frac{3}{\theta^4}\cdot 2N\theta^2
+  =\frac{-2N+6N}{\theta^2}=\frac{4N}{\theta^2},
+  \qquad
+  \mathrm{Var}[\hat{\theta}]\ge\frac{\theta^2}{4N}.$$
+  <p class="aviso">Official key writes \(\mathrm{VAR}(\hat{\theta})\ge\hat{\theta}^2/(4N)\). Wrong object: CRLB is a function of the <b>true</b> \(\theta\), not of the estimate. Report \(\theta^2/(4N)\). The score is not linear in \((\hat{\theta}_{\mathrm{ML}}-\theta)\), so this MLE is not finite-sample efficient.</p>
+  <p>Same exam, part c, MAP with exponential prior \(p(\theta)=\lambda e^{-\lambda\theta}\), \(\theta&gt;0\). Maximize \(p(\mathbf{x}\mid\theta)p(\theta)\):</p>
+  $$\ln\big(p(\mathbf{x}\mid\theta)p(\theta)\big)
+  =\mathrm{const}-2N\ln\theta-\frac{1}{2\theta^2}\sum x^2[n]-\lambda\theta,$$
+  $$\frac{\partial}{\partial\theta}=-\frac{2N}{\theta}+\frac{1}{\theta^3}\sum x^2[n]-\lambda\stackrel{!}{=}0
+  \qquad\Rightarrow\qquad
+  \lambda\theta^3+2N\theta^2-\sum x^2[n]=0.$$
+  <p>Cubic, no tidy closed form. Official: “\(\hat{\theta}_{\mathrm{MAP}}\) depends on the value of \(\lambda\)”. Also project onto \(\theta&gt;0\).</p>
+
+  <h3>DC level in WGN — the workhorse</h3>
+  <p>Reader Example 7.2 / VL6. \(x_n=A+w_n\), \(w_n\sim\mathcal{N}(0,\sigma^2)\) iid, \(\sigma^2\) known.</p>
+  $$\ln p(\mathbf{x};A)=-\frac{N}{2}\ln(2\pi\sigma^2)-\frac{1}{2\sigma^2}\sum_n(x_n-A)^2,$$
+  $$\frac{\partial}{\partial A}\ln p=\frac{1}{\sigma^2}\sum_n(x_n-A)=\frac{N}{\sigma^2}\left(\frac{1}{N}\sum_n x_n-A\right)\stackrel{!}{=}0,$$
+  $$\hat{A}_{\mathrm{ML}}=\frac{1}{N}\sum_{n=0}^{N-1}x_n=\bar{x}.$$
+  <p>This <b>is</b> the efficiency identity with \(\mathcal{I}(A)=N/\sigma^2\) and \(g=\bar{x}\). Sample mean is MLE, efficient, and MVUE. \(\mathrm{Var}=\sigma^2/N=\mathrm{CRLB}\).</p>
+  <p><b>Both mean and variance unknown</b> (reader Example 7.4). Score in \(A\) still gives \(\hat{A}=\bar{x}\). Score in \(\sigma^2\):</p>
+  $$\frac{\partial}{\partial\sigma^2}\ln p=-\frac{N}{2\sigma^2}+\frac{1}{2\sigma^4}\sum_n(x_n-A)^2=0
+  \Rightarrow
+  \hat{\sigma}^2_{\mathrm{ML}}=\frac{1}{N}\sum_n(x_n-\bar{x})^2.$$
+  <p>Biased: \(\mathbb{E}[\hat{\sigma}^2]=\frac{N-1}{N}\sigma^2\). Unbiased cousin uses \(N-1\). Asymptotically \(\hat{\sigma}^2\sim\mathcal{N}(\sigma^2,2\sigma^4/N)\), matching the Fisher-matrix bound \(\mathrm{Var}[\sigma^2]\ge 2\sigma^4/N\).</p>
+  <p><b>DC with variance equal to the mean</b> (reader Example 7.3): \(x_n=A+w_n\), \(w_n\sim\mathcal{N}(0,A)\), \(A&gt;0\). No efficient estimator. Likelihood equation reduces to the quadratic \(A^2+A-\frac{1}{N}\sum x_n^2=0\), positive root</p>
+  $$\hat{A}_{\mathrm{ML}}=-\frac12+\sqrt{\frac{1}{N}\sum_n x_n^2+\frac14}.$$
+  <p>Jensen \(\Rightarrow\) biased; LLN \(\Rightarrow\) consistent.</p>
+
+  <h3>Angle from two Gaussians <span class="tag exam">Nov 2022 · 2d–2e</span></h3>
+  <p>No official numeric key in the old-exam answers file. Derive from the paper.</p>
+  $$\mathbf{x}=A\begin{bmatrix}\cos\theta\\\sin\theta\end{bmatrix}+\mathbf{w},
+  \qquad
+  p(\mathbf{x};\theta)=\frac{1}{2\pi\sigma^2}\exp\left(-\frac{1}{2\sigma^2}\Big[(x_1-A\cos\theta)^2+(x_2-A\sin\theta)^2\Big]\right).$$
+  <p>\(A&gt;0\) and \(\sigma^2\) known. Expand the quadratic:</p>
+  $$(x_1-A\cos\theta)^2+(x_2-A\sin\theta)^2
+  =x_1^2+x_2^2+A^2-2A(x_1\cos\theta+x_2\sin\theta).$$
+  <p>Maximizing the likelihood \(\Leftrightarrow\) maximizing \(x_1\cos\theta+x_2\sin\theta\) (the only \(\theta\)-dependent term). Write</p>
+  $$x_1\cos\theta+x_2\sin\theta=R\cos(\theta-\phi),\qquad
+  R=\sqrt{x_1^2+x_2^2},\quad\phi=\mathrm{atan2}(x_2,x_1).$$
+  <p>Maximum at \(\theta=\phi\):</p>
+  $$\hat{\theta}_{\mathrm{ML}}=\mathrm{atan2}(x_2,x_1).$$
+  <p class="aviso">\(\arctan(x_2/x_1)\) loses the quadrant. Use two-argument atan2. Setting \(\partial/\partial\theta=0\) gives \(\tan\theta=x_2/x_1\), same ambiguity.</p>
+  <p>Fisher (2e). Write \(Q\) for the quadratic. Then</p>
+  $$\frac{\partial Q}{\partial\theta}=2(x_1-A\cos\theta)(A\sin\theta)+2(x_2-A\sin\theta)(-A\cos\theta)=2A(x_1\sin\theta-x_2\cos\theta),$$
+  $$\frac{\partial\ln p}{\partial\theta}=-\frac{A}{\sigma^2}(x_1\sin\theta-x_2\cos\theta),$$
+  $$\frac{\partial^2\ln p}{\partial\theta^2}=-\frac{A}{\sigma^2}(x_1\cos\theta+x_2\sin\theta).$$
+  <p>Hint on the exam: \(\mathbb{E}[x_1]=A\cos\theta\), \(\mathbb{E}[x_2]=A\sin\theta\). So</p>
+  $$\mathcal{I}(\theta)=-\mathbb{E}\left[\frac{\partial^2\ln p}{\partial\theta^2}\right]
+  =\frac{A}{\sigma^2}\big(A\cos^2\theta+A\sin^2\theta\big)=\frac{A^2}{\sigma^2}.$$
+  <p>CRLB \(=\sigma^2/A^2\). Large amplitude or small noise: easier angle. One snapshot, so no factor \(N\).</p>
+
+  <h3>Two groups sharing a mean <span class="tag exam">SLT3 2025–26 · 3.2</span></h3>
+  <p>\(X_i\stackrel{\mathrm{iid}}{\sim}\mathcal{N}(\mu,\sigma^2)\), \(Y_i\stackrel{\mathrm{iid}}{\sim}\mathcal{N}(\mu,\lambda\sigma^2)\), \(i=1,\ldots,N\). Shared mean \(\mu\) is <b>known</b>. Unknown: \(\lambda&gt;0\), and in (b) also \(\sigma^2\).</p>
+  <p><b>(a) \(\sigma^2\) known.</b> Independence of all \(2N\) samples:</p>
+  $$
+  \begin{aligned}
+  p(\mathbf{x},\mathbf{y};\lambda)
+  &amp;=\frac{1}{(2\pi\sigma^2)^{N/2}}\exp\left(-\frac{1}{2\sigma^2}\sum_i(x_i-\mu)^2\right)\\
+  &amp;\quad\cdot\frac{1}{(2\pi\lambda\sigma^2)^{N/2}}\exp\left(-\frac{1}{2\lambda\sigma^2}\sum_i(y_i-\mu)^2\right).
+  \end{aligned}
+  $$
+  <p>Drop terms without \(\lambda\):</p>
+  $$\mathcal{L}=-\frac{N}{2}\ln\lambda-\frac{1}{2\lambda\sigma^2}\sum_i(y_i-\mu)^2+\mathrm{const},$$
+  $$\frac{\partial\mathcal{L}}{\partial\lambda}=-\frac{N}{2\lambda}+\frac{1}{2\lambda^2\sigma^2}\sum_i(y_i-\mu)^2\stackrel{!}{=}0,$$
+  $$\hat{\lambda}_{\mathrm{ML}}=\frac{1}{N\sigma^2}\sum_{i=1}^N(y_i-\mu)^2.$$
+  <p>Official (4). The \(X\)-sample does not enter: given \(\sigma^2\), it carries no information about \(\lambda\).</p>
+  <p><b>(b) \(\sigma^2\) and \(\lambda\) unknown.</b> Same likelihood, now \(p(\mathbf{x},\mathbf{y};\lambda,\sigma^2)\). The \(\lambda\)-equation is still (a). Differentiate in \(\sigma^2\):</p>
+  $$\frac{\partial\mathcal{L}}{\partial\sigma^2}
+  =-\frac{N}{2\sigma^2}+\frac{1}{2\sigma^4}\sum_i(x_i-\mu)^2
+  -\frac{N}{2\sigma^2}+\frac{1}{2\lambda\sigma^4}\sum_i(y_i-\mu)^2.$$
+  <p>Set to 0 and substitute \(\lambda=\frac{1}{N\sigma^2}\sum(y_i-\mu)^2\). The last term becomes \(N/(2\sigma^2)\), so</p>
+  $$-\frac{N}{\sigma^2}+\frac{1}{2\sigma^4}\sum_i(x_i-\mu)^2+\frac{N}{2\sigma^2}=0
+  \qquad\Rightarrow\qquad
+  -\frac{N}{2\sigma^2}+\frac{1}{2\sigma^4}\sum_i(x_i-\mu)^2=0,$$
+  $$\hat{\sigma}^2_{\mathrm{ML}}=\frac{1}{N}\sum_{i=1}^N(x_i-\mu)^2,
+  \qquad
+  \hat{\lambda}_{\mathrm{ML}}=\frac{\sum_i(y_i-\mu)^2}{\sum_i(x_i-\mu)^2}.$$
+  <p>Official (12)–(13). Intuition: \(X\) estimates \(\sigma^2\); \(Y\) estimates \(\lambda\sigma^2\); the ratio estimates \(\lambda\).</p>
+
+  <div class="drill">
+    <h3>Exponential MLE, from memory <span class="tag exam">21/01/2019 · Q2a</span></h3>
+    <p>IID \(p(x;\lambda)=\lambda e^{-\lambda x}\), \(x\ge 0\), \(N\) samples. Write \(p(\mathbf{x};\lambda)\), the log-likelihood, the score, and \(\hat{\lambda}_{\mathrm{ML}}\). Is it unbiased for finite \(N\)?</p>
+    <details>
+      <summary>Solution</summary>
+      <p>\(p(\mathbf{x};\lambda)=\lambda^N\exp(-\lambda\sum_i x_i)\). \(\ln p=N\ln\lambda-\lambda\sum_i x_i\). Score \(N/\lambda-\sum_i x_i=0\) gives \(\hat{\lambda}_{\mathrm{ML}}=N/\sum_i x_i\). Official key (1): that formula. Second derivative \(-N/\lambda^2&lt;0\). For \(N&gt;1\), \(\mathbb{E}[\hat{\lambda}_{\mathrm{ML}}]=N\lambda/(N-1)\neq\lambda\): biased, asymptotically unbiased.</p>
+    </details>
+  </div>
+
+  <div class="drill">
+    <h3>Two groups, both variances unknown <span class="tag exam">SLT3 2025–26 · 3.2b</span></h3>
+    <p>\(X_i\sim\mathcal{N}(\mu,\sigma^2)\), \(Y_i\sim\mathcal{N}(\mu,\lambda\sigma^2)\), iid, \(i=1,\ldots,N\). Mean \(\mu\) known. Both \(\lambda&gt;0\) and \(\sigma^2\) unknown. Find \(\hat{\sigma}^2_{\mathrm{ML}}\) and \(\hat{\lambda}_{\mathrm{ML}}\).</p>
+    <details>
+      <summary>Solution</summary>
+      <p>The \(\lambda\)-score still gives \(\hat{\lambda}=\frac{1}{N\sigma^2}\sum_i(y_i-\mu)^2\). Plug that into the \(\sigma^2\)-score; the \(Y\)-term cancels to \(N/(2\sigma^2)\), leaving</p>
+      $$\hat{\sigma}^2_{\mathrm{ML}}=\frac{1}{N}\sum_{i=1}^N(x_i-\mu)^2,\qquad
+      \hat{\lambda}_{\mathrm{ML}}=\frac{\sum_i(y_i-\mu)^2}{\sum_i(x_i-\mu)^2}.$$
+      <p>Official (12)–(13). If \(\sigma^2\) were known, \(X\) would drop out and \(\hat{\lambda}_{\mathrm{ML}}=\frac{1}{N\sigma^2}\sum_i(y_i-\mu)^2\).</p>
+    </details>
+  </div>
+
+  <h2 id="invariance">Invariance, and MLE on a boundary</h2>
+
+  <h3>Invariance</h3>
+  <p>Reader 7.4 / VL7. If \(\alpha=h(\theta)\) and \(h\) is one-to-one,</p>
+  $$\hat{\alpha}_{\mathrm{ML}}=h(\hat{\theta}_{\mathrm{ML}}).$$
+  <p>You maximize in the convenient parametrization, then transform. VL7 also states the property for \(h\) not necessarily one-to-one, via the induced likelihood \(p_T(x;\alpha)=\max_{\{\theta:h(\theta)=\alpha\}}p(x;\theta)\). Exam MCQ (resit 2022 2b, official <b>c</b>): if \(\alpha=\psi(\theta)\) one-to-one then \(\hat{\theta}_{\mathrm{ML}}=\psi^{-1}(\hat{\alpha}_{\mathrm{ML}})\).</p>
+  <p>Worked (VL / EstimationTheory slides). DC in WGN, \(\hat{A}_{\mathrm{ML}}=\bar{x}\). For \(\alpha=e^{A}\), invariance gives \(\hat{\alpha}_{\mathrm{ML}}=e^{\bar{x}}\). Do not re-derive a likelihood in \(\alpha\) unless asked.</p>
+  <p class="aviso">Efficiency is <b>not</b> invariant unless \(h\) is affine. Counter-example: sample mean \(\bar{x}\) is efficient for \(A\), but \(\bar{x}^2\) is biased for \(A^2\):</p>
+  $$\mathbb{E}[\bar{x}^2]=\big(\mathbb{E}[\bar{x}]\big)^2+\mathrm{Var}[\bar{x}]=A^2+\frac{\sigma^2}{N}\neq A^2.$$
+  <p>CRLB of the transform is still valid as a bound; the transformed estimator need not achieve it.</p>
+
+  <h3>Uniform: MLE on a boundary</h3>
+  <p>Reader Example 7.1 / VL6. \(x_i\stackrel{\mathrm{iid}}{\sim}\mathrm{Unif}[0,\theta]\), \(\theta&gt;0\):</p>
+  $$p(\mathbf{x};\theta)=\begin{cases}\theta^{-N}&amp;0\lt\max_i x_i\lt\theta,\\0&amp;\text{else.}\end{cases}$$
+  <p>Likelihood is 0 if \(\theta&lt;\max x_i\), and \(\theta^{-N}\) (strictly decreasing) if \(\theta\ge\max x_i\). So</p>
+  $$\hat{\theta}_{\mathrm{ML}}=\max_i x_i.$$
+  <p>No derivative: support depends on \(\theta\). Same setup breaks the CRLB (next chapter).</p>
+  <p class="aviso">If the max sits on the boundary of the parameter set, the likelihood equation need not hold. Look at the function. Uniform, \(x\in[0,\theta]\), \(x\ge\theta\): MLE is usually \(\max\) or \(\min\).</p>
+
+  <div class="drill">
+    <h3>Uniform \([0,\theta]\) <span class="tag">reader 7.1</span></h3>
+    <p>\(x_1,\ldots,x_N\) iid \(\mathrm{Unif}[0,\theta]\), \(\theta&gt;0\). Write the likelihood as a function of \(\theta\). Find \(\hat{\theta}_{\mathrm{ML}}\). Can you set \(\partial\ln p/\partial\theta=0\)? Can you quote a CRLB?</p>
+    <details>
+      <summary>Solution</summary>
+      <p>\(p(\mathbf{x};\theta)=\theta^{-N}\) on \(\theta\ge\max_i x_i\), and 0 otherwise. That function of \(\theta\) is strictly decreasing on its support, so \(\hat{\theta}_{\mathrm{ML}}=\max_i x_i\). The maximiser is on the boundary of the allowed set: the derivative of \(\theta^{-N}\) is not zero there, and you must not pretend it is. Support depends on \(\theta\), so regularity fails and there is no CRLB. (Resit 24/01/2022 2e is the same trap with \(p(x;\theta)=2x/\theta\) on \([0,\theta]\).)</p>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="./02-processes.html">← random processes</a>
+    <a class="next" href="./04-crlb.html">CRLB →</a>
+  </div>
+  <p class="foot">5CTA0 Q1 2026–27 · from the course reader, lectures and official keys.</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}]});</script>
+</body>
+</html>

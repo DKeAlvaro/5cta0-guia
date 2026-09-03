@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>5CTA0 exam guide — Statistical Signal Processing</title>
+  <meta name="description" content="From-zero study guide for the 5CTA0 written exam at TU/e. Built from past papers (2019–2022), official keys, and the course reader.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</head>
+<body>
+<div class="frame">
+  <div class="mast">
+    <a href="./index.html">5CTA0 · Statistical Signal Processing</a>
+    <span>exam guide</span>
+  </div>
+
+  <h1>Four blocks. Same skeletons every year.</h1>
+  <p class="answer">The written exam is 70% of the grade. It is always the same four exercises — probability, estimation, spectra, detection — with new numbers. This guide teaches the course from zero and trains those skeletons until they are automatic.</p>
+  <div class="byline">Sources: course reader 2023–24, video lectures, official keys 2019–2020, papers 2019–2022, SLT 2024–26. Not a dump of the other agent’s notes.</div>
+
+  <div class="cifras">
+    <div><span class="n">70%</span><span>written exam<br>need ≥ 5.0 here</span></div>
+    <div><span class="n">4</span><span>exercises, ~3 h<br>MC + open</span></div>
+    <div><span class="n">1 A4</span><span>own sheet, both sides<br>+ calculator</span></div>
+  </div>
+
+  <p class="aviso">Lab is 30% and there is no opt-out. Pass rule: exam ≥ 5.0 <i>and</i> weighted average ≥ 5.5. This guide is for the written exam.</p>
+
+  <h2>How to use this</h2>
+  <ol>
+    <li>Read a chapter. Do the algebra yourself; do not just look at it.</li>
+    <li>Close the solution. Do the drill. Then open the spoiler.</li>
+    <li>When a chapter is dry, sit a past paper under time (Appendix).</li>
+    <li>Copy the A4 sheet by hand. Typed is allowed; writing it is how it sticks.</li>
+  </ol>
+  <p>Exam language is English, so the guide is English. Notation matches the reader: \(p(x;\theta)\) classical, \(p(x\mid\theta)\) Bayesian, \(r[\tau]\), \(P(e^{j\theta})\).</p>
+
+  <h2>The four blocks</h2>
+  <ul class="toc">
+    <li><a href="./01-probability.html">0 · Probability from zero</a><span class="tag">block 1 · ~1.5</span></li>
+    <li><a href="./02-processes.html">1 · Random signals and processes</a><span class="tag">block 1</span></li>
+    <li><a href="./03-mle.html">2a · Maximum likelihood</a><span class="tag exam">block 2 · ~2.75</span></li>
+    <li><a href="./04-crlb.html">2b · Fisher information and CRLB</a><span class="tag exam">block 2</span></li>
+    <li><a href="./05-bayes.html">2c · MMSE, MAP, and priors</a><span class="tag exam">block 2</span></li>
+    <li><a href="./06-ls.html">2d · Least squares and BLUE</a><span class="tag">block 2</span></li>
+    <li><a href="./07-spectra.html">3 · Spectral estimation</a><span class="tag exam">block 3 · ~3.0</span></li>
+    <li><a href="./08-detection.html">4 · Detection theory</a><span class="tag exam">block 4 · ~2.75</span></li>
+    <li><a href="./a4.html">A4 formula sheet</a><span class="tag">write this</span></li>
+    <li><a href="./exams.html">Past papers and pattern bank</a><span class="tag">2019–2022</span></li>
+  </ul>
+
+  <h2>What the exam actually is</h2>
+  <table>
+    <tr><th>Aid</th><td>1 A4 both sides (typed or handwritten) + scientific/graphic calculator + dictionary. The 2026–27 guide does not promise a provided formula sheet. Write your own.</td></tr>
+    <tr><th>Shape</th><td>Four exercises, ~3 h. MC + open. After Jan 2019, MC is one correct circle, sprinkled through all four blocks (not a separate Q1). Jan 2019 allowed 1 or 2 correct, with a −0.25 penalty.</td></tr>
+    <tr><th>Points</th><td>Typical split (Nov 2022): 1.5 / 2.75 / 3.0 / 2.75. Spectra is the fattest block. Total 10.</td></tr>
+    <tr><th>What they grade</th><td>Formulation, order, foundation of arguments. A correct number with no likelihood written is not full marks. Shade-the-plot and fill-the-table appear every year.</td></tr>
+  </table>
+
+  <h2>What actually repeats</h2>
+  <p>Seven papers, 2019–2022. The 2020 resit and the 2022 resit are the same exam. These skeletons come back with new numbers:</p>
+  <table>
+    <tr><th>Every paper</th><td>LRT + shade \(P_D / P_{\mathrm{FA}} / P_M\) on a plot. Which region is “decide \(\mathcal H_1\)” is the trap.</td></tr>
+    <tr><th>5 papers</th><td>Bayes with a complement / base-rate trap. Correlogram in \(\cos(k\theta)\). AR(\(p\)) Yule–Walker + PSD overlay.</td></tr>
+    <tr><th>4 papers</th><td>MLE from an iid PDF. CRLB / Fisher / regularity. MAP vs MMSE. MA(\(q\)) from the ACF.</td></tr>
+    <tr><th>Still live</th><td>Spectral factorization (min-phase), ARMA(1,1) → ACF then fake AR(1)/MA(1), Gauss–Newton, matched filter as MC.</td></tr>
+    <tr><th>Legacy</th><td>2-tap Wiener as a 2.5-pt design question: only Jan 2019. Keep \(Rw=r\) as the AR predictor; do not drill a numerical Wiener layout.</td></tr>
+  </table>
+  <p>Full bank, official answers, and key errata: <a href="./exams.html">past papers</a>.</p>
+
+  <p class="foot">Álvaro Menéndez Ros · 5CTA0 Q1 2026–27 · built from Canvas material, not from the previous study dump.</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}]});</script>
+</body>
+</html>

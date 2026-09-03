@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spectral estimation — 5CTA0</title>
+  <meta name="description" content="From-zero 5CTA0 chapter on energy vs power, Wiener–Khinchin, non-parametric estimators, and AR/MA/ARMA spectra. Official numbers from Nov 2019 and SLT6 2025.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</head>
+<body>
+<div class="frame">
+  <div class="mast">
+    <a href="./index.html">5CTA0 · Statistical Signal Processing</a>
+    <span>block 3</span>
+  </div>
+
+  <h1>The periodogram does not get quieter.</h1>
+  <p class="answer">A random signal has no ordinary Fourier transform. What exists is a <b>power spectral density</b>. From \(N\) samples you get a random function \(\hat P\). Raw Fourier methods are asymptotically unbiased and <b>inconsistent</b>. Averaging or a lag-window buys variance. An AR / MA / ARMA model then writes \(P(e^{j\theta})\) from a handful of lags.</p>
+  <div class="byline">Block 3 · reader ch. 11–13 and 3.4 / 4.2–4.3 · VL12–VL14 · SLT5/SLT6 · official keys Nov 2019 Q2, Jan 2020 Q3. Frequency \(\theta\in[-\pi,\pi]\). Driving white noise \(i[n]\) has variance \(\sigma_i^2\).</div>
+
+  <div class="cifras">
+    <div><span class="n">\(\propto P^2\)</span><span>periodogram variance<br>does not fall with \(N\)</span></div>
+    <div><span class="n">\(1/K\)</span><span>Bartlett only<br>WOSA is not this</span></div>
+    <div><span class="n">\(|b|&lt;1\)</span><span>min-phase MA root<br>not the reciprocal</span></div>
+  </div>
+
+  <ul class="toc">
+    <li><a href="#energy">Energy vs power, Wiener–Khinchin</a><span class="tag">from zero</span></li>
+    <li><a href="#windows">Windows, leakage, zero-padding</a><span class="tag exam">MC trap</span></li>
+    <li><a href="#table">Non-parametric table</a><span class="tag exam">fill this</span></li>
+    <li><a href="#parametric">AR / MA / ARMA</a><span class="tag">formulas</span></li>
+    <li><a href="#worked">Nov 2019 AR(2), SLT6 ARMA</a><span class="tag exam">official</span></li>
+  </ul>
+
+  <p>Exam block, every year: one MC on the table below, then a correlogram from given \(r[k]\), then an AR or MA fit, then a sketch on \([-\pi,\pi]\).</p>
+
+  <h2 id="energy">Energy vs power</h2>
+  <p>Total energy and average power of a discrete-time signal:</p>
+  $$E_s=\sum_{n=-\infty}^{\infty}|x[n]|^2,\qquad P_s=\lim_{N\to\infty}\frac1N\sum_{n=0}^{N-1}|x[n]|^2.$$
+  <table>
+    <tr><th>Type</th><th>Energy</th><th>Average power</th><th>Example</th></tr>
+    <tr><td><b>Energy</b></td><td>finite</td><td>\(P_s=0\)</td><td>one pulse, \(a^n u[n]\) with \(|a|&lt;1\)</td></tr>
+    <tr><td><b>Power</b></td><td>infinite</td><td>finite, \(P_s&gt;0\)</td><td>everlasting sinusoid, WSS noise</td></tr>
+    <tr><td>Neither</td><td>infinite</td><td>infinite</td><td>a ramp</td></tr>
+  </table>
+  <p>An energy signal is characterised by its energy spectral density \(\mathcal E(e^{j\theta})=|X(e^{j\theta})|^2\). A power signal is characterised by its <b>PSD</b> \(P(e^{j\theta})\). Noise, speech, radar clutter: if you wait forever the energy blows up; the rate of energy stays finite. Those are power signals.</p>
+  <p>Parseval (energy): \(\sum_n|x[n]|^2=\frac1{2\pi}\int_{-\pi}^{\pi}\mathcal E(e^{j\theta})\,d\theta\). Power analogue:</p>
+  $$P_s=\frac1{2\pi}\int_{-\pi}^{\pi}P(e^{j\theta})\,d\theta=r_x[0].$$
+  <p>The area under the PSD is the average power. \(P(e^{j\theta})\,d\theta/2\pi\) is the power in a small band.</p>
+  <p class="aviso">A decaying exponential \(e^{-t}u(t)\) is an <b>energy</b> signal (\(E=\tfrac12\), \(P=0\)). A cosine is a <b>power</b> signal.</p>
+
+  <h2>Wiener–Khinchin</h2>
+  <p>A realisation of a WSS process is not square-summable, and the next realisation is different. What is well-defined is the Fourier pair of the <b>true</b> autocorrelation and the <b>true</b> PSD:</p>
+  $$P_x(e^{j\theta})=\sum_{l=-\infty}^{\infty}r_x[l]e^{-j\theta l},\qquad r_x[l]=\frac1{2\pi}\int_{-\pi}^{\pi}P_x(e^{j\theta})e^{jl\theta}\,d\theta.$$
+  <ul>
+    <li>\(P_x(e^{j\theta})\ge 0\) for all \(\theta\). It is a density of power.</li>
+    <li>\(P_x\) is \(2\pi\)-periodic. For real \(x\), \(P_x\) is even.</li>
+    <li>White noise \(r[l]=\sigma^2\delta[l]\) \(\Rightarrow\) \(P=\sigma^2\) (flat).</li>
+    <li>LTI filter: \(P_x(e^{j\theta})=|H(e^{j\theta})|^2 P_i(e^{j\theta})\).</li>
+  </ul>
+  <p>The pair needs the true \(r[l]\) at infinitely many lags. We have \(N\) samples of one realisation. Replacing \(r\) by \(\hat r\) produces a random \(\hat P\) with bias and variance. That is the whole subject.</p>
+  <p>Two families. <b>Non-parametric</b> (Fourier): no model of how samples correlate. <b>Parametric</b>: assume AR / MA / ARMA driven by white noise, estimate a few coefficients, plug into a closed-form PSD (which implicitly extrapolates \(r[l]\) past the observed lags).</p>
+
+  <h3>Periodogram and correlogram are the same number</h3>
+  <p>A power signal must be windowed to length \(N\): \(\tilde x[n]=x[n]\) for \(n=0,\dots,N-1\).</p>
+  <p><b>Periodogram</b> (direct):</p>
+  $$\hat P_N(e^{j\theta})=\frac1N\bigl|X_N(e^{j\theta})\bigr|^2=\frac1N\left|\sum_{n=0}^{N-1}\tilde x[n]e^{-jn\theta}\right|^2.$$
+  <p><b>Correlogram</b> (indirect):</p>
+  $$\hat P_N(e^{j\theta})=\sum_{l=-(N-1)}^{N-1}\hat r_x[l]\,e^{-j\theta l}.$$
+  <p>These two are identical if \(\hat r\) is the <b>biased</b> autocorrelation estimator. Always use the biased ACF for a correlogram.</p>
+  $$\hat r_b[l]=\frac1N\sum_{n=0}^{N-1-|l|}x[n+|l|]x^*[n],\qquad \mathbb E[\hat r_b[l]]=\frac{N-|l|}{N}r[l].$$
+  <p>Equivalently \(\hat r_b[l]=r[l]\,w_B[l]\) with the Bartlett (triangular) lag-window \(w_B[l]=(N-|l|)/N\). The unbiased estimator \(\hat r_{ub}\) divides by \(N-|l|\) instead. Its lag-window is rectangular, and the Dirichlet kernel \(W_R(e^{j\theta})\) takes <b>negative</b> values, so \(\mathrm{FT}\{\hat r_{ub}\}\) can go negative — an illegal PSD. \(W_B=|W_R|^2/N\ge 0\), so the biased correlogram stays non-negative. The periodogram \(\frac1N|X|^2\) is automatically \(\ge 0\).</p>
+  <p class="aviso">Use the biased ACF in a correlogram, or \(\hat P\) may go negative. Truncating a true ACF to a few lags can also make the cosine polynomial dip below zero (Nov 2019 blue curve).</p>
+
+  <h2 id="windows">Main lobe, side lobes, zero-padding</h2>
+  <p>A finite record is a windowed infinite signal: \(\tilde x[n]=w[n]x[n]\). Multiplication in time is periodic convolution in frequency, \(\tilde X=X\,*_{2\pi}\,W\). The rectangular window of length \(N\) has the Dirichlet transform</p>
+  $$W_R(e^{j\theta})=\frac{\sin(N\theta/2)}{\sin(\theta/2)}\,e^{-j(N-1)\theta/2}.$$
+  <p>A main lobe plus side lobes. The expected periodogram is the true PSD smeared by that kernel:</p>
+  $$\mathbb E[\hat P]=\underbrace{P*W_{\mathrm{ML}}}_{\text{loss of resolution}}+\underbrace{P*W_{\mathrm{SL}}}_{\text{spectral leakage}}.$$
+  <ul>
+    <li><b>Resolution</b> (can you split two close tones) is set by <b>main-lobe width</b>. Wider lobe \(\Rightarrow\) worse resolution. Longer \(N\) narrows the main lobe. A tapered window of the same \(N\) has a <i>wider</i> main lobe than rectangular, so worse resolution.</li>
+    <li><b>Leakage</b> (a strong tone hides a weak neighbour) is set by <b>side-lobe height</b>. Height is a property of the window <i>family</i>, not of \(N\). Increasing \(N\) for a rectangular window does <b>not</b> lower the side-lobe height; it only packs the lobes denser.</li>
+  </ul>
+  <table>
+    <tr><th>Window</th><th>3 dB main-lobe bandwidth</th><th>First side-lobe</th></tr>
+    <tr><td>Rectangular</td><td>\(1.81\,\pi/(N-1)\)</td><td>\(-13\) dB</td></tr>
+    <tr><td>Triangular</td><td>\(5.01\,\pi/(N-1)\)</td><td>\(-27\) dB</td></tr>
+    <tr><td>Hanning</td><td>\(6.27\,\pi/(N-1)\)</td><td>\(-32\) dB</td></tr>
+  </table>
+  <p>Same \(N\): rectangular = best resolution, worst leakage. Hanning = worse resolution, less leakage.</p>
+  <p>To resolve two sines, \(|\theta_1-\theta_2|\) must exceed the 3 dB width. With \(\theta=2\pi f/f_s\),</p>
+  $$|f_1-f_2|_{\min}=\frac{1.81\,f_s}{2(N-1)}.$$
+  <p>SLT5 2024–25, official: \(f_s=100\,\mathrm{Hz}\), \(N=30\) \(\Rightarrow\) \(|f_1-f_2|_{\min}=1.81\cdot 100/58\approx 3.12\,\mathrm{Hz}\approx 3\,\mathrm{Hz}\) (rectangular). Triangular, same \(N\): \(\approx 8.6\,\mathrm{Hz}\). Tapering hurts resolution.</p>
+
+  <h3>Zero-padding is interpolation, not resolution</h3>
+  <p>The DFT of \(N\) samples evaluates the DTFT of the <i>windowed</i> signal at \(N\) frequencies \(k\cdot 2\pi/N\). Zero-padding to length \(L&gt;N\) evaluates the <b>same</b> underlying DTFT on a finer grid \(k\cdot 2\pi/L\). You walk in smaller steps on the same smeared curve. You do not recover the infinite-data spectrum, and you do not split two peaks the main lobe already merged.</p>
+  <p class="aviso">Zero-padding \(\neq\) resolution. “Zeropad to \(L\) samples the FTD at step \(2\pi/N\)” is false — the step becomes \(2\pi/L\). “Triangular has higher resolution than rectangular, same \(N\)” is false. “Rectangular leakage drops if you increase \(N\)” is false (side-lobe <i>height</i> is unchanged). True slogan: main-lobe width \(\leftrightarrow\) resolution, side-lobe height \(\leftrightarrow\) leakage.</p>
+
+  <h2 id="table">Non-parametric estimators</h2>
+  <p>Bias of the raw periodogram / correlogram: \(\mathbb E[\hat P]=P\,*_{2\pi}\,W\), a smoothed true PSD. As \(N\to\infty\), \(W\to\delta\), so the estimator is <b>asymptotically unbiased</b>. Finite \(N\): always resolution loss plus leakage.</p>
+  <p>Variance, Gaussian data through an LTI (reader 12.21–12.22):</p>
+  $$\mathrm{Var}\bigl[\hat P(e^{j\theta})\bigr]=P(e^{j\theta})^2\left[1+\left(\frac1N\frac{\sin(\theta N)}{\sin\theta}\right)^2\right]\;\xrightarrow{N\to\infty}\;P(e^{j\theta})^2.$$
+  <p>At a generic \(\theta\), \(\mathrm{Var}\approx P^2\). <b>It does not go to 0 as \(N\to\infty\).</b> More data narrows the main lobe (less bias) but the estimate stays just as noisy. That is an <b>inconsistent</b> estimator. At \(\theta=0\) for real white Gaussian data the extra sinc inflates this to \(\mathrm{Var}=2P^2\); the exam slogan remains “variance \(\propto P^2\)”.</p>
+  <p class="aviso">Periodogram variance does <b>not</b> fall with \(N\). A longer record is not a quieter periodogram.</p>
+
+  <h3>Bartlett</h3>
+  <p>Split \(N=K\cdot M\) into \(K\) <b>non-overlapping</b> length-\(M\) blocks. Periodogram each block, average:</p>
+  $$\hat P_B(e^{j\theta})=\frac1K\sum_{i=1}^K\hat P_i(e^{j\theta}),\qquad\hat P_i=\frac1M\left|\sum_{n=0}^{M-1}x_i[n]e^{-j\theta n}\right|^2.$$
+  <p>Bias is that of a raw periodogram of length <b>\(M\)</b>, not \(N\): shorter windows, wider main lobe, <b>more bias</b>. If the blocks are independent, \(\mathrm{Var}(\hat P_B)\approx P^2/K\). Variance drops as \(1/K\). Consistent only if you let \(K\to\infty\) (so \(M\) must not eat all of \(N\)).</p>
+
+  <h3>Welch / WOSA</h3>
+  <p>Like Bartlett, but segments <b>overlap</b> (typically 50% or 75%) and each segment is usually windowed. Overlap \(\Rightarrow\) longer segments than Bartlett for the same \(K\) \(\Rightarrow\) less extra bias. Overlap \(\Rightarrow\) segments are <b>dependent</b>, even if the process is white, so the variance decreases, but <b>not as \(1/K\)</b>.</p>
+  <p class="aviso">WOSA variance is <b>not</b> \(1/K\). Course view at the same \(K\): WOSA variance is higher than Bartlett’s (dependence) and lower than the raw periodogram. Correct 2022 / Jan 2020 statement: Bartlett, \(K\) segments: variance \(\propto 1/K\), bias increases. “WOSA reduces variance as \(1/K\)” is false.</p>
+
+  <h3>Blackman–Tukey</h3>
+  <p>Raw \(\hat r_b[l]\) near \(|l|=N-1\) is one product — extremely noisy. BT tapers those lags with a symmetric lag-window \(w_L[l]\) of length \(2L-1\), \(L\ll N\):</p>
+  $$\hat P_{\mathrm{BT}}(e^{j\theta})=\sum_{l=-(L-1)}^{L-1}w_L[l]\,\hat r_b[l]\,e^{-j\theta l}=\frac1{2\pi}\,\hat P*W_L.$$
+  <p>Need \(W_L(e^{j\theta})\ge 0\) (or \(w_L\) positive semi-definite). Rectangular / Hamming / Hann in the <i>lag</i> domain can make \(\hat P\) negative. Triangular is safe. If \(w_L\) is triangular and \(L=N\), BT is the raw correlogram.</p>
+  <p>Asymptotically unbiased if \(w_L[0]=1\). Variance (reader 12.36): \(\mathrm{Var}[\hat P_{\mathrm{BT}}]\approx (P^2/N)\sum w_L^2[l]\). The \(1/N\) in front \(\Rightarrow\) <b>consistent</b> as \(N\to\infty\) with \(L\) growing slower than \(N\). Larger \(L\): less bias, more variance.</p>
+
+  <h3>The table they ask you to fill</h3>
+  <p>Nov 2019 1c was this table. Every later MC tests the same cells. Official sample row (periodogram): <i>“Estimate of PSD obtained by taking the modulus squared of FT of the observed signal. The periodogram is the Fourier transform of the biased estimator of \(r[\tau]\). The periodogram is asymptotically unbiased. The variance of the periodogram is proportional to the square of the true spectrum.”</i></p>
+  <div style="overflow-x:auto">
+  <table>
+    <tr><th>Method</th><th>Idea</th><th>Bias</th><th>Variance</th><th>Consistent?</th></tr>
+    <tr>
+      <td><b>Periodogram</b></td>
+      <td>\(\hat P=\frac1N\bigl|\sum_{n=0}^{N-1}x[n]e^{-j\theta n}\bigr|^2\)</td>
+      <td>FT of the biased ACF. Smoothed true PSD. Asymptotically unbiased as \(N\to\infty\).</td>
+      <td>\(\approx P^2\). Does <b>not</b> fall with \(N\).</td>
+      <td><b>No</b></td>
+    </tr>
+    <tr>
+      <td><b>Correlogram</b></td>
+      <td>\(\hat P=\sum_l \hat r_b[l]e^{-j\theta l}\). Same number as the periodogram if \(\hat r_b\) is used.</td>
+      <td>Same as periodogram. \(\hat r_{ub}\) can make \(\hat P&lt;0\).</td>
+      <td>Same, \(\propto P^2\)</td>
+      <td><b>No</b></td>
+    </tr>
+    <tr>
+      <td><b>Bartlett</b></td>
+      <td>Average \(K\) periodograms of <b>non-overlapping</b> length-\(M\) blocks, \(N=KM\).</td>
+      <td><b>Worse</b> than raw: each block is shorter, main lobe wider.</td>
+      <td>\(\approx P^2/K\) if blocks independent</td>
+      <td>Only if \(K\to\infty\)</td>
+    </tr>
+    <tr>
+      <td><b>Welch / WOSA</b></td>
+      <td>Average periodograms of <b>overlapping</b>, usually windowed, segments. Typical overlap 50–75%.</td>
+      <td>Extra bias <b>smaller</b> than Bartlett (segments longer).</td>
+      <td>Lower than raw, <b>higher than Bartlett</b>. <b>Not</b> \(1/K\).</td>
+      <td>Not “\(1/K\)-consistent”</td>
+    </tr>
+    <tr>
+      <td><b>Blackman–Tukey</b></td>
+      <td>Window the ACF, then FT. Down-weight unreliable large lags.</td>
+      <td>Asymptotically unbiased if \(w[0]=1\). Larger lag-window \(L\) \(\Rightarrow\) less bias, more variance.</td>
+      <td>\(\approx (P^2/N)\sum w^2[l]\). Scales as \(1/N\).</td>
+      <td><b>Yes</b> (\(N\to\infty\))</td>
+    </tr>
+  </table>
+  </div>
+
+  <h2 id="parametric">Parametric spectra</h2>
+  <p>Non-parametric methods treat the record as one period of a periodic signal and set \(\hat r[l]=0\) for \(|l|\ge N\). Both are usually false, and they cap the resolution. Parametric idea: guess a generating filter, estimate a few parameters, write \(P(e^{j\theta})\) from the model.</p>
+  <p>Innovation representation: WSS with a rational PSD = white \(i[n]\) through a causal LTI \(L(z)\). Restrict \(L\) to rational \(\Rightarrow\) ARMA. Sign convention in this course: \(x[n]=i[n]-\sum_{k=1}^p a_k x[n-k]\), so the AR polynomial is \(A(z)=1+\sum a_k z^{-k}\).</p>
+  <p>Memorise the three PSD formulas.</p>
+  <p>AR(\(p\)) — all-pole, \(H(z)=1/A(z)\):</p>
+  $$P_{\mathrm{AR}}(e^{j\theta})=\frac{\sigma_i^2}{\bigl|1+a_1 e^{-j\theta}+\cdots+a_p e^{-jp\theta}\bigr|^2}.$$
+  <p>MA(\(q\)) — all-zero, \(b_0=1\):</p>
+  $$P_{\mathrm{MA}}(e^{j\theta})=\sigma_i^2\bigl|1+b_1 e^{-j\theta}+\cdots+b_q e^{-jq\theta}\bigr|^2.$$
+  <p>ARMA(\(p,q\)):</p>
+  $$P_{\mathrm{ARMA}}(e^{j\theta})=\sigma_i^2\frac{\bigl|1+b_1 e^{-j\theta}+\cdots+b_q e^{-jq\theta}\bigr|^2}{\bigl|1+a_1 e^{-j\theta}+\cdots+a_p e^{-jp\theta}\bigr|^2}.$$
+
+  <h3>ACF structure</h3>
+  <p><b>AR(\(p\)):</b> \(r[l]\) has infinite duration. Yule–Walker (real, \(r[-l]=r[l]\)):</p>
+  $$r[l]=\begin{cases}\sigma_i^2-\sum_{k=1}^p a_k r[l-k],& l=0,\\-\sum_{k=1}^p a_k r[l-k],& |l|&gt;0.\end{cases}$$
+  <p>Matrix form (Toeplitz). The right-hand side is \((\sigma_i^2,0,\dots,0)^\top\), <b>not</b> \((r[1],r[2],\dots)\):</p>
+  $$\begin{bmatrix}r[0]&amp;r[1]&amp;\cdots&amp;r[p]\\r[1]&amp;r[0]&amp;\cdots&amp;r[p-1]\\\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\r[p]&amp;r[p-1]&amp;\cdots&amp;r[0]\end{bmatrix}\begin{bmatrix}1\\a_1\\\vdots\\a_p\end{bmatrix}=\begin{bmatrix}\sigma_i^2\\0\\\vdots\\0\end{bmatrix}.$$
+  <p>The last \(p\) rows are linear in the \(a_k\). The first row then gives \(\sigma_i^2\).</p>
+  <p><b>MA(\(q\)):</b> \(r[l]=0\) for \(|l|&gt;q\) (finite ACF). With \(b_0=1\),</p>
+  $$r[l]=\sigma_i^2\sum_{k=|l|}^q b_k b_{k-|l|},\qquad 0\le|l|\le q.$$
+  <p>Fitting \((b_k,\sigma_i^2)\) from lags is <b>nonlinear</b> (products \(b_k b_{k-\ell}\)).</p>
+  <p><b>ARMA(\(p,q\)):</b> the MA contribution dies after lag \(q\). For \(|l|&gt;q\) the ACF is purely AR, \(r[l]=-\sum_{k=1}^p a_k r[l-k]\). Estimate AR from the tail of \(r\), then peel it off to fit MA.</p>
+  <p>A 1-step Wiener FIR predictor solves the same Yule–Walker system: \(w_{\mathrm{opt}}=-\hat a\), MMSE \(J=\hat\sigma_i^2\). Exam T/F (Nov 2019 1b.E): “Wiener 1-step predictor can be used for <b>MA</b> parametric estimation” is <b>false</b>. It estimates AR coefficients.</p>
+
+  <h3>AR(1) closed form</h3>
+  <p>\(x[n]=i[n]-a_1 x[n-1]\). YW at lags 0 and 1:</p>
+  $$r[0]=\sigma_i^2-a_1 r[1],\qquad r[1]=-a_1 r[0].$$
+  $$a_1=-\frac{r[1]}{r[0]},\qquad\sigma_i^2=r[0]+a_1 r[1].$$
+  <p>True AR(1) process: \(r[0]=\sigma_i^2/(1-a_1^2)\), \(r[l]=r[0](-a_1)^{|l|}\).</p>
+  <p>Shape: \(a_1&lt;0\) (pole on the positive real axis) \(\Rightarrow\) low-frequency peak. \(a_1&gt;0\) \(\Rightarrow\) high-frequency peak. Useful identity: \(|1+\alpha e^{-j\theta}|^2=1+\alpha^2+2\alpha\cos\theta\).</p>
+
+  <h3>MA fit and min-phase</h3>
+  <p>From \(r[0],r[\pm 1]\) for MA(1):</p>
+  $$r[0]=\sigma_i^2(1+b_1^2),\qquad r[1]=\sigma_i^2 b_1.$$
+  <p>Quadratic in \(b_1\): two real roots, <b>reciprocals</b>. They give the same \(P(e^{j\theta})\) (same magnitude response). Uniqueness: the innovation filter must be causal, stable, and <b>minimum-phase</b> = all zeros (and poles) <b>inside</b> the unit circle. Pick \(|b_1|&lt;1\).</p>
+  <p>Spectral factorisation: \(P(z)=\sigma_i^2 L(z)L(z^{-1})\) with \(L\) min-phase and \(l[0]=1\). For every root \(z_k\) of a valid PSD, \(1/z_k^*\) is also a root; keep the ones inside the disc.</p>
+  <p>If you skip parameter fitting and just take \(\hat P=\sum_{l=-q}^q \hat r[l]e^{-jl\theta}\) (rectangular-windowed correlogram of width \(2q+1\)), you get a valid MA(\(q\)) <i>spectrum shape</i> but it can go negative if \(\hat r\) is not a valid MA ACF. Fitting \((b_k,\sigma_i^2)\) then using \(\sigma_i^2|B(e^{j\theta})|^2\) guarantees \(\hat P\ge 0\).</p>
+  <p class="aviso ok">Favourite exam sentence: for a <b>true</b> MA(\(q\)), the correlogram that uses exactly lags \(|l|\le q\) <b>equals</b> the MA PSD. The ACF really is zero outside. An AR fit of the same lags is a different curve.</p>
+
+  <h2 id="worked">Worked: Nov 2019 Q2 — correlogram and AR(2)</h2>
+  <p>Official key. Given \(r[0]=1\), \(r[\pm 1]=0.7\), \(r[\pm 2]=0.5\), \(r[\pm 3]=0.3\), \(r[\pm 4]=0\).</p>
+  <h3>(a) Correlogram</h3>
+  $$P_{\mathrm{cor}}(e^{j\theta})=r[0]+2\sum_{k=1}^{3}r[k]\cos(k\theta)=1+1.4\cos\theta+\cos 2\theta+0.6\cos 3\theta.$$
+  <p>At \(\theta=0\): \(1+1.4+1+0.6=4\). The truncated ACF is not a valid infinite ARMA autocorrelation, so this cosine polynomial can go slightly negative (official sketch: blue curve, small negative sidelobes). Label \(\theta\in[-\pi,\pi]\) and the values at \(0,\pi\).</p>
+  <h3>(b) AR(2) Yule–Walker</h3>
+  <p>Unknowns \(a_1,a_2,\sigma_i^2\). Use lags 0, 1, 2:</p>
+  $$\begin{bmatrix}1&amp;0.7&amp;0.5\\0.7&amp;1&amp;0.7\\0.5&amp;0.7&amp;1\end{bmatrix}\begin{bmatrix}1\\a_1\\a_2\end{bmatrix}=\begin{bmatrix}\sigma_i^2\\0\\0\end{bmatrix}.$$
+  <p>Rows 2–3:</p>
+  $$\begin{aligned}0.7+a_1+0.7 a_2&=0 &&\Rightarrow&& a_1+0.7 a_2=-0.7,\\0.5+0.7 a_1+a_2&=0 &&\Rightarrow&& 0.7 a_1+a_2=-0.5.\end{aligned}$$
+  <p>From the first, \(a_1=-0.7-0.7 a_2\). Plug into the second:</p>
+  $$0.7(-0.7-0.7 a_2)+a_2=-0.5\Rightarrow -0.49-0.49 a_2+a_2=-0.5\Rightarrow 0.51 a_2=-0.01.$$
+  $$a_2=-\frac{0.01}{0.51}=-\frac{1}{51}\approx -0.01961,\qquad a_1=-0.7-0.7(-0.01961)\approx -0.6863.$$
+  <p>First row: \(\sigma_i^2=1+a_1\cdot 0.7+a_2\cdot 0.5\). Unrounded this is \(\approx 0.5098\). Official key rounds to \(\sigma_i^2\approx 0.5089\). Because \(a_1\) is negative,</p>
+  $$P_{\mathrm{AR2}}(e^{j\theta})=\frac{0.5089}{\bigl|1-0.6863 e^{-j\theta}-0.0196 e^{-j2\theta}\bigr|^2}.$$
+  <p>The AR(2) peak at \(\theta=0\) is sharper than the correlogram: the model extrapolates \(r[l]\) past lag 3, and the PSD is forced to stay non-negative.</p>
+
+  <h2>Worked: SLT6 2025–26 — ARMA(1,1) to \(r[0]=28/27\)</h2>
+  <p>Official sol. \(H(z)=\dfrac{1-\frac23 z^{-1}}{1-\frac12 z^{-1}}\), \(\sigma_i^2=1\). Difference equation:</p>
+  $$x[k]=i[k]-\tfrac23 i[k-1]+\tfrac12 x[k-1].$$
+  <p>So \(b_1=-\frac23\), \(a_1=-\frac12\), \(b_0=1\). Impulse response by polynomial division:</p>
+  $$H(z)=1+\Bigl(\tfrac12-\tfrac23\Bigr)z^{-1}+\cdots=1-\tfrac16 z^{-1}+\cdots\qquad\Rightarrow\qquad h[0]=1,\; h[1]=-\tfrac16.$$
+  <p>Modified Yule–Walker at lags 0 and 1 (\(\sigma_i^2=1\)):</p>
+  $$\begin{aligned}r[0]&=b_0 h[0]+b_1 h[1]-a_1 r[1]=1+\Bigl(-\tfrac23\Bigr)\Bigl(-\tfrac16\Bigr)+\tfrac12 r[1]=\tfrac{10}{9}+\tfrac12 r[1],\\r[1]&=b_1 h[0]-a_1 r[0]=-\tfrac23+\tfrac12 r[0].\end{aligned}$$
+  <p>Substitute the second into the first:</p>
+  $$r[0]=\tfrac{10}{9}+\tfrac12\Bigl(-\tfrac23+\tfrac12 r[0]\Bigr)=\tfrac{10}{9}-\tfrac13+\tfrac14 r[0]=\tfrac79+\tfrac14 r[0].$$
+  $$r[0]-\tfrac14 r[0]=\tfrac79\Rightarrow\tfrac34 r[0]=\tfrac79\Rightarrow r[0]=\tfrac{28}{27}.$$
+  $$r[1]=-\tfrac23+\tfrac12\cdot\tfrac{28}{27}=-\tfrac{18}{27}+\tfrac{14}{27}=-\tfrac{4}{27}.$$
+  <p>For \(|\tau|\ge 2\) only AR remains: \(r[\tau]=-a_1 r[\tau-1]=\frac12 r[\tau-1]\), so \(r[\tau]=\bigl(\tfrac12\bigr)^{|\tau|-1}r[1]\) for \(|\tau|\ge 1\).</p>
+  <p>AR(1) fit from \((r[0],r[1])\) only (this cannot match the MA zero):</p>
+  $$a_1=-\frac{r[1]}{r[0]}=\frac{4/27}{28/27}=\frac17,\qquad\sigma_i^2=r[0]+a_1 r[1]=\frac{28}{27}+\frac17\Bigl(-\frac4{27}\Bigr)=\frac{196-4}{189}=\frac{64}{63}.$$
+  $$P_{\mathrm{AR1}}(e^{j\theta})=\frac{64/63}{\bigl|1+\frac17 e^{-j\theta}\bigr|^2}.$$
+  <p class="aviso">The official sol’s last cosine simplification of this PSD is algebraically wrong. The parameters \(a_1=\frac17\), \(\sigma_i^2=\frac{64}{63}\) and the \(|1+\frac17 e^{-j\theta}|^{-2}\) form <b>are</b> official and correct. Sketch: \(a_1&gt;0\) \(\Rightarrow\) more power near \(\theta=\pm\pi\).</p>
+  <p>Same ARMA(1,1) recipe on every SLT6 and on Pr21 / Nov 2022: read \(a_k,b_k\) from \(H(z)\) or the DE \(\to\) \(h[0],h[1]\) \(\to\) modified YW for \(r[0],r[1]\) \(\to\) AR tail \(\to\) fake AR(1) from the \(2\times 2\) YW block. Nov 2022 uses different numbers and has no official key; do not quote it as a numbered answer.</p>
+
+  <h2>Traps</h2>
+  <ol>
+    <li>Zero-padding \(\neq\) resolution. Finer DFT grid on the same windowed DTFT.</li>
+    <li>Main lobe \(\leftrightarrow\) resolution; side lobes \(\leftrightarrow\) leakage. Increasing \(N\) does not lower rectangular side-lobe height.</li>
+    <li>Periodogram variance \(\propto P^2\), inconsistent. More samples \(\neq\) less noisy periodogram.</li>
+    <li>Bartlett: var \(1/K\), more bias. WOSA: overlap, var not \(1/K\).</li>
+    <li>Biased ACF for correlogram, or the PSD may go negative.</li>
+    <li>MA parameterisation is not unique; keep the min-phase root (\(|b|&lt;1\)).</li>
+    <li>Yule–Walker RHS is \((\sigma_i^2,0,\dots,0)^\top\). Denominator of \(P_{\mathrm{AR}}\) is \(|1+\sum a_k e^{-jk\theta}|^2\) with the same \(a_k\) as \(x[n]=i[n]-\sum a_k x[n-k]\).</li>
+  </ol>
+
+  <div class="drill">
+    <h3>The yearly MC <span class="tag exam">Jan 2019 · 1c</span></h3>
+    <p>Jan 2019 1c, two true. (A) Bartlett: bias increases as segment length \(M\) decreases. (B) Welch with 50% overlap: variance decreases as \(1/K\). (C) Blackman–Tukey is consistent. (D) Zero-padding increases spectral resolution.</p>
+    <details>
+      <summary>Solution</summary>
+      <p>Official: <b>A and C</b>. B is the WOSA trap (overlap kills \(1/K\)). D is interpolation, not resolution.</p>
+    </details>
+  </div>
+
+  <div class="drill">
+    <h3>MA(1), min-phase <span class="tag exam">SLT6 2024–25</span></h3>
+    <p>SLT6 2024–25, official. \(r[0]=\frac{13}{6}\), \(r[\pm 1]=-1\), and \(r[|l|\ge 2]=0\). Fit MA(1). Which root do you keep? Show that the MA PSD equals the three-lag correlogram.</p>
+    <details>
+      <summary>Solution</summary>
+      <p>\(r[0]=\sigma_i^2(1+b_1^2)\), \(r[1]=\sigma_i^2 b_1=-1\). Eliminate \(\sigma_i^2=-1/b_1\):</p>
+      $$-\frac{1+b_1^2}{b_1}=\frac{13}{6}\Rightarrow 6+6b_1^2+13 b_1=0\Rightarrow b_1=\frac{-13\pm 5}{12}.$$
+      <p>Two solutions: \(b_1=-\frac32\), \(\sigma_i^2=\frac23\) and \(b_1=-\frac23\), \(\sigma_i^2=\frac32\). Min-phase: zero of \(1+b_1 z^{-1}\) at \(z=-b_1\). Need \(|b_1|&lt;1\) \(\Rightarrow\) <b>\(b_1=-\frac23\), \(\sigma_i^2=\frac32\)</b> (zero at \(+\frac23\)). The other is max-phase (zero at \(\frac32\)).</p>
+      $$P_{\mathrm{MA}}=\sigma_i^2(1+b_1^2+2b_1\cos\theta)=\frac{13}{6}-2\cos\theta.$$
+      <p>Correlogram with the same three lags: \(\frac{13}{6}-e^{-j\theta}-e^{j\theta}=\frac{13}{6}-2\cos\theta\). They coincide because a true MA(1) has \(r[l]=0\) for \(|l|\ge 2\).</p>
+    </details>
+  </div>
+
+  <div class="pager">
+    <a href="./06-ls.html">← least squares</a>
+    <a class="next" href="./08-detection.html">detection →</a>
+  </div>
+  <p class="foot">5CTA0 Q1 2026–27 · from the course reader, lectures and official keys.</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"\\(",right:"\\)",display:false}]});</script>
+</body>
+</html>
