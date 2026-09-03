@@ -66,8 +66,9 @@ li { margin: 0 0 .28rem; }
 .cifras div + div { border-left: 1px solid rgba(27,22,16,.2); }
 .cifras .n {
   font-family: "Ibarra Real Nova", serif;
-  font-size: 1.55rem; font-weight: 700; letter-spacing: -.03em; line-height: 1;
+  font-size: 1.55rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.05;
   display: block; margin-bottom: .25rem;
+  white-space: nowrap;
 }
 .cifras span {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
