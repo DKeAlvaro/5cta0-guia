@@ -457,10 +457,44 @@
 
 
 <h2 id="b3">Block 3 · three curves on \([-\pi,\pi]\)</h2>
-  <p>This is about 3 of 10 points. Typical open part: they give you an autocorrelation, or a difference equation. You plot a correlogram, you fit AR(1) with Yule–Walker, you overlay an MA, you quote values at \(0,\pi/2,\pi\). There is also one MC on periodogram / Bartlett / Welch / windows.</p>
-  $$P_{\mathrm{cor}}(e^{j\theta})=r[0]+2\sum_{k\ge 1}r[k]\cos(k\theta)$$
-  <p>Course AR convention: \(x[n]+a_1 x[n-1]+\cdots=i[n]\), so the denominator is \(|1+a_1 e^{-j\theta}+\cdots|^2\). Getting that sign wrong wrecks the PSD.</p>
-  $$a_1=-\frac{r[1]}{r[0]},\qquad\sigma_i^2=r[0]+a_1 r[1],\qquad P_{\mathrm{AR}}=\frac{\sigma_i^2}{|1+a_1 e^{-j\theta}|^2}$$
+  <p>This is about 3 of 10 points — the fattest block. Typical open part: they hand you an autocorrelation, or a difference equation, or a filter. You draw a correlogram, fit an AR with Yule–Walker, overlay an MA, quote values at \(0\) and \(\pi\). Plus one MC on periodogram / Bartlett / Welch / windows.</p>
+
+  <h3>Notation for this block</h3>
+  <table>
+    <tr><th>Object</th><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>Autocorrelation</td><td>\(r[l]=E[x[n]x[n-l]]\)</td><td>lag \(l\); \(r[0]=E[x^2]\) is the average power; real processes: \(r[-l]=r[l]\)</td></tr>
+    <tr><td>PSD</td><td>\(P(e^{j\theta})\), \(\theta\in[-\pi,\pi]\)</td><td>power per frequency; even, non-negative; area\(/2\pi\) = \(r[0]\)</td></tr>
+    <tr><td>Innovation</td><td>\(i[n]\), variance \(\sigma_i^2\)</td><td>the white drive behind AR/MA/ARMA models</td></tr>
+    <tr><td>AR coeffs</td><td>\(a_k\)</td><td>course sign: \(x[n]+a_1x[n-1]+\cdots=i[n]\)</td></tr>
+    <tr><td>MA coeffs</td><td>\(b_k\) (\(b_0=1\))</td><td>\(x[n]=i[n]+b_1i[n-1]+\cdots\)</td></tr>
+    <tr><td>Yule–Walker</td><td>Toeplitz\((r)\)</td><td>right-hand side \((\sigma_i^2,0,\dots)^\top\) — <i>not</i> the lags</td></tr>
+  </table>
+
+  <h3>Where the cosine sum comes from</h3>
+  <p>The correlogram is the DTFT of the estimated ACF: \(P_{\mathrm{cor}}=\sum_l\hat r[l]e^{-jl\theta}\). For real signals \(\hat r[-k]=\hat r[k]\), so pair lag \(k\) with \(-k\):</p>
+  $$r[k]e^{-jk\theta}+r[k]e^{+jk\theta}=2r[k]\cos(k\theta).$$
+  <p>The 2 in front of every cosine is the \(\pm k\) pair — not a fudge factor — and \(r[0]\) stands alone. Only lags with nonzero \(r\) enter: a printed zero lag (Nov 2019's \(r[\pm 4]=0\)) contributes nothing. Full form:</p>
+  $$P_{\mathrm{cor}}(e^{j\theta})=r[0]+2\sum_{k\ge 1}r[k]\cos(k\theta).$$
+
+  <h3>Course AR sign convention — read twice</h3>
+  <p>\(A(z)=1+a_1z^{-1}+\cdots\), difference equation \(x[n]+a_1x[n-1]+\cdots=i[n]\), PSD denominator \(|1+a_1e^{-j\theta}+\cdots|^2\) — the <i>same</i> \(a_1\) everywhere. Minus signs in a PSD come from a negative \(a_1\), never from the formula. Shape read: \(a_1&lt;0\) puts the pole on the positive real axis → low-frequency peak; \(a_1&gt;0\) → high-pass. Cross-check with \(r[1]\): neighbours agree (\(r[1]&gt;0\)) → low-pass; anti-correlated (\(r[1]&lt;0\)) → high-pass. If your sketch and your \(r[1]\) disagree, the sign flipped somewhere.</p>
+
+  <h3>Yule–Walker in one derivation</h3>
+  <p>Multiply the DE \(x[n]+a_1x[n-1]+\cdots=i[n]\) by \(x[n-l]\) and take \(E\). For \(l\ge 1\), \(E[i[n]x[n-l]]=0\) — today's innovation is independent of past outputs — so \(r[l]+a_1r[l-1]+\cdots=0\). For \(l=0\), \(E[i[n]x[n]]=\sigma_i^2\) — today's innovation <i>is</i> inside today's output — so \(r[0]+a_1r[1]+\cdots=\sigma_i^2\). Stack lags \(0..p\): Toeplitz matrix times \((1,a_1,\dots)^\top\) equals \((\sigma_i^2,0,\dots,0)^\top\). The last \(p\) rows solve the \(a\)'s; the first row then gives \(\sigma_i^2\).</p>
+
+  <h3>Method — given lags, three curves</h3>
+  <ol>
+    <li><b>Correlogram:</b> cosine sum. Always quote \(P(0)=r[0]+2\sum r[k]\) (all cosines are 1) and \(P(\pi)=r[0]-2r[1]+2r[2]-\cdots\) (alternating). Even function: compute \([0,\pi]\), mirror. Warning: a truncated ACF need not be a valid ACF, so the curve <i>can</i> go negative — write that sentence, it is the point.</li>
+    <li><b>AR fit:</b> Yule–Walker on lags \(0..p\). PSD \(\sigma_i^2/|A(e^{j\theta})|^2\ge 0\) by construction — strictly positive, sharper peak than the correlogram (the model <i>extrapolates</i> \(r\) past the last given lag instead of truncating it).</li>
+    <li><b>MA fit:</b> finite ACF: \(r[0]=\sigma_i^2(1+b_1^2+\cdots)\), \(r[1]=\sigma_i^2(b_1+b_1b_2+\cdots)\). Quadratic in \(b\) → reciprocal pair → keep \(|b|&lt;1\) (minimum-phase: zero of \(1+bz^{-1}\) at \(z=-b\) inside the unit circle). If the truth is MA(\(q\)), the correlogram of lags \(|l|\le q\) <i>is</i> the MA spectrum — identical curves; an AR fit of the same lags is a different curve.</li>
+  </ol>
+
+  <h3>Method — given \(H(z)\) or a difference equation</h3>
+  <p>Read \(a_k,b_k\) off \(H(z)=B(z)/A(z)\) (watch the signs: \(x=i+b_1i_{-1}-a_1x_{-1}\)). Impulse response: \(h[0]=1\) (direct feedthrough \(i[k]\to x[k]\)), \(h[1]=b_1-a_1\) (one step: \(x[1]=b_1\cdot 1-a_1\cdot 1\)). Modified Yule–Walker at lags 0 and 1 — extra \(b\cdot h\) terms, because recent innovations <i>are</i> inside the current output. For \(|\tau|&gt;q\) the MA part is dead: \(r[\tau]=-a_1r[\tau-1]\) (pure AR tail). Fake AR(1) / MA(1) fits use only \((r[0],r[1])\).</p>
+  <p><b>Sketch discipline, every curve:</b> axes \(\theta\in[-\pi,\pi]\), even symmetry, mark \(P(0)\) and \(P(\pi)\). Correlogram may dip below zero; model PSDs may not.</p>
+
+
+
 
   <div class="q">
     <p class="src">Written exam · 4 Nov 2019 · Q2 · 2 pt</p>
@@ -470,9 +504,14 @@
       <li>(b) Assume that \(x[n]\) is modeled by an AR(2) model. Determine and plot its spectrum estimate. [1 pt]</li>
     </ul>
   </div>
-  <p>Only lags with \(r\neq 0\) enter the correlogram, so \(r[\pm 4]=0\) does nothing. Official (a):</p>
+  <p><b>(a) Correlogram — pair each lag.</b> \(r[\pm 4]=0\) is a distractor: those lags contribute nothing, the sum stops at \(k=3\). Official:</p>
   $$P_{\mathrm{cor}}=1+1.4\cos\theta+\cos 2\theta+0.6\cos 3\theta$$
-  <p>At \(\theta=0\) that is 4. The ACF was truncated, so this cosine polynomial <b>can go negative</b> (official sketch: small negative sidelobes). Official (b): \(0.5089\big/|1-0.6863 e^{-j\theta}-0.0196 e^{-j2\theta}|^2\). An AR spectrum is forced positive. Label \([-\pi,\pi]\) and quote min/max at \(0\) and \(\pi\).</p>
+  <p><b>Sketch + mandatory numbers.</b> Even on \([-\pi,\pi]\): draw \([0,\pi]\), mirror. At \(\theta=0\) every cosine is 1: \(1+1.4+1+0.6=4\) — always quote this, it is one mark. At \(\theta=\pi\): signs alternate, \(1-1.4+1-0.6=0\). Between them the truncated ACF is <i>not</i> a valid infinite autocorrelation, so the polynomial <b>can go negative</b> (official sketch: small negative sidelobes). Say that on the script — it is the point of the question, not an error in your arithmetic.</p>
+  <p><b>(b) AR(2) — Yule–Walker on lags 0,1,2.</b> Unknowns \(a_1,a_2,\sigma_i^2\). Matrix with RHS \((\sigma_i^2,0,0)^\top\) — not the lags:</p>
+  $$\begin{bmatrix}1&0.7&0.5\\0.7&1&0.7\\0.5&0.7&1\end{bmatrix}\begin{bmatrix}1\\a_1\\a_2\end{bmatrix}=\begin{bmatrix}\sigma_i^2\\0\\0\end{bmatrix}.$$
+  <p>Rows 2–3 are two equations in \(a_1,a_2\): \(0.7+a_1+0.7a_2=0\), \(0.5+0.7a_1+a_2=0\). Eliminate \(a_1\): \(a_2=-0.01/0.51\approx -0.0196\), \(a_1\approx -0.6863\). First row: \(\sigma_i^2=1+0.7a_1+0.5a_2\approx 0.5089\) (official, rounded). So</p>
+  $$P_{\mathrm{AR2}}=0.5089\big/|1-0.6863 e^{-j\theta}-0.0196 e^{-j2\theta}|^2.$$
+  <p><b>Sketch vs (a).</b> \(\sigma_i^2/|A|^2\ge 0\) by construction — strictly positive, no negative lobes. Sharper peak at \(\theta=0\) than the correlogram (extrapolates \(r\) past lag 3 instead of truncating). Quote \(P(0),P(\pi)\), label \([-\pi,\pi]\). <b>Sign trap:</b> course PSD denominator is \(|1+a_1e^{-j\theta}+\cdots|^2\) with the <i>same</i> \(a_1\) — here \(a_1\) is negative, hence the minus signs. Flip that sign and the curve inverts.</p>
 
   <div class="q">
     <p class="src">Written exam · 20 Jan 2020 · Q3 · 2 pt</p>
@@ -483,7 +522,9 @@
       <li>(b) Assume that \(x[n]\) can be modeled by an MA(1) random process. Determine and plot its spectrum estimate. How does this relate to the spectrum estimate obtained in 3(a)? Motivate your answer. [1.2 pt]</li>
     </ul>
   </div>
-  <p>Official (a): \(P=\frac4{105}\cos\theta+\frac1{21}\). A true MA(1) has \(r[k]=0\) for \(|k|&gt;1\), so the correlogram of those lags <b>is</b> the MA spectrum. For MA(1): \(r[0]=\sigma_i^2(1+b^2)\), \(r[1]=\sigma_i^2 b\). Quadratic in \(b\), two real roots, reciprocals. Keep the min-phase one: \(|b|&lt;1\). Official: \(b=1/2\), not \(b=2\).</p>
+  <p><b>(a) Correlogram — two lags, one cosine.</b> \(P=r[0]+2r[1]\cos\theta=\frac1{21}+\frac4{105}\cos\theta\). Official. Quote \(P(0)=1/21+4/105=3/35\) and \(P(\pi)=1/21-4/105=1/105\).</p>
+  <p><b>(b) MA(1) — solve, then keep min-phase.</b> MA(1) equations: \(r[0]=\sigma_i^2(1+b^2)\), \(r[1]=\sigma_i^2 b\). Divide: \(r[0]/r[1]=(1+b^2)/b\). Here \(r[0]/r[1]=(1/21)/(2/105)=5/2\), so \(b^2-2.5b+1=0\): roots \(b=2\) and \(b=1/2\) — <b>reciprocals</b>, same \(|1+be^{-j\theta}|^2\) up to scale. Uniqueness comes from the innovation filter: causal + stable + <b>minimum-phase</b> means the zero of \(1+bz^{-1}\) (at \(z=-b\)) sits inside the unit circle, forcing \(|b|&lt;1\). Official: \(b=1/2\), \(\sigma_i^2=r[1]/b=4/105\).</p>
+  <p><b>The 1.2-pt sentence — relation to (a).</b> A true MA(1) has \(r[k]=0\) for \(|k|&gt;1\), so the correlogram truncated to \(|l|\le 1\) <b>is</b> the MA spectrum: \(\sigma_i^2(1+b^2+2b\cos\theta)=r[0]+2r[1]\cos\theta\). Identical curves. An AR(1) fit of the same two lags would be a <i>different</i> curve (\(\sigma^2/|1+ae^{-j\theta}|^2\)). "They coincide because the true ACF is finite" is the mark.</p>
 
   <div class="q">
     <p class="src">Practice exam · 28 Oct 2021 · Q3 · 2 pt · sketches on \([-\pi,\pi]\), values at critical points</p>
@@ -494,9 +535,12 @@
     $$\rho[0]=28/27,\quad\rho[1]=\rho[-1]=5/27,\quad\rho[\tau]=\bigl(\tfrac12\bigr)^{|\tau|-1}\rho[1]\ \text{for }|\tau|\ge 2.$$
     <p>3c. Approximate as MA(1). Use the correlogram method to calculate \(P_{\mathrm{corrMA1}}(e^{j\theta})\) from the ACF in 3a. There is no need to calculate the MA parameters. Sketch on top of 3b. Hint: for an MA process the number of autocorrelation lags different from zero is finite and related to the order. [0.5 pt]</p>
   </div>
-  <p><b>3a — the ARMA(1,1) recipe, every step.</b> Read \(a_k,b_k\) off \(H(z)=(1-\frac23z^{-1})/(1-\frac12z^{-1})\): with course signs \(x=i+b_1i_{-1}-a_1x_{-1}\), so \(b_1=-2/3\), \(a_1=-1/2\). Impulse response by polynomial division: \(H(z)=1+(1/2-2/3)z^{-1}+\cdots=1-\frac16z^{-1}+\cdots\), so \(h[0]=1\), \(h[1]=-1/6\). Modified Yule–Walker at lags 0,1 (\(\sigma_i^2=1\)): \(r[0]=b_0h[0]+b_1h[1]-a_1r[1]=1+(-2/3)(-1/6)+\frac12r[1]=10/9+\frac12r[1]\); \(r[1]=b_1h[0]-a_1r[0]=-2/3+\frac12r[0]\). Substitute: \(r[0]=7/9+\frac14r[0]\), so official \(r[0]=28/27\), \(r[1]=-4/27\). For \(|\tau|&gt;1\) the MA part is dead: \(r[\tau]=-a_1r[\tau-1]=\frac12r[\tau-1]\).</p>
-  <p><b>3b — fake AR(1) uses only \((r[0],r[1])\).</b> Yule–Walker \(2\times 2\): \(a_1=-r[1]/r[0]=(4/27)/(28/27)=1/7\), \(\sigma_i^2=r[0]+a_1r[1]=28/27-4/189=64/63\). PSD \((64/63)/|1+\frac17e^{-j\theta}|^2\). <b>Shape read:</b> \(a_1&gt;0\) ⇒ denominator largest at \(\theta=0\) ⇒ high-pass: \(P(0)=0.78\), \(P(\pi)=1.38\), and \(r[1]&lt;0\) says the same (adjacent samples anti-correlated). <b>3c — fake MA(1) is just the correlogram of lags \(|l|\le 1\):</b> \(28/27-(8/27)\cos\theta\), no parameter fitting needed (the hint). Sketch on top of 3b: same endpoints-ish, different middle.</p>
-  <p><b>Fallback trap.</b> If you missed 3a, the paper lets you use \(\rho[1]=+5/27\) — note the <b>plus</b>. True \(r[1]\) is \(-4/27\). The fallback flips the sign on purpose, so your 3b sketch would be low-pass instead of high-pass. If you take the fallback, you still get method marks, but do not “correct” its sign.</p>
+  <p><b>3a — read the filter, then the recipe.</b> \(H(z)=(1-\frac23z^{-1})/(1-\frac12z^{-1})\): numerator is MA, denominator is AR. With course signs \(x=i+b_1i_{-1}-a_1x_{-1}\): \(b_1=-2/3\), \(a_1=-1/2\). Why care: \(a_1\) sets the AR tail ratio later, \(b_1\) only enters lags 0–1.</p>
+  <p><b>Impulse response — why \(h[0]=1\).</b> \(H(z)=h[0]+h[1]z^{-1}+\cdots\): \(h[0]\) is the direct feedthrough \(i[k]\to x[k]\), always 1 here. Polynomial division: \(H(z)=1+(1/2-2/3)z^{-1}+\cdots\), so \(h[1]=-1/6\). (Check: one step, \(x[1]=1\cdot i[1]+b_1 i[0]-a_1 x[0]=b_1-a_1=-2/3+1/2=-1/6\). Yes.)</p>
+  <p><b>Modified Yule–Walker — why the extra terms.</b> Plain YW assumed only past \(x\)'s matter; here recent <i>innovations</i> are inside \(x\) too, contributing \(b\cdot h\). At lags 0,1 (\(\sigma_i^2=1\)): \(r[0]=b_0h[0]+b_1h[1]-a_1r[1]=1+(-2/3)(-1/6)+\frac12r[1]=10/9+\frac12r[1]\); \(r[1]=b_1h[0]-a_1r[0]=-2/3+\frac12r[0]\). Substitute: \(r[0]=7/9+\frac14r[0]\), so official \(r[0]=28/27\), \(r[1]=-4/27\). For \(|\tau|&gt;1\) the MA part is dead — innovations that old have flushed out — so \(r[\tau]=-a_1r[\tau-1]=\frac12r[\tau-1]\), a pure AR tail.</p>
+  <p><b>3b — fake AR(1) uses only \((r[0],r[1])\).</b> Pretend the truth is AR(1): Yule–Walker \(2\times 2\) gives \(a_1=-r[1]/r[0]=(4/27)/(28/27)=1/7\), \(\sigma_i^2=r[0]+a_1r[1]=28/27-4/189=64/63\). PSD \((64/63)/|1+\frac17e^{-j\theta}|^2\). <b>Shape read before sketching:</b> \(a_1&gt;0\) makes the denominator largest at \(\theta=0\) → high-pass. Quote \(P(0)=0.78\), \(P(\pi)=1.38\). Cross-check: \(r[1]&lt;0\) (neighbours anti-correlated) says high-pass too. If your sketch is low-pass, the sign flipped.</p>
+  <p><b>3c — fake MA(1) is just the correlogram of lags \(|l|\le 1\).</b> The hint ("finite nonzero lags") tells you the order: MA(1) means keep \(0,\pm 1\). So \(28/27-(8/27)\cos\theta\) — <i>no parameter fitting</i> (the paper says so explicitly). Sketch on top of 3b: same endpoints-ish, different middle.</p>
+  <p><b>Fallback trap.</b> Missed 3a? The paper gifts \(\rho[1]=+5/27\) — note the <b>plus</b>. True \(r[1]\) is \(-4/27\). The fallback flips the sign on purpose, so your 3b sketch would be low-pass instead of high-pass. You still get method marks — but do not "correct" its sign, or nothing matches the marking scheme.</p>
 
   <div class="q">
     <p class="src">Final exam · 7 Nov 2022 · 3c–g · no official key</p>
@@ -511,8 +555,10 @@
       <li>3g. Model \(x[k]\) as MA(1) and calculate \(P_{\mathrm{MA1}}(e^{j\theta})\). Decimal numbers are allowed. [0.75 pt]</li>
     </ul>
   </div>
-  <p><b>Same recipe as 2021 — run it, don't memorise it.</b> Difference equation \(x=i-i_{-1}+\frac34x_{-1}\): ARMA(1,1) with <span class="tag">derived</span> \(a_1=-3/4\) (since \(-a_1=+3/4\)), \(b_1=-1\). \(P_x=\frac78 |1-e^{-j\theta}|^2\big/|1-\frac34 e^{-j\theta}|^2\); \(r[0]=1\), \(r[1]=-1/8\), then \(r[\tau]=\frac34 r[\tau-1]\) for \(|\tau|&gt;1\); fake AR \(a_1=1/8\), \(\sigma_i^2=63/64\); fake MA \(1-\frac14\cos\theta\). All numbers here are derived (no official key), see the keys table.</p>
-  <p><b>3c is vocabulary (0.15 pt).</b> AR = past outputs in the equation, MA = past innovations in the equation, so this is ARMA(1,1) — one line, full marks. <b>3d (0.35 pt):</b> plug into \(P_x=\sigma_i^2|B|^2/|A|^2\). Zero at \(\theta=0\): the MA zero kills DC entirely — write that sentence, it shows you read the formula. <b>3e (0.5 pt):</b> impulse response \(h[0]=1\), \(h[1]=b_1-a_1=-1/4\); modified Yule-Walker gives the ACF. <b>3f/3g (0.75 pt each)</b> are the fake fits from (r0,r1) only. Compare with Practice 2021 above: same skeleton, negative r1 both times (high-pass). If you can do 2021 3a-c cold, this one is transcription.</p>
+  <p><b>Same skeleton as Practice 2021 — run it, don't memorise numbers.</b> Difference equation \(x=i-i_{-1}+\frac34x_{-1}\): past output present → AR; past innovation present → MA. So ARMA(1,1) with <span class="tag">derived</span> \(a_1=-3/4\) (since the DE has \(-a_1=+3/4\)) and \(b_1=-1\). That reading is <b>3c</b> [0.15 pt — one line, full marks].</p>
+  <p><b>3d [0.35 pt] — plug into the shapes.</b> \(P_x=\sigma_i^2|B|^2/|A|^2=\frac78|1-e^{-j\theta}|^2/|1-\frac34e^{-j\theta}|^2\). Read before sketching: numerator \(|1-e^{-j\theta}|^2=2-2\cos\theta\) is <b>zero at \(\theta=0\)</b> — the MA zero kills DC entirely; denominator smallest at \(\theta=0\). Write that sentence: it proves you read the formula, not just copied it.</p>
+  <p><b>3e [0.5 pt] — ACF via \(h\).</b> \(h[0]=1\), \(h[1]=b_1-a_1=-1+3/4=-1/4\); modified Yule–Walker gives <span class="tag">derived</span> \(r[0]=1\), \(r[1]=-1/8\). Why \(r[1]\) is small and negative: the MA(\(-1\)) pulls neighbours apart while the AR(\(+3/4\)) pulls them together — net slightly negative. Tail: \(r[\tau]=\frac34r[\tau-1]\) for \(|\tau|&gt;1\).</p>
+  <p><b>3f/3g [0.75 pt each] — the fake fits.</b> AR(1) from \((r[0],r[1])\): <span class="tag">derived</span> \(a_1=-r[1]/r[0]=1/8\), \(\sigma_i^2=r[0]+a_1r[1]=63/64\). MA(1): correlogram of lags \(|l|\le 1\), <span class="tag">derived</span> \(1-\frac14\cos\theta\). All numbers derived (no official key) — see the keys table. Compare with 2021: same skeleton, \(r[1]\) negative both times (high-pass both times). If you can do 2021 3a–c cold, this one is transcription.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 3b–d · 1 pt each</p>
@@ -522,12 +568,12 @@
     <p>3c. Calculate the power spectral density of \(x[n]\) using the correlogram method. If you were not able to solve 3b, you may use \(a=1/4\) and \(b=5/4\). Express the PSD as a function of \(\cos\theta\). Hint: the autocorrelation of an MA process is of finite length.</p>
     <p>3d. Now assume \(x[n]\) can be modeled as generated by an AR(1) process. Find the AR parameters and the PSD of the AR(1) (as a function of \(\cos\theta\)). Same fallback \(a=1/4\), \(b=5/4\). Hint: some parameters may result in fractions with large numbers.</p>
   </div>
-  <p><b>3b — you need r0 first; it is not given.</b> MA(2) with unit-variance innovation: r0 = 1+a^2+b^2, r1 = a(1+b), r2 = b. Read bottom-up: r2 = 1/4 gives <b>b = 1/4 directly</b>. Then r1 = a(1+1/4) = -15/16 gives a = -3/4. Official: b = 1/4, a = -3/4. Then r0 = 1+9/16+1/16 = 13/8. Order matters: lags +-2 pin b, lags +-1 pin a, lag 0 falls out.</p>
-  <p><b>3c — correlogram, cosine form.</b> P = r0+2r1 cos+2r2 cos2. Official numbers are in the keys table below. If you took the fallback a=1/4, b=5/4: that pair is <b>not min-phase</b> (|b|&gt;1) and not the true process — the paper gifts it so 3c-d stay doable. Compute r0, r1, r2 from the fallback with the MA(2) formulas above and proceed identically; you keep method marks.</p>
-  <p><b>3d — fake AR(1), fractions and all.</b> Yule-Walker on (r0,r1): a1 = -r1/r0 = 15/26, sigma2 = r0+a1*r1 = 451/416. Official. The hint about large numbers warns you the fraction is fine — do not round it into a wrong decimal.</p>
+  <p><b>3b — you need \(r[0]\) first; it is not given. Where MA(2) lags come from.</b> \(x[n]=i[n]+ai[n-1]+bi[n-2]\): lag 2 shares only \(i[n-2]\) (coefficient \(b\)), lag 1 shares two innovations, lag 0 is total energy. So with unit-variance drive: \(r[2]=b\), \(r[1]=a(1+b)\), \(r[0]=1+a^2+b^2\). Read <b>bottom-up</b>: \(r[2]=1/4\) gives <b>\(b=1/4\) directly</b> — no system to solve. Then \(r[1]=a(1+1/4)=-15/16\) gives \(a=(-15/16)/(5/4)=-3/4\). Official: \(b=1/4\), \(a=-3/4\). Then \(r[0]=1+9/16+1/16=13/8\). Order matters: \(\pm 2\) pins \(b\), \(\pm 1\) pins \(a\), 0 falls out. (Sanity: MA(2) has exactly 5 nonzero lags — the paper gives \(0,\pm 1,\pm 2\). Matches.)</p>
+  <p><b>3c — correlogram, cosine form.</b> \(P=r[0]+2r[1]\cos\theta+2r[2]\cos 2\theta=\frac{13}8-\frac{15}8\cos\theta+\frac12\cos 2\theta\). Official. If you took the fallback \(a=1/4,b=5/4\): that pair is <b>not min-phase</b> (\(|b|&gt;1\), zero outside the unit circle) and not the true process — the paper gifts it so 3c–d stay doable. Compute \(r[0]=21/8\), \(r[1]=9/16\), \(r[2]=5/4\) from the fallback with the MA(2) formulas above and proceed identically; you keep method marks.</p>
+  <p><b>3d — fake AR(1), fractions and all.</b> Yule–Walker on \((r[0],r[1])=(13/8,-15/16)\): \(a_1=-r[1]/r[0]=(15/16)/(13/8)=15/26\), \(\sigma_i^2=r[0]+a_1r[1]=13/8-(15/26)(15/16)=451/416\). Official. The hint ("large numbers") warns you \(451/416\) is fine — do not "simplify" it into a wrong decimal. PSD: \((451/416)/|1+\frac{15}{26}e^{-j\theta}|^2\); expand \(|1+\alpha e^{-j\theta}|^2=1+\alpha^2+2\alpha\cos\theta\) for the cosine form.</p>
 
   <h3>The nonparametric MC</h3>
-  <p>Periodogram \(\frac1N|\sum x[n]e^{-jn\theta}|^2\): Fourier transform of the biased ACF, asymptotically unbiased, variance \(\propto P^2\), <b>does not fall with \(N\)</b>, inconsistent. A longer record is not a quieter periodogram. Bartlett: average \(K\) periodograms of <b>non-overlapping</b> length-\(M\) blocks, variance \(\propto 1/K\), bias up. Welch / WOSA: segments overlap, variance is not \(1/K\). Main lobe = resolution. Side lobes = leakage. Zero-padding interpolates the same smeared curve; it does not raise resolution.</p>
+  <p><b>Five methods, one idea each.</b> Every MC option tests whether you know what each method <i>does</i>, not its formula. Periodogram: raw \(|FT|^2/N\) — Fourier transform of the <i>biased</i> ACF (biased, or the PSD could go negative), asymptotically unbiased, but variance \(\propto P^2\) <b>never falls with \(N\)</b> — inconsistent; a longer record sharpens the peak, it does not quiet the noise. Bartlett: chop into \(K\) <b>non-overlapping</b> blocks, average — variance \(\propto 1/K\), but each block is shorter so bias <i>up</i>. Welch/WOSA: overlapping + windowed segments — less extra bias than Bartlett (longer segments), but overlap means dependence, so variance is <b>not</b> \(1/K\). Blackman–Tukey: window the <i>ACF</i> (kill noisy far lags), then FT — consistent. Slogans: main lobe = resolution (split two tones), side lobes = leakage (strong hides weak), zero-padding = interpolation on the same smeared curve (denser samples, <i>not</i> resolution).</p>
 
   <div class="q">
     <p class="src">Retake · 21 Jan 2019 · 1c · 0.5 pt · one or two correct</p>
@@ -539,7 +585,7 @@
       <li>D. In general, zero-padding increases spectral resolution.</li>
     </ul>
   </div>
-  <p>Official: <b>A and C</b>. B is the yearly false statement (overlap ⇒ not \(1/K\)). D is false: zeropad interpolates.</p>
+  <p>Official: <b>A and C</b>. Kill each: <b>B</b> is the yearly false statement — "Welch with overlap, variance \(1/K\)": overlap means the \(K\) segments are <i>dependent</i>, so no \(1/K\). (Bartlett's \(1/K\) needs <i>non</i>-overlapping blocks.) <b>D</b> "zero-padding increases resolution": padding evaluates the <i>same windowed</i> DTFT on a finer grid — interpolation, the main lobe is unchanged. <b>A</b> holds (shorter block = wider main lobe = more bias); <b>C</b> holds (BT is consistent).</p>
 
   <div class="q">
     <p class="src">Written exam · 20 Jan 2020 · 1b · 0.25 pt · one correct (unlettered bullets; key uses A/B/C/D = 1st/2nd/3rd/4th)</p>
@@ -551,7 +597,7 @@
       <li>It consists of averaging \(K\) different periodograms, obtained from \(K\) segments of the observed random signal, allowing overlap between the segments. The variance is larger than Bartlett’s method, but lower than the periodogram.</li>
     </ul>
   </div>
-  <p>Welch allows overlap. Course view at the same \(K\): variance larger than Bartlett, still below the periodogram. Official: <b>D</b> (fourth bullet). The first bullet is Bartlett, not Welch.</p>
+  <p>Two independent choices per bullet: overlap or not, variance claim. Welch = overlap, so bullets 1 and 3 (both "not allowing overlap") describe <i>Bartlett</i> — dead immediately. Between 2 and 4: course view at the same \(K\) is variance <i>larger</i> than Bartlett (dependence) but still below the raw periodogram. Official: <b>D</b> (fourth bullet). Bullet 2 claims "lower than Bartlett's" — the wrong direction.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 3a · 0.3 pt · one correct</p>
@@ -571,7 +617,7 @@
       <li>(d) 1D, 2B, 3C, 4A</li>
     </ul>
   </div>
-  <p>Infinite cosine → two impulses (sharp). Window → sinc. DFT = samples of that sinc. Zeropad = denser samples, same envelope. Official: <b>b) 1B, 2D, 3C, 4A</b>. Option (a) has a typo (two “3”s).</p>
+  <p><b>Four objects, sharp → smeared → sampled.</b> (1) Infinite cosine: two <i>impulses</i> at \(\pm 25\) Hz — infinitely sharp. So 1 = the sharpest plot (B). (2) Windowing to \(N\) multiplies by a rectangle = convolves with a sinc: the impulses fatten into main lobe + sidelobes. So 2 = the continuous smeared curve (D). (3–4) DFT <i>samples</i> that smeared curve: no padding = \(N\) sparse dots (A); zero-padding to \(N+M\) = denser dots on the <i>same</i> envelope (C). So 3 = C, 4 = A. Official: <b>b) 1B, 2D, 3C, 4A</b>. Option (a) has a typo (two "3"s) — free elimination. Note \(f=25\), \(f_s=50\): Nyquist is 25 Hz, the tone sits exactly there — that is why the plots alias symmetrically, and why the question works at all.</p>
 
   <h3>Spectral factorisation</h3>
   <p>Write \(P\) in \(\cos\theta\), replace \(\cos\theta=(z+z^{-1})/2\), factor \(P(z)=\sigma_i^2 L(z)L(z^{-1})\), put every pole <i>and</i> every zero of \(L\) inside the unit circle, scale so \(l[0]=1\). \(L(z^{-1})\) is max-phase and is the trap.</p>
@@ -590,7 +636,7 @@
       <li>d) The input variance is given by \(\sigma_i^2=1/2\).</li>
     </ul>
   </div>
-  <p>Official: <b>c</b>, \(\sigma_i^2=2\) not \(1/2\). (b) is max-phase. The key notes a possible sign typo in the printed denominator; still pick c.</p>
+  <p><b>What "innovation filter" means.</b> Many filters share one \(|H|^2\); the innovation representation picks the unique <i>minimum-phase</i> one (all poles and zeros strictly inside \(|z|=1\), so system and inverse are both causal-stable) with \(l[0]=1\), scale in \(\sigma_i^2\). Kill: <b>(b)</b> \(L(z^{-1})\) runs on \(z^{+1}\) — anti-causal, maximum-phase by construction. <b>(d)</b> \(\sigma_i^2=1/2\): the printed gain is 2, and halving vs doubling is the reciprocal trap. Official: <b>c</b>, \(\sigma_i^2=2\). (The key notes a possible sign typo in the printed denominator — pick c anyway; the inside/outside pattern is unambiguous.)</p>
 
   <h2 id="b4">Block 4 · which region is “decide \(\mathcal H_1\)”</h2>
   <div class="why">
@@ -598,6 +644,17 @@
   </div>
   $$\mathcal L=\frac{p(x\mid\mathcal H_1)}{p(x\mid\mathcal H_0)}\gtrless\gamma$$
   <p>January 2019 published this ratio upside down. Later papers and SLT7 use \(p_1/p_0\). Write the standard ratio. Flag the 2019 key if you quote it.</p>
+
+  <h3>Notation for this block</h3>
+  <table>
+    <tr><th>Object</th><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>Hypotheses</td><td>\(\mathcal H_0\), \(\mathcal H_1\)</td><td>labels in the PDF — \(\mathcal H_0\) is <i>not</i> always "narrow" or "noise"; read the parameters</td></tr>
+    <tr><td>Likelihood ratio</td><td>\(L=p(\mathbf x\mid\mathcal H_1)/p(\mathbf x\mid\mathcal H_0)\)</td><td>scalar even if \(\mathbf x\) is a vector; decide \(\mathcal H_1\) iff \(L\ge\gamma\)</td></tr>
+    <tr><td>Sufficient statistic</td><td>\(T(\mathbf x)\), threshold \(\lambda'\)</td><td>after simplifying \(\ln L\): \(\lambda'\neq\gamma\), it absorbed constants, \(\sigma^2\), \(N\), \(\ln\gamma\)</td></tr>
+    <tr><td>False alarm</td><td>\(P_{\mathrm{FA}}=P(\text{decide }H_1\mid H_0)\)</td><td>\(\mathcal H_0\) density on the \(\mathcal H_1\) side — always under \(\mathcal H_0\), never "the overlap"</td></tr>
+    <tr><td>Detection / miss</td><td>\(P_D=P(\text{decide }H_1\mid H_1)\), \(P_M=1-P_D\)</td><td>\(\mathcal H_1\) density on the \(\mathcal H_1\) / \(\mathcal H_0\) side</td></tr>
+  </table>
+  <p><b>Method — five lines on the script.</b> (1) Write \(L=p_1/p_0\), take \(\ln\), dump constants. (2) Isolate the statistic \(T\): <b>re-derive the inequality direction</b> — never memorise "right tail". Rule of thumb: \(\mathcal H_1\) wider/heavier → decide \(\mathcal H_1\) on large \(|x|\) (outer); \(\mathcal H_1\) narrower/faster → decide \(\mathcal H_1\) on small \(x\) (inner); mean shift → the shifted side. Multiplying by \(-1\) flips \(\gtrless\). (3) Sketch both densities, mark the threshold, shade \(P_{\mathrm{FA}}\) (\(H_0\) on the \(H_1\) side) and \(P_M\) (\(H_1\) on the \(H_0\) side). (4) NP: fix \(\lambda'\) from \(P_{\mathrm{FA}}=\alpha\) using <i>only</i> the \(\mathcal H_0\) law. Bayes 0–1: \(\gamma=P_0/P_1\) (equals 1 only for equal priors). (5) Compute the shaded areas: Gaussian → \(Q\)/erf; exponential/Laplace folded → \(e^{-\lambda\lambda'}\) (right side) or \(1-e^{-\lambda\lambda'}\) (left side); two-sided → <b>double</b> the one-sided tail.</p>
 
   <div class="fig">
     <svg viewBox="0 0 420 148" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Narrow H0 and wide H1. Decide H1 in the outer tails.">
@@ -650,7 +707,7 @@
       <li>d) \(P_d\) and \(P_{fa}\) are switched.</li>
     </ul>
   </div>
-  <p>Official: <b>a</b>. Raising \(\sigma_0^2\) moves the curve toward the diagonal; it does not flip it into the lower triangle. (b), (c) and (d) all invert the ROC.</p>
+  <p><b>What flips a ROC into the lower triangle.</b> The ROC is \(P_D\) vs \(P_{\mathrm{FA}}\) as \(\gamma:0\to\infty\), through (0,0)–(1,1), concave, upper triangle for any sane detector. Three ways to land below the diagonal: <b>(b)</b> swap the hypotheses in the ratio (you detect \(H_0\)); <b>(c)</b> use the CDF instead of the survival function for \(P_D\) (you integrate the wrong tail); <b>(d)</b> swap the axes. All three <i>invert</i> the curve. <b>(a)</b> raising \(\sigma_0^2\) only blurs the two densities — the curve sags toward the diagonal, it never crosses it. Official: <b>a</b> ("cannot be the reason").</p>
 
   <h3>Four PDF pairs you will actually see</h3>
 
@@ -677,7 +734,7 @@
       <tr><td>2</td><td>3</td><td>1</td><td></td><td></td></tr>
     </table>
   </div>
-  <p>Right-tail test: \(P(y&gt;y_{\mathrm{th}})=\tfrac12[1-\mathrm{erf}((y_{\mathrm{th}}-\mu)/(\sigma\sqrt 2))]\). \(P_{fa}\) uses \(\mu=0\), \(\sigma=1\). First row: threshold 1 sits on the \(\mathcal H_1\) mean, so \(P_d=0.5\); \(Z=1\), \(\mathrm{erf}=0.683\), \(P_{fa}=\tfrac12(1-0.683)=0.159\). Official: 0.5 / 0.159; 0.977 / 0.159; 0.842 / 0.159; 0.842 / 0.023. \(P_{fa}\) does not depend on \(\mu_1\). The erf table is printed; do not copy one onto the A4.</p>
+  <p><b>How to read that erf table.</b> The paper prints \(\mathrm{erf}(Z/\sqrt 2)\) against \(Z\) — and \(Z=(X-\mu)/\sigma\) is exactly the standardised distance, so look up \(Z\) <i>directly</i>, no \(\sqrt 2\) arithmetic. Right-tail probability: \(P(y&gt;X)=\tfrac12[1-\mathrm{erf}]\). \(\mathrm{erf}\) is odd: \(\mathrm{erf}(-2)=-0.954\). Row by row: <b>(1,1,1):</b> threshold sits on the \(\mathcal H_1\) mean → \(P_d=0.5\) by symmetry, no table needed; \(P_{fa}\): \(Z=1\), erf \(0.683\), \(\tfrac12(1-0.683)=0.159\). <b>(1,3,1):</b> \(Z=(1-3)/1=-2\), erf \(-0.954\), \(P_d=\tfrac12(1+0.954)=0.977\); \(P_{fa}\) unchanged (\(\mathcal H_0\) did not move). <b>(1,3,2):</b> \(Z=(1-3)/2=-1\), \(P_d=\tfrac12(1+0.683)=0.842\) — wider \(\mathcal H_1\) leaks more mass left of the threshold, so \(P_d\) <i>drops</i> vs the previous row. <b>(2,3,1):</b> higher threshold, \(P_{fa}\): \(Z=2\), \(\tfrac12(1-0.954)=0.023\); \(P_d\): \(Z=(2-3)=-1\), \(0.842\). Official: 0.5/0.159; 0.977/0.159; 0.842/0.159; 0.842/0.023. <b>Structural fact:</b> \(P_{fa}\) uses only \(\mathcal H_0\) — it is 0.159 in the first three rows regardless of \(\mu_1,\sigma_1\). The erf table is printed on the paper; do not copy one onto the A4.</p>
 
   <div class="q">
     <p class="src">Written exam · 4 Nov 2019 · Q4 · 2 pt</p>
@@ -689,9 +746,9 @@
       <li>(c) Derive the log-likelihood ratio test that uses the observed data \(x[0],\dots,x[n]\), starting from \(\mathcal L(x)=p(\mathbf x;\mathcal H_1)/p(\mathbf x;\mathcal H_0)&gt;\gamma\). [1 pt]</li>
     </ul>
   </div>
-  <p>H1 is wider → decide H1 in the outer tails. \(P_{\mathrm{FA}}\) is the two tails of the <i>narrow</i> H0 Gaussian outside \(\pm x_{\mathrm{th}}\). Official (b): \(P_D=0.318\), \(P_{\mathrm{FA}}=0.004\). Under H1, \(x_{\mathrm{th}}=\sigma_1\) is one own-sd out: \(P_D=2(0.5-0.341)=0.318\). Under H0, \(x_{\mathrm{th}}=3\sigma_0\) is three own-sd out: \(P_{\mathrm{FA}}=2(0.5-0.341-0.136-0.021)=0.004\). Official (c):</p>
-  $$\ln\frac{\sigma_0^N}{\sigma_1^N}-\frac{\sum x^2}{2\sigma_1^2}+\frac{\sum x^2}{2\sigma_0^2}\gtrless\ln\gamma$$
-  <p>Statistic \(\sum x[n]^2\). Energy detector, not a mean detector.</p>
+  <p><b>(a) Sketch + region.</b> Both centred at 0; \(\mathcal H_1\) wider (\(\sigma_1&gt;\sigma_0\)): tall narrow \(\mathcal H_0\) peak, short wide \(\mathcal H_1\). They cross at \(\pm x_{\mathrm{th}}\) (\(L=1\)). Far out, the wide density wins, so decide \(\mathcal H_1\) <b>outside</b> the lines (two outer tails). Write the equations with the densities, not the Gaussian formula (the paper says so): \(P_D=2\int_{x_{\mathrm{th}}}^\infty p(x\mid\mathcal H_1)dx\), \(P_{fa}=2\int_{x_{\mathrm{th}}}^\infty p(x\mid\mathcal H_0)dx\). The factor 2 is the two sides — forgetting it is the standard half-mark loss.</p>
+  <p><b>(b) Numbers — convert the threshold to each hypothesis's own units.</b> \(x_{\mathrm{th}}=\sigma_1=3\sigma_0\). Under \(\mathcal H_1\) that is <i>one</i> own-sd out: \(P_D=2(0.5-0.341)=0.318\). Under \(\mathcal H_0\) it is <i>three</i> own-sd out: stack the printed bands \(0.341+0.136+0.021=0.498\), so \(P_{fa}=2(0.5-0.498)=0.004\). Official. Rule: always express the threshold in the units of the density you integrate — "3 sd out" vs "1 sd out" is the whole computation.</p>
+  <p><b>(c) Log-LRT — why squares.</b> IID product, \(\ln\), group: the \(x_n^2\) terms survive (variances differ, means don't), the \(x_n\) terms never appear. Coefficient of \(\sum x^2\): \(1/\sigma_0^2-1/\sigma_1^2&gt;0\) (since \(\sigma_1&gt;\sigma_0\)) so decide \(\mathcal H_1\) when \(\sum x[n]^2\) is <b>large</b>. Energy detector, not a mean detector. (The with-answers key drops the squares — typesetting bug; the oldexams key has them.) If \(\sigma_1&lt;\sigma_0\) the coefficient would flip and \(\mathcal H_1\) would be the inner region — same derivation, opposite side.</p>
 
   <div class="q">
     <p class="src">Written exam · 20 Jan 2020 · Q5 · 2.5 pt</p>
@@ -704,7 +761,10 @@
       <li>(c) Plot the ROC for that \(\lambda_1\), using \(P_{fa}=0.5\) and \(P_{fa}=0.9\) as reference points. Roughly sketch two more curves for \(\lambda_1\) increased and \(\lambda_1\) decreased. [1.25 pt]</li>
     </ul>
   </div>
-  <p>H1 is the faster decay, mass near 0, so decide H1 for <b>small</b> \(x\). The hint “\(P_d&gt;P_{fa}\)” is that left-side choice. Official (a): \(x_{\mathrm{th}}=1.58\), \(P_D=1-e^{-\lambda_1 x_{\mathrm{th}}}\) (left of threshold). Official (b): \(P_{fa}=0.1\Rightarrow x_{\mathrm{th}}=1.05\), then \(P_d=0.9\Rightarrow\lambda_1=2.19\). Larger \(\lambda_1\) lifts the ROC toward the top-left.</p>
+  <p><b>(a) Sketch first, then the threshold.</b> Two exponentials on \(x\ge 0\), each starting at its rate: \(\mathcal H_1\) (\(\lambda_1=2\)) starts high and dies fast; \(\mathcal H_0\) (\(\lambda_0=0.1\)) starts low and dies slowly. Sketch rule: height at 0 = rate, decay speed = rate — the faster one starts taller. They cross once. Set \(L(x_{\mathrm{th}})=1\): \((\lambda_1/\lambda_0)e^{-(\lambda_1-\lambda_0)x_{\mathrm{th}}}=1\), so \(x_{\mathrm{th}}=\ln(\lambda_1/\lambda_0)/(\lambda_1-\lambda_0)=\ln 20/1.9\approx 1.58\). Official.</p>
+  <p><b>Which side is \(\mathcal H_1\)?</b> \(L(x)\) is a <i>decreasing</i> exponential in \(x\) (since \(\lambda_1&gt;\lambda_0\)), so \(L&gt;1\) iff \(x&lt;x_{\mathrm{th}}\): decide \(\mathcal H_1\) for <b>small</b> \(x\), left of the line. That is what the hint ("design so \(P_D&gt;P_{fa}\)") means — the other side would give \(P_D&lt;P_{fa}\) (below the ROC diagonal). Shade: \(P_D\) is \(\mathcal H_1\) on \((0,x_{\mathrm{th}})\), \(P_{fa}\) is \(\mathcal H_0\) on \((0,x_{\mathrm{th}})\). With the printed CDF: \(P_D=1-e^{-\lambda_1 x_{\mathrm{th}}}\), \(P_{fa}=1-e^{-\lambda_0 x_{\mathrm{th}}}\).</p>
+  <p><b>(b) Operating point, two inversions.</b> NP logic: the threshold comes from \(\mathcal H_0\) alone. Fix \(P_{fa}=0.1\): \(1-e^{-0.1x_{\mathrm{th}}}=0.1\), so \(x_{\mathrm{th}}=-10\ln 0.9\approx 1.05\). <i>Then</i> demand \(P_D=0.9\) at that threshold: \(1-e^{-\lambda_1\cdot 1.05}=0.9\), so \(\lambda_1=\ln 10/1.05\approx 2.19\). Official. Order matters: threshold from \(H_0\), performance from \(H_1\) — never the reverse.</p>
+  <p><b>(c) ROC — parametrize by the threshold.</b> Each \(x_{\mathrm{th}}\) is one \((P_{fa},P_D)\) point: \(x_{\mathrm{th}}\to 0\) gives (1,1), \(x_{\mathrm{th}}\to\infty\) gives (0,0). The paper's \(P_{fa}=0.5\) (\(x_{\mathrm{th}}=-10\ln 0.5\approx 6.93\), \(P_D\approx 1\)) and \(P_{fa}=0.9\) (\(x_{\mathrm{th}}\approx 23\), \(P_D\approx 1\)) are two dots on the same curve — compute, mark, join through (0,0)–(1,1). Larger \(\lambda_1\) = easier separation = harder bow toward top-left; smaller = sag toward the diagonal. Sketch three curves, label which is which. Curve below the diagonal means you integrated the wrong tail — flip.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 4a–c</p>
@@ -719,7 +779,9 @@
     <p>Provide a sketch for the two PDFs and indicate the probability of false alarm and missed detection for a likelihood test with \(\gamma=1\).</p>
     <p>4c. Compute \(P_D\) and \(P_{\mathrm{FA}}\) at that threshold. The 2022 paper prints a \(Q\)-table; they use \(Q(1.59)=0.0559\). [1.0 pt]</p>
   </div>
-  <p>Official 4a: <b>a</b>. Impulse response is \(s[-n]\) or \(s[N-1-n]\), not \(s[n]\), unless you correlate instead of convolve. It exists for coloured noise too, after whitening. Official 4b–c: Laplace has heavier tails than \(\mathcal N(0,1)\), so H1 = outer tails. \(y_{\mathrm{th}}=\pm 1.5884\), \(P_D=0.4519\), \(P_{\mathrm{FA}}=2\times 0.0559=0.1118\). Shade: miss is the centre of the Laplace; false alarm is the Gaussian tails.</p>
+  <p><b>4a — one line each.</b> Official: <b>a</b>. Matched filter = SNR-optimal linear filter (Cauchy–Schwarz: \((h^\top s)^2\le(h^\top h)(s^\top s)\), equality iff \(h\propto s\) — that proportionality <i>is</i> the filter). <b>(b)</b> is the correlate-vs-convolve trap: filtering convolves, so the FIR form time-reverses, \(h[n]=s[N-1-n]\), sampled at \(n=N-1\); \(h[n]=s[n]\) only <i>correlates</i>. <b>(c)</b> is false — coloured noise just needs a whitening front-end first; "only uncorrelated" confuses the textbook example with the definition.</p>
+  <p><b>4b — sketch + shade.</b> \(\mathcal H_0=\mathcal N(0,1)\): tall narrow bell. \(\mathcal H_1=\frac14e^{-|y|/2}\): shorter peak, <b>heavier tails</b> (exponential tails beat Gaussian tails far out). So \(\mathcal H_1\) = outer tails, thresholds at \(\pm y_{\mathrm{th}}\) where \(L=1\). Shade with the rule: \(P_M\) is \(\mathcal H_1\) truth on the \(\mathcal H_0\) side = the <i>centre</i> of the Laplace (between the lines); \(P_{fa}\) is \(\mathcal H_0\) truth on the \(\mathcal H_1\) side = the Gaussian <i>tails</i> (outside the lines). Say the rule out loud before shading — putting one area on the wrong density is the standard half-mark loss.</p>
+  <p><b>4c — numbers, both doubled.</b> \(L=1\) gives \(-|y|+y^2=2\ln 4-\ln(2\pi)\), so \(y_{\mathrm{th}}=\pm 1.5884\). Laplace tail (one side, times 2 by evenness): \(P_D=e^{-1.5884/2}=0.4519\). Gaussian (Q-table printed, \(Q(1.59)=0.0559\), times 2): \(P_{fa}=2\times 0.0559=0.1118\). Official. Two-sided test: every tail count doubles. Forgetting one factor of 2 is the arithmetic trap.</p>
 
   <div class="q">
     <p class="src">Final exam · 7 Nov 2022 · 4c–d · no official key</p>
