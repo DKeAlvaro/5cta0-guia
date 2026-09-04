@@ -207,9 +207,16 @@
     $$p(x;\lambda)=\lambda e^{-\lambda x}$$
     <p>find the maximum likelihood estimator for \(\lambda\), given \(N\) independent identically distributed observations \(x_i\), \(i\in\{0:N-1\}\).</p>
   </div>
-  <p>Joint \(\lambda^N\exp(-\lambda\sum x_i)\). Log: \(N\ln\lambda-\lambda\sum x_i\). Derivative: \(N/\lambda-\sum x_i=0\).</p>
-  $$\hat\lambda_{\mathrm{ML}}=\frac{N}{\sum_i x_i}=\frac{1}{\bar x}$$
-  <p>Official: that formula. It is one over the sample mean, which is what a rate should be. For finite \(N&gt;1\) it is biased (\(E[\hat\lambda]=N\lambda/(N-1)\)). They still want the MLE, not the unbiased cousin.</p>
+  <p><b>Step 1 — joint.</b> IID, so the joint is a product. Each sample contributes one \(\lambda e^{-\lambda x_i}\):</p>
+  $$p(\mathbf{x};\lambda)=\prod_{i=0}^{N-1}\lambda e^{-\lambda x_i}=\lambda^N\exp\Big(-\lambda\sum_{i=0}^{N-1}x_i\Big).$$
+  <p><b>Step 2 — log.</b> Products become sums. Drop nothing yet (both terms depend on \(\lambda\)):</p>
+  $$\ln p(\mathbf{x};\lambda)=N\ln\lambda-\lambda\sum_i x_i.$$
+  <p><b>Step 3 — score = 0.</b> Differentiate in \(\lambda\) (the data \(\sum x_i\) is a frozen number here):</p>
+  $$\frac{\partial}{\partial\lambda}\ln p=\frac{N}{\lambda}-\sum_i x_i\stackrel{!}{=}0
+  \qquad\Rightarrow\qquad
+  \hat\lambda_{\mathrm{ML}}=\frac{N}{\sum_i x_i}=\frac{1}{\bar x}.$$
+  <p><b>Step 4 — max check.</b> Second derivative \(-N/\lambda^2&lt;0\), so it is a maximum, and it is interior (\(\lambda&gt;0\), support \(x\ge 0\) does not move with \(\lambda\)).</p>
+  <p>Official: that formula. Sanity: a rate is one over a mean time, so \(1/\bar x\) is what you expect. For finite \(N&gt;1\) it is biased (\(E[\hat\lambda]=N\lambda/(N-1)\), because \(1/\sum x_i\) is inverse-gamma). They still want the MLE, not the unbiased cousin \((N-1)/\sum x_i\). What loses the point here is writing the joint as a sum, or differentiating \(e^{-\lambda x}\) without the \(N\ln\lambda\) term.</p>
 
   <div class="q">
     <p class="src">Written exam · 4 Nov 2019 · 3a · 1 pt</p>
@@ -217,9 +224,14 @@
     $$p(x;\theta)=\frac{x}{\theta^2}\exp\left[-\frac{x^2}{2\theta^2}\right],\qquad x\ge 0.$$
     <p>Find the maximum likelihood estimator for the parameter \(\theta\).</p>
   </div>
-  <p>Log-likelihood: \(\sum\ln x[n]-2N\ln\theta-\frac{1}{2\theta^2}\sum x^2[n]\). Set the \(\theta\)-derivative to 0:</p>
+  <p><b>Step 1 — log-likelihood, term by term.</b> Take \(\ln\) of one sample: \(\ln x-2\ln\theta-x^2/(2\theta^2)\). Sum over \(N\) iid samples (the \(\sum\ln x[n]\) pile does not depend on \(\theta\), so it dies on differentiation, but write it — they mark formulation):</p>
+  $$\ln p(\mathbf{x};\theta)=\sum_{n=0}^{N-1}\ln x[n]-2N\ln\theta-\frac{1}{2\theta^2}\sum_{n=0}^{N-1}x^2[n].$$
+  <p><b>Step 2 — score.</b> Differentiate in \(\theta\):</p>
+  $$\frac{\partial}{\partial\theta}\ln p=-\frac{2N}{\theta}+\frac{1}{\theta^3}\sum_n x^2[n]\stackrel{!}{=}0.$$
+  <p><b>Step 3 — solve.</b> Multiply by \(\theta^3\) (\(\theta&gt;0\)): \(-2N\theta^2+\sum x^2[n]=0\), so</p>
   $$\hat\theta_{\mathrm{ML}}=\sqrt{\frac{1}{2N}\sum_{n=0}^{N-1}x^2[n]}.$$
-  <p>Official: that square root. Now the cousin, same family, different parametrization:</p>
+  <p>Keep the positive root (\(\theta&gt;0\) is a scale). Second derivative at the solution is negative — interior max, support \(x\ge 0\) does not move with \(\theta\).</p>
+  <p>Official: that square root. Now the cousin, same family, different parametrization — read the exponent before you copy last year’s answer:</p>
 
   <div class="q">
     <p class="src">Practice exam · 28 Oct 2021 · 2b · 1 pt</p>
@@ -227,7 +239,9 @@
     $$p(x[n])=\frac{x}{\theta}\exp\left(-\frac{x^2}{2\theta}\right),\qquad n=0,1,\dots,N-1,$$
     <p>find an estimator for the parameter \(\theta\).</p>
   </div>
-  <p>Here \(\theta\) already sits where \(\theta^2\) sat in 2019. Official MLE: \(\hat\theta=(1/(2N))\sum x^2[n]\), no square root. Read the exponent before you copy last year’s answer.</p>
+  <p>Here \(\theta\) already sits where \(\theta^2\) sat in 2019: \(p=x/\theta\cdot\exp(-x^2/(2\theta))\). Same three steps — joint, \(\ln\), score:</p>
+  $$\ln p=\sum\ln x[n]-N\ln\theta-\frac{1}{2\theta}\sum x^2[n],\qquad -\frac{N}{\theta}+\frac{\sum x^2[n]}{2\theta^2}=0,$$
+  <p>so official MLE \(\hat\theta=(1/(2N))\sum x^2[n]\), <b>no square root</b>. If you memorised “Rayleigh → square root” you lose this point. The exam deliberately re-parametrises the same family to test whether you derive or recall. Also note: \(\mathbb{E}[x^2]=2\theta\) here vs \(2\theta^2\) in the 2019 version — that is what feeds the CRLB differently.</p>
 
   <div class="q">
     <p class="src">Final exam · 7 Nov 2022 · 2d · 0.5 pt · no official key</p>
@@ -237,7 +251,13 @@
     $$p(\mathbf x;\theta)=\frac{1}{2\pi\sigma^2}\exp\left(-\frac{1}{2\sigma^2}\Big[(x_1-A\cos\theta)^2+(x_2-A\sin\theta)^2\Big]\right).$$
     <p>Find the maximum likelihood estimator of the parameter \(\theta\).</p>
   </div>
-  <p>The only \(\theta\)-dependent piece is \(x_1\cos\theta+x_2\sin\theta\). That is \(R\cos(\theta-\phi)\) with \(\phi=\mathrm{atan2}(x_2,x_1)\), so it peaks at \(\hat\theta_{\mathrm{ML}}=\mathrm{atan2}(x_2,x_1)\). \(\arctan(x_2/x_1)\) loses the quadrant. <span class="tag">derived</span></p>
+  <p><b>Step 1 — expand the square.</b> \(A&gt;0\), \(\sigma^2\) known, so the prefactor \(1/(2\pi\sigma^2)\) is a constant. Inside the exponent:</p>
+  $$(x_1-A\cos\theta)^2+(x_2-A\sin\theta)^2=x_1^2+x_2^2+A^2-2A(x_1\cos\theta+x_2\sin\theta).$$
+  <p>Only the last term depends on \(\theta\). Maximising the likelihood \(\Leftrightarrow\) minimising that quadratic \(\Leftrightarrow\) <b>maximising</b> \(x_1\cos\theta+x_2\sin\theta\).</p>
+  <p><b>Step 2 — phasor form.</b> Any \(a\cos\theta+b\sin\theta\) is \(R\cos(\theta-\phi)\) with \(R=\sqrt{a^2+b^2}\), \(\phi=\mathrm{atan2}(b,a)\). Here \(a=x_1\), \(b=x_2\):</p>
+  $$x_1\cos\theta+x_2\sin\theta=R\cos(\theta-\phi),\qquad R=\sqrt{x_1^2+x_2^2},\ \phi=\mathrm{atan2}(x_2,x_1).$$
+  <p><b>Step 3 — peak.</b> \(\cos\) peaks at 0, so \(\hat\theta_{\mathrm{ML}}=\phi=\mathrm{atan2}(x_2,x_1)\). <span class="tag">derived</span></p>
+  <p><b>Trap.</b> Setting \(\partial/\partial\theta=0\) gives \(-x_1\sin\theta+x_2\cos\theta=0\), i.e. \(\tan\theta=x_2/x_1\). That equation has <b>two</b> solutions \(\phi\) and \(\phi+\pi\) (one is the max, one the min). \(\arctan(x_2/x_1)\) returns one number in \((-\pi/2,\pi/2]\) and loses the quadrant — e.g. \((x_1,x_2)=(-1,-1)\) is angle \(-3\pi/4\), but \(\arctan(1)=\pi/4\). Two-argument \(\mathrm{atan2}\) keeps the signs. On the script, write the \(R\cos(\theta-\phi)\) line: that is the line they mark.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 2b · 0.3 pt · one correct</p>
@@ -280,7 +300,11 @@
     $$p(x;\theta)=\frac{x}{\theta^2}\exp\left[-\frac{x^2}{2\theta^2}\right],\qquad x\ge 0.$$
     <p>Find the Cramer-Rao Lower Bound for the MLE.</p>
   </div>
-  <p>Second derivative of the log-likelihood, take \(-\mathbb E\): \(\mathcal I(\theta)=4N/\theta^2\), so \(\mathrm{Var}\ge\theta^2/(4N)\). The published key writes \(\hat\theta^2/(4N)\). Wrong object: the bound depends on the true parameter, not on the estimate. Report \(\theta^2/(4N)\).</p>
+  <p><b>Step 1 — second derivative.</b> From 3a, score \(-2N/\theta+(1/\theta^3)\sum x^2[n]\). Differentiate again:</p>
+  $$\frac{\partial^2}{\partial\theta^2}\ln p=\frac{2N}{\theta^2}-\frac{3}{\theta^4}\sum_n x^2[n].$$
+  <p><b>Step 2 — expectation.</b> Fisher is \(-\mathbb{E}[\cdot]\). You need \(\mathbb{E}[x^2]\). Either integrate \(\int_0^\infty x^2\cdot(x/\theta^2)e^{-x^2/(2\theta^2)}dx=2\theta^2\), or notice \(x/\theta\) is standard Rayleigh (scale 1), whose second moment is 2. So \(\mathbb{E}[\sum x^2]=N\cdot 2\theta^2\):</p>
+  $$\mathcal{I}(\theta)=-\frac{2N}{\theta^2}+\frac{3}{\theta^4}\cdot 2N\theta^2=\frac{4N}{\theta^2},\qquad\mathrm{Var}[\hat\theta]\ge\frac{\theta^2}{4N}.$$
+  <p>The published key writes \(\hat\theta^2/(4N)\). <b>Wrong object:</b> the bound is a function of the <i>true</i> parameter, which sets the curvature of the likelihood — you cannot compute it from the estimate. Report \(\theta^2/(4N)\). Bonus: the score is \(-2N/\theta+(1/\theta^3)\sum x^2\), which cannot be factored as \(\mathcal{I}(\theta)(g-\theta)\) with \(g\) free of \(\theta\), so this MLE is <b>not</b> finite-sample efficient (it is only asymptotically efficient).</p>
 
   <h3>MMSE is the mean. MAP is the mode.</h3>
   <p>Classical: \(\theta\) is a fixed unknown. Bayesian: \(\theta\) is drawn from a prior, you update to a posterior \(p(\theta\mid x)\), then you pick one number from that posterior. Square cost → posterior mean (MMSE). Hit-or-miss / uniform cost → posterior mode (MAP). They are different functions unless the posterior is symmetric (Gaussian: mean = mode).</p>
@@ -303,9 +327,12 @@
     <p>2f. Find the minimum-mean square error estimator. Hint: you can use \(\int x^2 e^{-x}\,dx=-e^{-x}(x^2+2x+2)\).</p>
     <p>2g. Find the maximum a posteriori estimator.</p>
   </div>
-  <p>The paper already gave you the posterior. Do not re-derive Bayes. Shape 2, rate \(b=x+a\): Gamma mean is \(2/b\), mode of Gamma(2, \(b\)) is \(1/b\).</p>
-  $$\hat\theta_{\mathrm{MMSE}}=\frac{2}{x+a},\qquad\hat\theta_{\mathrm{MAP}}=\frac{1}{x+a}$$
-  <p>They differ because the posterior is skewed. <span class="tag">derived</span></p>
+  <p>The paper already gave you the posterior — do not re-derive Bayes, start from it. Recognise the shape: \(b^2\theta e^{-b\theta}\) with \(b=x+a\) is Gamma(shape 2, rate \(b\)). Check it integrates to 1: \(\int_0^\infty\theta e^{-b\theta}d\theta=1/b^2\) (substitute \(u=b\theta\)), so \(b^2\) is the normaliser.</p>
+  <p><b>2f — MMSE = mean.</b> Gamma mean is shape/rate. Or grind it with the printed hint (\(\int\theta^2 e^{-b\theta}d\theta=2/b^3\) after \(u=b\theta\)):</p>
+  $$\hat\theta_{\mathrm{MMSE}}=\mathbb{E}[\theta\mid x]=b^2\cdot\frac{2}{b^3}=\frac{2}{b}=\frac{2}{x+a}.$$
+  <p><b>2g — MAP = mode.</b> \(\ln p(\theta\mid x)=\mathrm{const}+\ln\theta-b\theta\), derivative \(1/\theta-b=0\):</p>
+  $$\hat\theta_{\mathrm{MAP}}=\frac{1}{x+a}.$$
+  <p>Mode of Gamma(2, \(b\)) is \(1/b\). They differ because the posterior is <b>skewed</b> (long right tail pulls the mean right of the peak). If the posterior were Gaussian, mean = mode and both answers would coincide — that is the 2d-MCQ connection. <span class="tag">derived</span></p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 2f–h · 0.6 each</p>
@@ -316,9 +343,16 @@
     <p>(If 2f failed, the paper prints a garbled fallback for the two posteriors. Use 2f.)</p>
     <p>2h. Find the maximum a posterior estimator \(\hat X_{\mathrm{MAP}}\) of \(X\) given \(Y\). More specifically, find a threshold \(y_{\mathrm{th}}\) such that a decision on \(X\) depends on whether or not this threshold is exceeded. Hint: \(X\) is discrete, so \(\hat X_{\mathrm{MAP}}=\arg\max_{X\in\{1,-1\}}P[X\mid Y]\). Check the ratio of the two posteriors.</p>
   </div>
-  <p>2f is the two-Gaussian softmax. 2g: posterior mean of a discrete \(\pm 1\) is \(P(X=1\mid y)-P(X=-1\mid y)\). After cancelling exponentials that is \((e^{2y/\sigma^2}-1)/(e^{2y/\sigma^2}+1)\). Official:</p>
-  $$\hat X_{\mathrm{MMSE}}=\tanh(y/\sigma^2),\qquad\hat X_{\mathrm{MAP}}=\mathrm{sign}(y)$$
-  <p>MMSE is a soft number in \((-1,1)\). MAP is a hard decision at 0. Same sign, different magnitude.</p>
+  <p><b>2f — posteriors.</b> Bayes with equal priors \(P(X=1)=P(X=-1)=1/2\). Likelihoods: \(Y\mid X=1\sim\mathcal{N}(1,\sigma^2)\), \(Y\mid X=-1\sim\mathcal{N}(-1,\sigma^2)\). The 1/2 priors cancel:</p>
+  $$P[X=1\mid Y=y]=\frac{e^{-(y-1)^2/(2\sigma^2)}}{e^{-(y-1)^2/(2\sigma^2)}+e^{-(y+1)^2/(2\sigma^2)}},$$
+  <p>and symmetrically for \(-1\). This is a two-class softmax: the posterior is the likelihood of that class over the sum. (If 2f failed, the paper prints a garbled fallback — use your 2f, not theirs.)</p>
+  <p><b>2g — MMSE = posterior mean, discrete version.</b> \(X\) takes values \(\pm 1\), so the “integral” is a sum:</p>
+  $$\hat X_{\mathrm{MMSE}}=\mathbb{E}[X\mid y]=(+1)P_1+(-1)P_{-1}=P_1-P_{-1}=\frac{e^{-(y-1)^2/(2\sigma^2)}-e^{-(y+1)^2/(2\sigma^2)}}{e^{-(y-1)^2/(2\sigma^2)}+e^{-(y+1)^2/(2\sigma^2)}}.$$
+  <p>Divide top and bottom by \(e^{-(y+1)^2/(2\sigma^2)}\). The exponent difference: \((y-1)^2-(y+1)^2=-4y\), so the ratio is \(e^{2y/\sigma^2}\). Then the printed identity with \(u=y/\sigma^2\):</p>
+  $$\hat X_{\mathrm{MMSE}}=\frac{e^{2y/\sigma^2}-1}{e^{2y/\sigma^2}+1}=\tanh(y/\sigma^2).$$
+  <p><b>2h — MAP = argmax, threshold.</b> Compare posteriors by their ratio (denominators cancel):</p>
+  $$\frac{P_1}{P_{-1}}=\frac{e^{-(y-1)^2/(2\sigma^2)}}{e^{-(y+1)^2/(2\sigma^2)}}=e^{2y/\sigma^2}\gtrless 1\iff y\gtrless 0.$$
+  <p>So \(\hat X_{\mathrm{MAP}}=\mathrm{sign}(y)\), threshold \(y_{\mathrm{th}}=0\). Official for both. <b>Read the two answers against each other:</b> MMSE is a <i>soft</i> number in \((-1,1)\) (saturates at \(\pm 1\) for large \(|y|/\sigma^2\), near 0 when \(y\approx 0\) — “I am unsure”); MAP is a <i>hard</i> \(\pm 1\) decision. Same sign, different magnitude. That soft-vs-hard contrast is the whole point of asking both.</p>
 
   <div class="q">
     <p class="src">Retake · 21 Jan 2019 · 2b–c · after the exponential MLE in 2a</p>
@@ -326,7 +360,9 @@
     $$p(\lambda)=\begin{cases}1/2&amp;0\le\lambda\le 2\\ 0&amp;\text{otherwise.}\end{cases}$$
     <p>Treat \(p(x;\lambda)\) as a conditional \(p(x\mid\lambda)\). (b) Determine the Bayesian MMSE for \(\lambda\): first write the formula specifying each density, then solve it. (c) Using the same information, find the MAP estimator for \(\lambda\). Integrals \(\int x e^{ax}\,dx\) and \(\int x^2 e^{ax}\,dx\) are printed on the paper.</p>
   </div>
-  <p>MAP: the prior is flat on \((0,2)\), so MAP is the MLE projected onto \([0,2]\). The published key writes only \(N/\sum x_i\) and skips the projection. If the unconstrained MLE sits outside, the maximum is the endpoint \(\hat\lambda=2\). MMSE is the integral of \(\lambda\) against the truncated posterior on \([0,2]\); the published last line is the one-sample formula despite \(N\) in 2a. See errata.</p>
+  <p><b>(c) MAP — project, don’t just copy the MLE.</b> The prior is flat (\(1/2\)) on \((0,2)\), so inside that interval maximising the posterior \(\Leftrightarrow\) maximising the likelihood. For one sample, \(\ln p(x\mid\lambda)=\ln\lambda-\lambda x\), score \(1/\lambda-x=0\), unconstrained MLE \(1/x\) (second derivative \(-1/\lambda^2&lt;0\)). Now the boundary: \(\ln\lambda-\lambda x\) is increasing for \(\lambda&lt;1/x\). If \(1/x&gt;2\) (i.e. \(x&lt;1/2\)), it is still increasing on the whole \((0,2]\), so the constrained max is the right endpoint:</p>
+  $$\hat\lambda_{\mathrm{MAP}}=\begin{cases}2 & x&lt;1/2,\\ 1/x & x\ge 1/2.\end{cases}$$
+  <p>For \(N\) samples the unconstrained MLE is \(N/\sum x_i\); project that onto \([0,2]\). The published key writes only \(N/\sum x_i\) and skips the projection — that answer is MAP <i>only when it already lies in</i> \([0,2]\). <b>(b) MMSE</b> is the posterior mean on \([0,2]\): \(\int_0^2\lambda^2 e^{-x\lambda}d\lambda\big/\int_0^2\lambda e^{-x\lambda}d\lambda\). Closed form in ch. 05-bayes; the published last line has \((x+1)^2\) where \(2x^2+2x+1\) should be. See errata — and note the key answers 2b with a one-sample formula despite \(N\) in 2a.</p>
 
   <h3>No noise PDF → least squares</h3>
   <div class="q">
@@ -339,9 +375,12 @@
       <li>(d) Formulate the Gauss-Newton solution for the estimator cost function derived in (c). Clearly show the iterative formulation. [1 pt]</li>
     </ul>
   </div>
-  <p>Official (a): least squares, “requires no function for the noise.” No PDF was given, so not MLE. (b) linear in \(A\):</p>
+  <p><b>(a) LS, and why.</b> The paper gives a signal model \(s[n]=Ae^{\phi n}\) but <b>no noise PDF</b> — no \(p(\mathbf{x};\theta)\), so MLE/MAP/BLUE are all off the table (each needs a PDF, or at least a covariance). LS needs only the model: minimise residual energy \(J=\sum(x[n]-s[n])^2\). That is the 0.5 pt: name LS + the one sentence “requires no function for the noise” (official wording).</p>
+  <p><b>(b) \(\phi\) known → linear in \(A\).</b> One unknown multiplying a known waveform \(h[n]=e^{\phi n}\). Scalar normal equation \(\hat A=(\mathbf{h}^\top\mathbf{x})/(\mathbf{h}^\top\mathbf{h})\):</p>
   $$\hat A_{\mathrm{LS}}=\frac{\sum x[n]e^{\phi n}}{\sum e^{2\phi n}}$$
-  <p>(c) \(J=\sum(x[n]-A e^{\phi n})^2\), nonlinear. (d) Gauss–Newton linearises the <i>signal</i> and takes a linear least-squares step. Newton–Raphson iterates on \(J\) itself with the Hessian. The 2020 key printed the Newton form even though the question said Gauss–Newton. Write whichever they named; know the difference.</p>
+  <p>(Key sums \(n=0..N\); match the paper’s indexing, not the reader’s \(N-1\).)</p>
+  <p><b>(c) Both unknown → nonlinear.</b> \(J(\phi,A)=\sum(x[n]-A e^{\phi n})^2\). Nonlinear because \(\phi\) sits inside the exponential — no change of variables linearises both parameters at once. Write the gradient too (it is part d’s input): \(\partial J/\partial A=-2\sum e^{\phi n}(x[n]-Ae^{\phi n})\), \(\partial J/\partial\phi=-2\sum Ane^{\phi n}(x[n]-Ae^{\phi n})\).</p>
+  <p><b>(d) Gauss–Newton vs what the key printed.</b> Gauss–Newton linearises the <i>signal</i> \(\mathbf{s}(\theta)\) about \(\theta_k=(\phi_k,A_k)\): Jacobian row \(n\) is \([A_k n e^{\phi_k n},\ e^{\phi_k n}]\) (derivatives of \(Ae^{\phi n}\) in \(\phi,A\)), then one linear-LS step \(\theta_{k+1}=\theta_k+(H_k^\top H_k)^{-1}H_k^\top(\mathbf{x}-\mathbf{s}(\theta_k))\). Newton–Raphson instead iterates on \(J\) with its Hessian: \(\theta_{k+1}=\theta_k-(\nabla^2 J)^{-1}\nabla J\). The 2020 key printed the <b>Newton</b> form even though the question said Gauss–Newton. On your script, write the one they name; if they name Gauss–Newton, the Jacobian row is the line they mark. Know both — resit 2022 2c explicitly says both are legal.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 2c · 0.3 pt · one correct</p>
@@ -392,8 +431,9 @@
     $$\rho[0]=28/27,\quad\rho[1]=\rho[-1]=5/27,\quad\rho[\tau]=\bigl(\tfrac12\bigr)^{|\tau|-1}\rho[1]\ \text{for }|\tau|\ge 2.$$
     <p>3c. Approximate as MA(1). Use the correlogram method to calculate \(P_{\mathrm{corrMA1}}(e^{j\theta})\) from the ACF in 3a. There is no need to calculate the MA parameters. Sketch on top of 3b. Hint: for an MA process the number of autocorrelation lags different from zero is finite and related to the order. [0.5 pt]</p>
   </div>
-  <p>Recipe: read \(a_1=-1/2\), \(b_1=-2/3\) from \(H(z)\) (course sign: \(x[k]=i[k]+b_1 i[k-1]-a_1 x[k-1]\)). Impulse response \(h[0]=1\), \(h[1]=b_1-a_1\). Expand \(E[x[k]x[k-\tau]]\) at lags 0 and 1. For \(|\tau|&gt;1\) the MA part is dead: \(r[\tau]=-a_1 r[\tau-1]\). Fake AR(1) = Yule–Walker on \((r[0],r[1])\) only. Fake MA(1) = correlogram of lags \(\{0,\pm 1\}\) only.</p>
-  <p>Official: \(r[0]=28/27\), \(r[1]=-4/27\), then AR \(a_1=1/7\), \(\sigma_i^2=64/63\), \(P(0)=0.78\), \(P(\pi)=1.38\) (high-pass, because \(r[1]\) is negative). MA correlogram \(28/27-(8/27)\cos\theta\). The fallback ACF in 3b flips the sign of \(r[1]\) on purpose. If you missed 3a and used \(+5/27\), you draw the wrong shape.</p>
+  <p><b>3a — the ARMA(1,1) recipe, every step.</b> Read \(a_k,b_k\) off \(H(z)=(1-\frac23z^{-1})/(1-\frac12z^{-1})\): with course signs \(x=i+b_1i_{-1}-a_1x_{-1}\), so \(b_1=-2/3\), \(a_1=-1/2\). Impulse response by polynomial division: \(H(z)=1+(1/2-2/3)z^{-1}+\cdots=1-\frac16z^{-1}+\cdots\), so \(h[0]=1\), \(h[1]=-1/6\). Modified Yule–Walker at lags 0,1 (\(\sigma_i^2=1\)): \(r[0]=b_0h[0]+b_1h[1]-a_1r[1]=1+(-2/3)(-1/6)+\frac12r[1]=10/9+\frac12r[1]\); \(r[1]=b_1h[0]-a_1r[0]=-2/3+\frac12r[0]\). Substitute: \(r[0]=7/9+\frac14r[0]\), so official \(r[0]=28/27\), \(r[1]=-4/27\). For \(|\tau|&gt;1\) the MA part is dead: \(r[\tau]=-a_1r[\tau-1]=\frac12r[\tau-1]\).</p>
+  <p><b>3b — fake AR(1) uses only \((r[0],r[1])\).</b> Yule–Walker \(2\times 2\): \(a_1=-r[1]/r[0]=(4/27)/(28/27)=1/7\), \(\sigma_i^2=r[0]+a_1r[1]=28/27-4/189=64/63\). PSD \((64/63)/|1+\frac17e^{-j\theta}|^2\). <b>Shape read:</b> \(a_1&gt;0\) ⇒ denominator largest at \(\theta=0\) ⇒ high-pass: \(P(0)=0.78\), \(P(\pi)=1.38\), and \(r[1]&lt;0\) says the same (adjacent samples anti-correlated). <b>3c — fake MA(1) is just the correlogram of lags \(|l|\le 1\):</b> \(28/27-(8/27)\cos\theta\), no parameter fitting needed (the hint). Sketch on top of 3b: same endpoints-ish, different middle.</p>
+  <p><b>Fallback trap.</b> If you missed 3a, the paper lets you use \(\rho[1]=+5/27\) — note the <b>plus</b>. True \(r[1]\) is \(-4/27\). The fallback flips the sign on purpose, so your 3b sketch would be low-pass instead of high-pass. If you take the fallback, you still get method marks, but do not “correct” its sign.</p>
 
   <div class="q">
     <p class="src">Final exam · 7 Nov 2022 · 3c–g · no official key</p>
@@ -408,7 +448,8 @@
       <li>3g. Model \(x[k]\) as MA(1) and calculate \(P_{\mathrm{MA1}}(e^{j\theta})\). Decimal numbers are allowed. [0.75 pt]</li>
     </ul>
   </div>
-  <p>Same recipe as 2021. <span class="tag">derived</span>: ARMA(1,1) with \(a_1=-3/4\), \(b_1=-1\); \(P_x=\frac78 |1-e^{-j\theta}|^2\big/|1-\frac34 e^{-j\theta}|^2\); \(r[0]=1\), \(r[1]=-1/8\), then \(r[\tau]=\frac34 r[\tau-1]\) for \(|\tau|&gt;1\); fake AR \(a_1=1/8\), \(\sigma_i^2=63/64\); fake MA \(1-\frac14\cos\theta\).</p>
+  <p><b>Same recipe as 2021 — run it, don't memorise it.</b> Difference equation \(x=i-i_{-1}+\frac34x_{-1}\): ARMA(1,1) with <span class="tag">derived</span> \(a_1=-3/4\) (since \(-a_1=+3/4\)), \(b_1=-1\). \(P_x=\frac78 |1-e^{-j\theta}|^2\big/|1-\frac34 e^{-j\theta}|^2\); \(r[0]=1\), \(r[1]=-1/8\), then \(r[\tau]=\frac34 r[\tau-1]\) for \(|\tau|&gt;1\); fake AR \(a_1=1/8\), \(\sigma_i^2=63/64\); fake MA \(1-\frac14\cos\theta\). All numbers here are derived (no official key), see the keys table.</p>
+  <p><b>3c is vocabulary (0.15 pt).</b> AR = past outputs in the equation, MA = past innovations in the equation, so this is ARMA(1,1) — one line, full marks. <b>3d (0.35 pt):</b> plug into \(P_x=\sigma_i^2|B|^2/|A|^2\). Zero at \(\theta=0\): the MA zero kills DC entirely — write that sentence, it shows you read the formula. <b>3e (0.5 pt):</b> impulse response \(h[0]=1\), \(h[1]=b_1-a_1=-1/4\); modified Yule-Walker gives the ACF. <b>3f/3g (0.75 pt each)</b> are the fake fits from (r0,r1) only. Compare with Practice 2021 above: same skeleton, negative r1 both times (high-pass). If you can do 2021 3a-c cold, this one is transcription.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 3b–d · 1 pt each</p>
@@ -418,7 +459,9 @@
     <p>3c. Calculate the power spectral density of \(x[n]\) using the correlogram method. If you were not able to solve 3b, you may use \(a=1/4\) and \(b=5/4\). Express the PSD as a function of \(\cos\theta\). Hint: the autocorrelation of an MA process is of finite length.</p>
     <p>3d. Now assume \(x[n]\) can be modeled as generated by an AR(1) process. Find the AR parameters and the PSD of the AR(1) (as a function of \(\cos\theta\)). Same fallback \(a=1/4\), \(b=5/4\). Hint: some parameters may result in fractions with large numbers.</p>
   </div>
-  <p>You also need \(r[0]\). For MA(2), \(r[2]=\sigma_i^2 b=b\) (unit-variance innovation), so \(b=1/4\), and \(r[1]=\sigma_i^2(a+ab)\) gives \(a=-3/4\). Official 3b: \(b=1/4\), \(a=-3/4\). Then \(r[0]=1+a^2+b^2=13/8\). Official 3c: \(\frac{13}8-\frac{15}8\cos\theta+\frac12\cos 2\theta\). Official 3d: \(a_1=15/26\), \(\sigma_i^2=451/416\). The fallback \(a=1/4\), \(b=5/4\) is not the true MA(2) and is not min-phase. They put it there so a wrong 3b still lets you do 3c–d.</p>
+  <p><b>3b — you need r0 first; it is not given.</b> MA(2) with unit-variance innovation: r0 = 1+a^2+b^2, r1 = a(1+b), r2 = b. Read bottom-up: r2 = 1/4 gives <b>b = 1/4 directly</b>. Then r1 = a(1+1/4) = -15/16 gives a = -3/4. Official: b = 1/4, a = -3/4. Then r0 = 1+9/16+1/16 = 13/8. Order matters: lags +-2 pin b, lags +-1 pin a, lag 0 falls out.</p>
+  <p><b>3c — correlogram, cosine form.</b> P = r0+2r1 cos+2r2 cos2. Official numbers are in the keys table below. If you took the fallback a=1/4, b=5/4: that pair is <b>not min-phase</b> (|b|&gt;1) and not the true process — the paper gifts it so 3c-d stay doable. Compute r0, r1, r2 from the fallback with the MA(2) formulas above and proceed identically; you keep method marks.</p>
+  <p><b>3d — fake AR(1), fractions and all.</b> Yule-Walker on (r0,r1): a1 = -r1/r0 = 15/26, sigma2 = r0+a1*r1 = 451/416. Official. The hint about large numbers warns you the fraction is fine — do not round it into a wrong decimal.</p>
 
   <h3>The nonparametric MC</h3>
   <p>Periodogram \(\frac1N|\sum x[n]e^{-jn\theta}|^2\): Fourier transform of the biased ACF, asymptotically unbiased, variance \(\propto P^2\), <b>does not fall with \(N\)</b>, inconsistent. A longer record is not a quieter periodogram. Bartlett: average \(K\) periodograms of <b>non-overlapping</b> length-\(M\) blocks, variance \(\propto 1/K\), bias up. Welch / WOSA: segments overlap, variance is not \(1/K\). Main lobe = resolution. Side lobes = leakage. Zero-padding interpolates the same smeared curve; it does not raise resolution.</p>
@@ -625,7 +668,7 @@
     <p>4d. For \(N=1\), set \(Y=|X|\), so \(p(y;\mathcal H_0)=e^{-y}\), \(p(y;\mathcal H_1)=2e^{-2y}\), and \(y\gtrless_{\mathcal H_1}^{\mathcal H_0}\gamma'\). The two densities are plotted below. Indicate \(P_{\mathrm{FA}}\) and \(P_M\) for \(\gamma'=1\). [0.25 pt]</p>
     <img src="./img/nov22-shade.jpg" alt="Solid H0 exponential starting at 1, dashed H1 exponential starting at 2, versus y from 0 to 5.">
   </div>
-  <p>H1 is the <i>narrower</i> Laplace (rate 2 vs 1). Large \(|x|\) favours H0, so the inequality flips: decide H1 when the sum of absolute values is <b>small</b>. <span class="tag">derived</span> \(\gamma'=N\ln 2-\ln\gamma\). At \(\gamma'=1\), decide H1 for \(y&lt;1\): \(P_{\mathrm{FA}}\) is H0 on \((0,1)\) (under the solid curve); \(P_M\) is H1 on \((1,\infty)\) (under the dashed curve). Do not shade the usual right tail.</p>
+  <p><b>4c — the inequality flip, slowly.</b> IID, so the joint ratio is a product: L = 2^N exp(-sum|x_n|). Take logs: N ln2 - sum|x_n| compared against ln(gamma), H1 on top. Now move the sum to the left by multiplying by -1 — <b>the inequality flips</b>, and H1 ends up at the bottom: decide H0 when the sum of absolute values is <b>large</b>. Why: H1 is the <i>narrower</i> Laplace (rate 2 vs 1 — taller peak, faster decay), so large |x| favours H0. Threshold: N ln2 - ln(gamma) (tagged derived — no official Nov22 key). Writing the unflipped inequality is the 0.5-pt loss; the hint on the paper says pay special attention to the inequality, and this is what it means.</p><p><b>4d — shade on the folded plot.</b> N=1, Y=|X|: H0 density exp(-y), H1 density 2exp(-2y), y&gt;0. At threshold 1, decide H1 for <b>y&lt;1</b> (left of the line — <b>not</b> the usual right tail). P_FA: H0 density on (0,1), under the solid curve. P_M: H1 density on (1, infinity), under the dashed curve. If you shade right-tails by habit you shade exactly the complements. Look at the photo: solid starts at 1, dashed at 2 — at y=0, H1 is twice as tall, so the left region is H1's.</p>
 
   <h2 id="keys">Marking keys</h2>
   <p>Use these after you sit the paper. <span class="tag exam">no official key</span> means there is no published letter. <span class="tag">derived</span> is computed here, never a published letter.</p>
