@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Past papers — 5CTA0</title>
-  <meta name="description" content="24 exam skeletons for 5CTA0, with official answers from 2019–2022 keys and a per-paper index.">
+  <meta name="description" content="How to sit 5CTA0 past papers: the four methods walked on real questions, then official marking keys.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
@@ -18,326 +18,404 @@
     <span>past papers</span>
   </div>
 
-  <h1>The same 24 skeletons</h1>
-  <p class="answer">The written exam reuses these 24 skeletons every year, with new numbers. Learn the trap and the method; the algebra does not change.</p>
-  <div class="byline">Papers 2019–2022. Official keys quoted where they exist. Nov 2022 has none — anything computed here is tagged derived, never as a published letter. Jan20r ≡ Jan22r.</div>
+  <h1>How to sit the papers</h1>
+  <p class="answer">The written exam is four recycled methods with new numbers. Learn each method on one real question here, then sit two papers under time. The marking keys are at the bottom, after the methods. Do not start by reading the keys.</p>
+  <div class="byline">Papers 2019–2022. Official numbers from the published keys. Nov 2022 has no key: those answers are tagged derived.</div>
 
   <div class="cifras">
-    <div><span class="n">4</span><span>blocks, 3 h, 10 pt<br>typical 1.5 / 2.75 / 3 / 2.75</span></div>
-    <div><span class="n">24</span><span>skeletons<br>P1–P24 below</span></div>
-    <div><span class="n">7</span><span>papers<br>2019–2022</span></div>
+    <div><span class="n">4</span><span>blocks, ~3 h, 10 pt<br>typical 1.5 / 2.75 / 3 / 2.75</span></div>
+    <div><span class="n">Nov22</span><span>sit this first<br>current shape, no key</span></div>
+    <div><span class="n">Jan22r</span><span>sit this second<br>official key exists</span></div>
   </div>
 
-  <h2>Format</h2>
-  <p>Four blocks, three hours, total 10. Spectra is the fattest. 2019 dumped all MC into Q1 with <b>one or two correct</b> and −0.25 per extra wrong letter. From Jan 2020 the rule is <b>exactly one</b>. From the 2020 resit, MC is sprinkled through all four parts. Shade-the-plot and fill-the-table show up every year in detection, often in spectra.</p>
-  <table>
-    <tr><th>Paper</th><th>Shape</th><th>Key</th></tr>
-    <tr><td>Jan19</td><td>4 ex. Q1 = 4 MC × 0.5. 1 or 2 correct.</td><td>oldexams</td></tr>
-    <tr><td>Nov19</td><td>4 ex. Mixed MC / T/F / table.</td><td>two keys; 1a conflicts</td></tr>
-    <tr><td>Jan20</td><td><b>5</b> ex. MC exactly one.</td><td>oldexams</td></tr>
-    <tr><td>Jan20r</td><td>4 parts, MC inside each (0.3).</td><td>Resit 2020 solutions</td></tr>
-    <tr><td>Pr21</td><td>Practice. 6 MC × 0.5 in part 1; PMFs printed.</td><td>Q&amp;A slides; 1f missing</td></tr>
-    <tr><td>Jan22r</td><td>Jan20r reprinted. 18.00–21.00.</td><td>use Jan20r</td></tr>
-    <tr><td>Nov22</td><td>4 Q, stated <b>1.5 / 2.75 / 3 / 2.75</b>.</td><td><span class="tag exam">no official key</span></td></tr>
-  </table>
-  <p>Recycling (do not rank as independent): Jan20r ≡ Jan22r. Pr21 Q3 ≡ SLT6 2025–26 6.2. Jan19 Q3 ≡ SLT7 7.1. Jan22r 2f–h ≡ SLT4 2025–26 4.3. SLT is extra drill, not a key.</p>
-
   <ul class="toc">
-    <li><a href="#bank">Pattern bank</a><span class="tag">P1–P24</span></li>
-    <li><a href="#papers">Per-paper index</a><span class="tag">7 sittings</span></li>
-    <li><a href="#errata">Key errata</a><span class="tag exam">read before grading</span></li>
-    <li><a href="#sit">How to sit a paper</a><span class="tag">Nov22, then Jan22r</span></li>
+    <li><a href="#order">Practice order</a><span class="tag">two sittings</span></li>
+    <li><a href="#b1">Block 1 · probability</a><span class="tag">Bayes, ACF</span></li>
+    <li><a href="#b2">Block 2 · estimation</a><span class="tag">MLE, CRLB, MAP</span></li>
+    <li><a href="#b3">Block 3 · spectra</a><span class="tag">~3 of 10 points</span></li>
+    <li><a href="#b4">Block 4 · detection</a><span class="tag">which tail</span></li>
+    <li><a href="#keys">Marking keys</a><span class="tag">after you sit</span></li>
   </ul>
 
-  <h2 id="bank">Pattern bank</h2>
-  <p>Ranked by hits on the seven papers (both sittings of Jan20r/Jan22r count). Trap first; method second.</p>
+  <h2>What you walk into</h2>
+  <p>Four exercises, three hours, total 10. Spectra is usually the fattest (about 3 points). After January 2019, every multiple choice has <b>exactly one</b> correct circle, and those questions sit inside all four blocks rather than in a separate Q1. January 2019 was the old style: four MC in Q1, one or two letters allowed, −0.25 per extra wrong letter. Ignore that rule unless you sit that paper.</p>
+  <p>They grade formulation and order. A correct number with no likelihood written is not full marks. Every year you shade a plot or fill a table in detection, often in spectra too.</p>
+  <p>Aids: one A4, both sides, typed or handwritten, plus a calculator and a dictionary. The 2026–27 study guide does not promise a provided formula sheet. Write your own; see the <a href="./a4.html">A4 page</a>.</p>
 
-  <h3>Block 1 · probability</h3>
-  $$P(B\mid A)=\frac{P(A\mid B)P(B)}{P(A\mid B)P(B)+P(A\mid B^c)P(B^c)}$$
   <table>
-    <tr>
-      <th>P1 · 5</th>
-      <td><b>Bayes with a complement / base-rate.</b> Jan20 Q2 · Pr21 1a · Jan20r/22r 1a · Nov22 1a. Trap: reporting sensitivity or \(P(A)\) instead of \(P(B\mid A)\). Method: name events, write Bayes with \(B^c\), compute the denominator.</td>
-    </tr>
-    <tr>
-      <th>P16 · 4</th>
-      <td><b>Valid ACF / WSS / ergodicity / discrete vs continuous.</b> Jan19 1a · Jan20 1a · Jan20r/22r 1bc · Nov22 1c. ACF tests, in order: even; \(r[0]\ge|r[\ell]|\); \(P(e^{j\theta})\ge 0\). Random constant \(X(t)=A\) is WSS, not ergodic. Pixel 0–255 is a discrete RV; a whole picture is one realization.</td>
-    </tr>
-    <tr>
-      <th>P19 · 1</th>
-      <td><b>Joint PMF → marginal.</b> Nov22 1b. Sum the other variable. Trap: treating \(Y\)’s support as \(X\)’s.</td>
-    </tr>
-    <tr>
-      <th>P20 · 1</th>
-      <td><b>Discrete PMF plug-in</b> (binomial / geometric). Pr21 1d. If the PMF is printed, plug in. Do not assume it will be given (Pr21 only). Pascal on that sheet has a typesetting error.</td>
-    </tr>
-    <tr>
-      <th>P14 · 2</th>
-      <td><b>Spectral factorization / min-phase \(L(z)\).</b> Jan20r/22r 1d · Nov22 1d. Write \(P\) in \(\cos\theta\), replace \(\cos\theta=(z+z^{-1})/2\), put poles and zeros inside the unit circle into \(L\). Trap: \(L(z^{-1})\) is max-phase; \(\sigma_i^2\) vs \(1/\sigma_i^2\); printed sign error (Jan22r 1d).</td>
-    </tr>
+    <tr><th>Paper</th><th>Why sit it</th><th>Key</th></tr>
+    <tr><td>Nov 2022</td><td>Current split 1.5 / 2.75 / 3 / 2.75. Closest to what you will get.</td><td><span class="tag exam">none</span> · derived below</td></tr>
+    <tr><td>Jan 2022 resit</td><td>Same exam as the Jan 2020 resit, so you can actually mark it.</td><td>Resit 2020 solutions</td></tr>
+    <tr><td>Nov 2019</td><td>Correlogram + AR(2) with official numbers. Energy detector.</td><td>two keys; 1a conflicts</td></tr>
+    <tr><td>Jan 2020</td><td>The only 5-exercise paper. Least squares / Gauss–Newton live here.</td><td>oldexams</td></tr>
+    <tr><td>Practice Oct 2021</td><td>Virus Bayes (37%). ARMA(1,1) with \(r[0]=28/27\). PMFs printed on the sheet.</td><td>Q&amp;A slides; 1f missing</td></tr>
+    <tr><td>Jan 2019 retake</td><td>erf table. Exponential MLE. 2-tap Wiener is legacy: skip Q4 as a model of 2026.</td><td>oldexams</td></tr>
   </table>
+  <p>Do not count the 2020 resit and the 2022 resit as two different papers. They are the same exam. Practice Q3 is also SLT6 2025–26 question 6.2. January 2019 Q3 is SLT7 7.1.</p>
 
-  <h3>Block 2 · estimation</h3>
-  <table>
-    <tr>
-      <th>P9 · 4</th>
-      <td><b>MLE from an iid PDF.</b> Jan19 2a exp rate · Nov19 3a Rayleigh \(\theta\) · Pr21 2b Rayleigh \(\theta=\sigma^2\) · Nov22 2d angle. Trap: parameterization. \((x/\theta^2)\exp(-x^2/(2\theta^2))\) has a square root; \((x/\theta)\exp(-x^2/(2\theta))\) does not. Method: \(\ln\prod p\), \(\partial/\partial\theta=0\).</td>
-    </tr>
-    <tr>
-      <th>P10 · 4</th>
-      <td><b>CRLB, Fisher, regularity.</b> Nov19 3b · Pr21 2a · Jan20r/22r 2a+2e · Nov22 2a+2e. \(\mathcal I(\theta)=-E[\partial^2\ln p/\partial\theta^2]\), \(\mathrm{var}\ge 1/\mathcal I\), \(N\) iid \(\Rightarrow\times N\). Efficient iff \(\partial\ln p/\partial\theta=\mathcal I(\theta)(g-\theta)\). Trap: if the support depends on \(\theta\) (Jan22r 2e, \(p=2x/\theta\) on \([0,\theta]\)) the CRLB does not exist. Do not grind Fisher.</td>
-    </tr>
-    <tr>
-      <th>P11 · 4</th>
-      <td><b>MAP vs MMSE.</b> Jan19 2bc · Nov19 3c · Jan20r/22r 2f–h · Nov22 2fg. MMSE \(=E[\theta\mid x]\) (mean); MAP \(=\arg\max p(\theta\mid x)\) (mode). BPSK in WGN: \(\tanh(y/\sigma^2)\) and \(\mathrm{sign}(y)\) — identity usually printed. Gamma(2, \(\beta\)): mean \(2/\beta\), mode \(1/\beta\). Trap: “MMSE is the maximum of the posterior”.</td>
-    </tr>
-    <tr>
-      <th>P17 · 1</th>
-      <td><b>LS / Gauss–Newton, nonlinear in a parameter.</b> Jan20 Q4. Noise PDF unknown \(\Rightarrow\) LS. Linear: \(\hat\theta=(H^\top H)^{-1}H^\top x\). Nonlinear: Gauss–Newton (Newton–Raphson also allowed). Jan22r 2c “some NL-LS separate into linear” — the 2020 key already says that is no longer in the content.</td>
-    </tr>
-    <tr>
-      <th>P18 · 1</th>
-      <td><b>Efficient-estimator inversion.</b> Pr21 2a only. Integrate \(\partial\ln p/\partial\theta=\mathcal I(\theta)(\bar x-\theta)\) and normalize. Hint on the paper is complete-the-square. They stop at the law of \(\bar x\), not the full \(N\)-sample Gaussian.</td>
-    </tr>
-  </table>
+  <h2 id="order">Practice order</h2>
+  <ol>
+    <li>Read the four block walkthroughs on this page. Close the spoilers. Do not open the marking keys yet.</li>
+    <li>Sit <a href="#nov22">November 2022</a> in three hours with only the A4 and a calculator. There is no official key, so you cannot mark letters from a sheet. After the clock, compare to the <span class="tag">derived</span> column and treat those as derived.</li>
+    <li>Sit <a href="#jan22r">January 2022 resit</a> in three hours. Grade with the official key. This is the paper that tells you if the methods stuck.</li>
+    <li>If you want more reps: November 2019 (two keys, question 1a fights) or January 2020 (least squares). Stop there. Seven papers of grinding without the methods does nothing.</li>
+  </ol>
+  <p class="aviso">Write the likelihood, the Yule–Walker 2×2, and the inequality direction of the LRT on the script. Those three lines are what they mark, not the final boxed number alone.</p>
 
-  <h3>Block 3 · spectra</h3>
-  $$a_1=-\frac{r[1]}{r[0]},\quad\sigma_i^2=r[0]+a_1 r[1],\quad P_{\mathrm{AR}}(e^{j\theta})=\sigma_i^2\bigl|1+a_1 e^{-j\theta}\bigr|^{-2}$$
-  <p>Course convention: \(x[n]+a_1 x[n-1]+\cdots=i[n]\). Wiener 1-step is the same thing, \(w_{\mathrm{opt}}=-a_1\). Correlogram: \(P_{\mathrm{cor}}=r[0]+2\sum_k r[k]\cos(k\theta)\).</p>
-  <table>
-    <tr>
-      <th>P2 · 5</th>
-      <td><b>Correlogram from a given ACF, in \(\cos(k\theta)\), sketch \([-\pi,\pi]\).</b> Nov19 2a · Jan20 3a · Pr21 3c · Jan20r/22r 3c · Nov22 3g. Trap: truncated ACF \(\Rightarrow\) PSD <b>can go negative</b> (Nov19 blue curve). Quote min/max at \(0,\pi\). Only use the lags the model allows (MA(\(q\)) \(\Rightarrow |k|\le q\)).</td>
-    </tr>
-    <tr>
-      <th>P3 · 5</th>
-      <td><b>AR(\(p\)) Yule–Walker + PSD in \(\cos\theta\) + overlay.</b> Nov19 2b AR2 · Pr21 3b AR1 · Jan20r/22r 3d · Nov22 3f. Trap: \(1+a_1 e^{-j\theta}\) vs \(1-a_1 e^{-j\theta}\); using the fallback ACF with the <b>wrong sign</b> of \(r[1]\) (Pr21). Negative \(r[1]\) \(\Rightarrow\) high-pass (dip at 0).</td>
-    </tr>
-    <tr>
-      <th>P12 · 4</th>
-      <td><b>MA(\(q\)) from ACF; PSD = correlogram.</b> Jan20 3b · Pr21 3c · Jan20r/22r 3b–c · Nov22 3g. \(r[q]=\sigma_i^2 b_q\), \(r[0]=\sigma_i^2(1+\sum b_k^2)\). Trap: two real roots — keep min-phase \(|b|&lt;1\). Fallback \((a,b)\) on the paper may be invalid (Jan22r \(a=\tfrac14,b=\tfrac54\)).</td>
-    </tr>
-    <tr>
-      <th>P13 · 2</th>
-      <td><b>ARMA(1,1) from a DE / \(H(z)\): ACF, then fake AR1 and MA1.</b> Pr21 3 · Nov22 3c–g. Expand the DE for \(r[0],r[1]\); AR tail for \(|\tau|&gt;q\); AR(1) = YW on \((r[0],r[1])\); MA(1) = correlogram of \(\{0,\pm1\}\). Sketch values at \(0,\pi/2,\pi\).</td>
-    </tr>
-    <tr>
-      <th>P15 · 4</th>
-      <td><b>Nonparametric SE MC</b> (periodogram / Bartlett / Welch / BT, windows, zeropad). Jan19 1c · Nov19 1c · Jan20 1bc · Nov22 3ab. Periodogram: as. unbiased, var \(\propto P^2\), inconsistent. Bartlett \(K\) non-overlap: var \(\propto 1/K\), bias <b>up</b>. Welch at the same \(K\): var <b>larger</b> than Bartlett, not \(\propto 1/K\) (Jan20 1b official D). Mainlobe = resolution, sidelobes = leakage. Zeropad interpolates; it does not raise resolution.</td>
-    </tr>
-    <tr>
-      <th>P21 · 1</th>
-      <td><b>FTD vs DFT vs zeropad association plot.</b> Jan20r/22r 3a (two sittings). Infinite cosine \(\to\) two impulses; window \(\to\) sinc; DFT = samples of that sinc; zeropad = denser samples, same envelope.</td>
-    </tr>
-  </table>
+  <h2 id="b1">Block 1 · they swapped the condition</h2>
 
-  <h3>Block 4 · detection</h3>
+  <h3>Bayes, with the complement in the denominator</h3>
+  <div class="why">
+    <p>You are given how the data look <i>if</i> a cause is true (sensitivity, pass rate of a machine). You are asked how likely the cause is, <i>given</i> the data. Those are not the same number. Bayes unswaps them. The distractors are always the sensitivity, or \(P(\text{data})\) with no cause.</p>
+  </div>
+  $$P(B\mid A)=\frac{P(A\mid B)\,P(B)}{P(A\mid B)\,P(B)+P(A\mid B^c)\,P(B^c)}$$
+  <p>Name the events before you touch a calculator. \(A\) is what you observed. \(B\) is the hidden cause. The second term in the denominator is the whole point: the data can also happen when \(B\) is false.</p>
+
+  <p><b>Practice 2021, virus test.</b> Prevalence 1.8%. Sensitivity 95%. False-positive rate 3%. Probability you are infected given a positive test.</p>
+  <p>Let \(B=\) infected, \(A=\) positive. Then \(P(B)=0.018\), \(P(B^c)=0.982\), \(P(A\mid B)=0.95\), \(P(A\mid B^c)=0.03\).</p>
+  $$
+  P(B\mid A)
+  =\frac{0.95\cdot 0.018}{0.95\cdot 0.018+0.03\cdot 0.982}
+  =\frac{0.0171}{0.0171+0.02946}
+  \approx 0.367
+  $$
+  <p>Official: <b>37%</b>. Why 95% is wrong: in 10&nbsp;000 people, about 180 are infected and 171 of those test positive. About 9&nbsp;820 are healthy and 295 of those still test positive. Most of the positives are healthy. Rare disease, noisy test: the false-positive pile wins.</p>
+  <p>Same skeleton, new story, every recent paper:</p>
+  <ul>
+    <li>Jan 2020 paint machines: three machines, given pass rates, asked \(P(\text{machine 3}\mid\text{pass})\). Official \(P(\text{pass})=0.819\), then \(0.18\).</li>
+    <li>Jan 2022 resit employees: official <b>0.26</b>.</li>
+    <li>Nov 2022 “followed the course”: sometimes they only ask the denominator, i.e. total probability. Derived \(0.65\cdot 0.75+0.35\cdot 0.4=0.6275\approx 0.63\).</li>
+  </ul>
+
+  <div class="drill">
+    <h3>Do this one before you look</h3>
+    <p>Three paint machines make 30, 45 and 25 cars a day. Pass rates 0.85, 0.92, 0.60. A random car passed. Probability it came from machine 3?</p>
+    <details>
+      <summary>Official, Jan 2020</summary>
+      <p>Total pass: \((30\cdot 0.85+45\cdot 0.92+25\cdot 0.60)/100=0.819\). Then \(P(M_3\mid A)=0.25\cdot 0.60/0.819=0.18\).</p>
+    </details>
+  </div>
+
+  <h3>Valid ACF, WSS, ergodic, discrete vs continuous</h3>
+  <p>A random variable is one number. A process is a whole waveform per outcome of the experiment. One recording is one realization, not the process.</p>
+  <p>Wide-sense stationary: constant mean, and the autocorrelation depends only on the lag, not on absolute time. Ergodic: one infinitely long realization already contains the ensemble (time average = ensemble average, <i>and</i> the variance of that estimator goes to 0). Stationary does not imply ergodic.</p>
+  <p>The standard pair: \(X(t)=A\) with \(A\) random. Every realization is a horizontal line at a random height. Mean is constant, autocorrelation is constant, so it is WSS. Time average of realization \(i\) is \(a_i\), which is not \(E[A]\). Not ergodic in the mean. You cannot learn the ensemble by watching one resistor forever.</p>
+  <p>\(X_n=A\cos(\omega_0 n)\) with fixed phase is the other trap. Mean is 0, but \(E[X_{n_1}X_{n_2}]\) still contains \(\cos(\omega_0(n_1+n_2))\). Not WSS.</p>
+  <p>Valid autocorrelation, three tests in order:</p>
+  <ol>
+    <li>Even: \(r[-\ell]=r[\ell]\) for a real process.</li>
+    <li>\(r[0]\) is the maximum: \(r[0]\ge|r[\ell]|\).</li>
+    <li>The DTFT \(P(e^{j\theta})=\sum r[\ell]e^{-j\ell\theta}\) is never negative.</li>
+  </ol>
+  <p>January 2020 1a: four plots. \(r_A\) has \(|r[1]|&gt;r[0]\). \(r_D\) is not even. \(r_C\) is even and \(r[0]\) is the max, but \(P(\pi)=2.5-4+2-1=-0.5\). Official: only \(r_B\). The third test is the one people skip.</p>
+  <p>Pixel colour 0–255 is a discrete random variable. A whole picture is one realization of a random signal. Phone number, dice count: discrete. Weight, commute time: continuous. January 2019 1a official: B and C (dice count, phone number).</p>
+
+  <h2 id="b2">Block 2 · freeze the data, pick \(\theta\)</h2>
+
+  <h3>Maximum likelihood</h3>
+  <div class="why">
+    <p>You never see \(\theta\). You see noisy data that depend on \(\theta\). Freeze the dataset you actually got. The PDF as a function of \(\theta\) is the likelihood. Pick the \(\theta\) that makes this dataset most plausible. In practice: write the joint, take \(\ln\), differentiate, set to 0. If the support of the PDF moves with \(\theta\), do not differentiate. Look at the function.</p>
+  </div>
+  <p>IID samples: the joint is a product, the log is a sum. Semicolon \(p(x;\theta)\) is classical (no prior). Bar \(p(x\mid\theta)\) is Bayesian. Mixing them is a free point lost.</p>
+
+  <p><b>January 2019 2a, exponential.</b> \(p(x;\lambda)=\lambda e^{-\lambda x}\), \(N\) iid samples. Joint \(\lambda^N\exp(-\lambda\sum x_i)\). Log: \(N\ln\lambda-\lambda\sum x_i\). Derivative: \(N/\lambda-\sum x_i=0\).</p>
+  $$\hat\lambda_{\mathrm{ML}}=\frac{N}{\sum_i x_i}=\frac{1}{\bar x}$$
+  <p>Official: that formula. It is “one over the sample mean”, which is what a rate should be. For finite \(N&gt;1\) it is biased (\(E[\hat\lambda]=N\lambda/(N-1)\)). They still want the MLE, not the unbiased cousin.</p>
+
+  <p class="aviso">Rayleigh trap, two exams, two PDFs. November 2019: \(p=(x/\theta^2)\exp(-x^2/(2\theta^2))\) ⇒ MLE has a square root, \(\hat\theta=\sqrt{(1/(2N))\sum x^2}\). Practice 2021: \(p=(x/\theta)\exp(-x^2/(2\theta))\) ⇒ \(\theta\) is already a scale-squared, no square root, \(\hat\theta=(1/(2N))\sum x^2\). Read the exponent before you copy last year’s answer.</p>
+  <p>November 2022 2d, angle in 2-D Gaussian: maximising the likelihood is maximising \(x_1\cos\theta+x_2\sin\theta\), which peaks at \(\hat\theta_{\mathrm{ML}}=\mathrm{atan2}(x_2,x_1)\). \(\arctan(x_2/x_1)\) loses the quadrant. No official key; that is derived.</p>
+  <p>Invariance (resit 2022 2b, official <b>c</b>): if \(\alpha=\psi(\theta)\) is one-to-one, \(\hat\theta_{\mathrm{ML}}=\psi^{-1}(\hat\alpha_{\mathrm{ML}})\). You maximise in the convenient parametrization, then transform.</p>
+
+  <h3>Fisher information and the CRLB</h3>
+  <p>Unbiased estimators cannot be arbitrarily sharp. Fisher information \(\mathcal I(\theta)\) is the expected curvature of the log-likelihood. The Cramér–Rao bound says \(\mathrm{Var}\ge 1/\mathcal I\), not \(\ge\mathcal I\). For \(N\) iid samples, \(\mathcal I_N=N\,i(\theta)\), so the bound shrinks as \(1/N\). Resit 2022 2a official: that linear-in-\(N\) fact is the correct MC.</p>
+  $$\mathcal I(\theta)=-E\left[\frac{\partial^2\ln p}{\partial\theta^2}\right],\qquad\mathrm{Var}(\hat\theta)\ge\frac1{\mathcal I(\theta)}$$
+  <p>An unbiased estimator that attains the bound is efficient, hence the MVUE. Attaining the bound is the identity \(\partial\ln p/\partial\theta=\mathcal I(\theta)(g(\mathbf x)-\theta)\). If the score does not factor that way, no finite-sample efficient estimator. You can still quote the bound.</p>
+  <p class="aviso">If the support of \(p(x;\theta)\) depends on \(\theta\), the bound does not exist. Resit 2022 2e: \(p=2x/\theta\) on \([0,\theta]\). Official: cannot derive a CRLB. Do not grind Fisher. Uniform\([0,\theta]\) is the same trap; the MLE is \(\max_i x_i\), on the boundary, no derivative.</p>
+  <p>November 2019 3b, Rayleigh above: \(\mathcal I=4N/\theta^2\), so \(\mathrm{Var}\ge\theta^2/(4N)\). The published key writes \(\hat\theta^2/(4N)\). Wrong object: the bound depends on the true parameter, not on the estimate. Report \(\theta^2/(4N)\).</p>
+
+  <h3>MMSE is the mean. MAP is the mode.</h3>
+  <p>Classical: \(\theta\) is a fixed unknown. Bayesian: \(\theta\) is drawn from a prior, you update to a posterior \(p(\theta\mid x)\), then you pick one number from that posterior. Square cost → posterior mean (MMSE). Hit-or-miss / uniform cost → posterior mode (MAP). They are different functions unless the posterior is symmetric (Gaussian: mean = mode).</p>
+  <p>Resit 2022 2d official: “MMSE is the mean of the posterior.” “MMSE is the maximum of the posterior” is MAP, and it is the trap.</p>
+
+  <p><b>November 2022 2f–g, posterior handed to you</b> (no official key). \(p(\theta\mid x)=(x+a)^2\theta e^{-(x+a)\theta}\) for \(\theta\ge 0\). That is Gamma, shape 2, rate \(b=x+a\). Mean of Gamma(shape, rate) is shape/rate. Mode of Gamma(2, \(b\)) is \(1/b\).</p>
+  $$\hat\theta_{\mathrm{MMSE}}=\frac{2}{x+a},\qquad\hat\theta_{\mathrm{MAP}}=\frac{1}{x+a}$$
+  <p>They differ because the posterior is skewed. When the paper gives you \(p(\theta\mid x)\), do not re-derive Bayes. Read mean vs mode off the given density.</p>
+
+  <p><b>Resit 2022 2f–h, BPSK in Gaussian noise.</b> \(Y=X+N\), \(X=\pm 1\) equally likely, \(N\sim\mathcal N(0,\sigma^2)\). Posterior mean of a discrete \(\pm 1\) is \(P(X=1\mid y)-P(X=-1\mid y)\). After cancelling exponentials that is \((e^{2y/\sigma^2}-1)/(e^{2y/\sigma^2}+1)\). The paper prints \(\tanh u=(e^{2u}-1)/(e^{2u}+1)\). Official:</p>
+  $$\hat X_{\mathrm{MMSE}}=\tanh(y/\sigma^2),\qquad\hat X_{\mathrm{MAP}}=\mathrm{sign}(y)$$
+  <p>MMSE is a soft number in \((-1,1)\). MAP is a hard decision at 0. Same sign, different magnitude. The \(\tanh\) identity is usually printed; still write the two-Gaussian posterior first (that is 2f).</p>
+  <p>Uniform prior on \([0,2]\) (January 2019 2c): MAP is the MLE projected onto \([0,2]\). The published key writes only \(N/\sum x_i\) and skips the projection. If the unconstrained MLE sits outside, the maximum is the endpoint.</p>
+
+  <h3>No noise PDF → least squares</h3>
+  <p>January 2020 Q4. Signal \(s[n]=A e^{\phi n}\), noise PDF not given. Official: least squares, “requires no function for the noise.” If \(\phi\) is known the model is linear in \(A\):</p>
+  $$\hat A_{\mathrm{LS}}=\frac{\sum x[n]e^{\phi n}}{\sum e^{2\phi n}}$$
+  <p>Both unknown: \(J=\sum(x[n]-A e^{\phi n})^2\), nonlinear. Iterate. Gauss–Newton linearises the <i>signal</i> and takes a linear least-squares step. Newton–Raphson iterates on \(J\) itself with the Hessian. Resit 2022 2c: both are legal. The 2020 key printed the Newton form even though the question said Gauss–Newton. Write whichever they named; know the difference.</p>
+  <p>Geometry, one sentence: the residual \(\mathbf x-\mathbf H\hat\theta\) is orthogonal to the columns of \(\mathbf H\). \(\hat\theta\) itself lives <i>in</i> that span, it is not orthogonal to it. That MC is a free point if you remember which vector is which.</p>
+
+  <h2 id="b3">Block 3 · three curves on \([-\pi,\pi]\)</h2>
+  <p>This is about 3 of 10 points. Typical open part: they give you an autocorrelation, or a difference equation. You plot a correlogram, you fit AR(1) with Yule–Walker, you overlay an MA, you quote values at \(0,\pi/2,\pi\). There is also one MC on periodogram / Bartlett / Welch / windows.</p>
+
+  <h3>Correlogram from a given ACF</h3>
+  $$P_{\mathrm{cor}}(e^{j\theta})=r[0]+2\sum_{k\ge 1}r[k]\cos(k\theta)$$
+  <p>Only use the lags the model allows. A true MA(\(q\)) has \(r[k]=0\) for \(|k|&gt;q\), so the correlogram of those lags <b>is</b> the MA spectrum.</p>
+  <p><b>November 2019 2a.</b> \(r[0]=1\), \(r[\pm 1]=0.7\), \(r[\pm 2]=0.5\), \(r[\pm 3]=0.3\), else 0. Official:</p>
+  $$P_{\mathrm{cor}}=1+1.4\cos\theta+\cos 2\theta+0.6\cos 3\theta$$
+  <p>At \(\theta=0\) that is 4. The ACF was truncated, so this cosine polynomial <b>can go negative</b> (official sketch: small negative sidelobes). An AR fit of the same lags cannot: the AR spectrum is forced positive. Label the axis \([-\pi,\pi]\) and quote min/max at \(0\) and \(\pi\).</p>
+
+  <h3>AR(\(p\)) Yule–Walker</h3>
+  <p>Course convention: \(x[n]+a_1 x[n-1]+\cdots=i[n]\), so the denominator is \(|1+a_1 e^{-j\theta}+\cdots|^2\). Getting that sign wrong wrecks the PSD.</p>
+  $$a_1=-\frac{r[1]}{r[0]},\qquad\sigma_i^2=r[0]+a_1 r[1],\qquad P_{\mathrm{AR}}=\frac{\sigma_i^2}{|1+a_1 e^{-j\theta}|^2}$$
+  <p>Negative \(r[1]\) ⇒ \(a_1&gt;0\) ⇒ high-pass (dip at 0, more power at \(\pi\)). Practice 2021 3b official: \(a_1=1/7\), \(\sigma_i^2=64/63\), \(P(0)=0.78\), \(P(\pi)=1.38\). The paper’s fallback ACF flips the sign of \(r[1]\) on purpose. If you missed 3a, the fallback draws the wrong shape.</p>
+  <p>The 2×2 Yule–Walker right-hand side is \((\sigma_i^2,0)^\top\), not \((r[1],r[2])\). AR(2) is the same idea with a 3×3 Toeplitz (November 2019 2b, official \(0.5089/|1-0.6863 e^{-j\theta}-0.0196 e^{-j2\theta}|^2\)).</p>
+
+  <h3>MA(\(q\)), and min-phase</h3>
+  <p>For MA(1): \(r[0]=\sigma_i^2(1+b^2)\), \(r[1]=\sigma_i^2 b\). Quadratic in \(b\), two real roots, reciprocals. Both give the same \(|H(e^{j\theta})|^2\). Keep the min-phase one: \(|b|&lt;1\) (zero inside the unit circle). January 2020 3b: \(b=1/2\), not \(b=2\). The MA spectrum equals the correlogram of lags \(\{0,\pm 1\}\).</p>
+  <p>Fallback \((a,b)\) printed on the 2022 resit (\(a=1/4,b=5/4\)) is not the true MA(2) and is not min-phase. They put it there so a wrong 3b still lets you do 3c.</p>
+
+  <h3>ARMA(1,1) from a difference equation</h3>
+  <p>Practice 2021 Q3 and November 2022 3c–g. Recipe:</p>
+  <ol>
+    <li>Read \(a_1,b_1\) from \(H(z)\) or from the DE. Watch the course sign: \(x[n]=i[n]+b_1 i[n-1]-a_1 x[n-1]\).</li>
+    <li>Impulse response: \(h[0]=1\), \(h[1]=b_1-a_1\) by polynomial division.</li>
+    <li>Expand \(E[x[k]x[k-\tau]]\) at lags 0 and 1 (or modified Yule–Walker with those \(h[k]\)). That is \(r[0],r[1]\).</li>
+    <li>For \(|\tau|&gt;1\) the MA part is dead: \(r[\tau]=-a_1 r[\tau-1]\) (AR tail).</li>
+    <li>Fake AR(1): Yule–Walker on \((r[0],r[1])\) only. Fake MA(1): correlogram of lags \(\{0,\pm 1\}\) only. Sketch both on top of the true ARMA.</li>
+  </ol>
+  <p>Practice 2021 official: \(r[0]=28/27\), \(r[1]=-4/27\), then AR \(a_1=1/7\), \(\sigma_i^2=64/63\), MA correlogram \(28/27-(8/27)\cos\theta\).</p>
+
+  <h3>The nonparametric MC</h3>
+  <p>Periodogram \(\frac1N|\sum x[n]e^{-jn\theta}|^2\): Fourier transform of the biased ACF, asymptotically unbiased, variance \(\propto P^2\), <b>does not fall with \(N\)</b>, inconsistent. A longer record is not a quieter periodogram.</p>
+  <p>Bartlett: average \(K\) periodograms of <b>non-overlapping</b> length-\(M\) blocks. Variance \(\propto 1/K\). Bias goes <b>up</b> (shorter blocks, wider main lobe). January 2019 1c official: that bias statement is true.</p>
+  <p>Welch / WOSA: segments <b>overlap</b>. Variance is not \(1/K\). Course view at the same \(K\): variance larger than Bartlett, still below the raw periodogram. January 2020 1b official: D, that fact. “Welch variance decreases as \(1/K\)” is the yearly false statement.</p>
+  <p>Main lobe = resolution. Side lobes = leakage. A tapered window of the same \(N\) has a <i>wider</i> main lobe than rectangular, so worse resolution, less leakage. Zero-padding interpolates the same smeared curve on a finer grid. It does not raise resolution. January 2019 1c: zeropad-increases-resolution is false.</p>
+  <p>Blackman–Tukey (lag-window the ACF, then Fourier): consistent if the lag window grows slower than \(N\).</p>
+  <p>FTD / DFT picture (resit 2022 3a, official <b>B = 1B, 2D, 3C, 4A</b>): infinite cosine → two impulses; window → sinc; DFT = samples of that sinc; zeropad = denser samples, same envelope. Option (a) on that paper has a typo (two “3”s).</p>
+
+  <h3>Spectral factorisation</h3>
+  <p>Write \(P\) in \(\cos\theta\), replace \(\cos\theta=(z+z^{-1})/2\), factor \(P(z)=\sigma_i^2 L(z)L(z^{-1})\), put every pole <i>and</i> every zero of \(L\) inside the unit circle, scale so \(l[0]=1\). \(L(z^{-1})\) is max-phase and is the trap. Resit 2022 1d official: <b>c</b>, \(L(z)=(1-\frac14 z^{-1})/(1+\frac34 z^{-1})\), \(\sigma_i^2=2\) not \(1/2\). The key notes a possible sign typo in the printed denominator; still pick c.</p>
+
+  <div class="drill">
+    <h3>Correlogram, from memory</h3>
+    <p>\(r[0]=1/21\), \(r[\pm 1]=2/105\), else 0. Write \(P(e^{j\theta})\) in \(\cos\theta\). What process is this, and which MA(1) coefficient do you keep?</p>
+    <details>
+      <summary>Official, Jan 2020 3a–b</summary>
+      <p>\(P=\frac4{105}\cos\theta+\frac1{21}\). It is MA(1), and the correlogram <i>is</i> the MA spectrum. Min-phase \(b=1/2\), not \(b=2\).</p>
+    </details>
+  </div>
+
+  <h2 id="b4">Block 4 · which region is “decide \(\mathcal H_1\)”</h2>
+  <div class="why">
+    <p>Estimation outputs a number. Detection outputs a label. The two densities overlap, so every rule makes mistakes. You always write the likelihood ratio \(L=p(x\mid\mathcal H_1)/p(x\mid\mathcal H_0)\) and compare it to a threshold. After algebra you test a scalar. Which side of that scalar is \(\mathcal H_1\) is not always the right tail. That is the exam.</p>
+  </div>
   $$\mathcal L=\frac{p(x\mid\mathcal H_1)}{p(x\mid\mathcal H_0)}\gtrless\gamma$$
-  <p>NP: max \(P_D\) at fixed \(P_{\mathrm{FA}}\). Bayes 0-1: \(\gamma=P_0/P_1\). \(P_M=1-P_D\). Jan19 published the ratio upside down — use this convention.</p>
+  <p>January 2019 published this ratio upside down. Later papers and SLT7 use \(p_1/p_0\). Write the standard ratio. Flag the 2019 key if you quote it.</p>
+
+  <div class="fig">
+    <svg viewBox="0 0 420 148" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Narrow H0 and wide H1. Decide H1 in the outer tails.">
+      <line x1="20" y1="128" x2="400" y2="128" stroke="#1b1610" stroke-width="1"/>
+      <path d="M90 128 C 90 128, 165 14, 210 14 C 255 14, 330 128, 330 128" fill="none" stroke="#1b1610" stroke-width="1.7"/>
+      <path d="M45 128 C 45 128, 140 58, 210 58 C 280 58, 375 128, 375 128" fill="none" stroke="#9b2114" stroke-width="1.7"/>
+      <line x1="148" y1="20" x2="148" y2="128" stroke="#1b1610" stroke-dasharray="3 3"/>
+      <line x1="272" y1="20" x2="272" y2="128" stroke="#1b1610" stroke-dasharray="3 3"/>
+      <text x="210" y="12" text-anchor="middle" font-size="11" fill="#1b1610" font-family="IBM Plex Mono, monospace">H0 tall / H1 wide</text>
+      <text x="70" y="144" font-size="11" fill="#9b2114" font-family="IBM Plex Mono, monospace">H1</text>
+      <text x="338" y="144" font-size="11" fill="#9b2114" font-family="IBM Plex Mono, monospace">H1</text>
+    </svg>
+  </div>
+  <p class="cap">H1 heavier tails or larger variance: decide H1 outside the dashed lines. False alarm is the H0 density on that outside. Miss is the H1 density in the middle.</p>
+
+  <div class="fig">
+    <svg viewBox="0 0 420 148" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fast H1 exponential and slow H0. Decide H1 for small x.">
+      <line x1="20" y1="128" x2="400" y2="128" stroke="#1b1610" stroke-width="1"/>
+      <path d="M36 18 Q 70 100, 140 120 T 400 128" fill="none" stroke="#9b2114" stroke-width="1.7"/>
+      <path d="M36 88 Q 200 108, 400 124" fill="none" stroke="#1b1610" stroke-width="1.7"/>
+      <line x1="132" y1="18" x2="132" y2="128" stroke="#1b1610" stroke-dasharray="3 3"/>
+      <text x="36" y="14" font-size="11" fill="#9b2114" font-family="IBM Plex Mono, monospace">H1 faster</text>
+      <text x="36" y="80" font-size="11" fill="#1b1610" font-family="IBM Plex Mono, monospace">H0</text>
+      <text x="48" y="144" font-size="11" fill="#9b2114" font-family="IBM Plex Mono, monospace">decide H1 here</text>
+    </svg>
+  </div>
+  <p class="cap">H1 faster exponential or narrower Laplace: mass near zero, so decide H1 for small \(x\). The inequality on \(\sum T(x_n)\) flips when you multiply by −1. Hint on January 2020: “design so \(P_D&gt;P_{\mathrm{FA}}\)” means take this left side.</p>
+
+  <p>Shade, always, after you know the region:</p>
+  <ul>
+    <li>\(P_{\mathrm{FA}}\): \(\mathcal H_0\) density on the \(\mathcal H_1\)-decision side.</li>
+    <li>\(P_D\): \(\mathcal H_1\) density on the \(\mathcal H_1\)-decision side.</li>
+    <li>\(P_M=1-P_D\): \(\mathcal H_1\) density on the \(\mathcal H_0\)-decision side.</li>
+  </ul>
+  <p>False alarm is not “the overlap”. It is not under \(\mathcal H_1\).</p>
+
+  <h3>Neyman–Pearson vs Bayes</h3>
+  <p>Neyman–Pearson: maximise \(P_D\) at a fixed \(P_{\mathrm{FA}}=\alpha\). Set the threshold from the \(\mathcal H_0\) law only. The \(\mathcal H_1\) law is not used until you compute \(P_D\).</p>
+  <p>Bayes, 0-1 costs: \(\gamma=P_0/P_1\). That is <b>not</b> \(\mathcal L=1\) unless the priors are equal. November 2022 4f plots the two <i>weighted</i> PDFs \(P_i\,p(y\mid\mathcal H_i)\); the threshold is where they cross.</p>
+  <p>ROC: \(P_D\) vs \(P_{\mathrm{FA}}\), upper triangle, through (0,0) and (1,1). Larger separation (bigger mean shift, bigger \(\lambda_1/\lambda_0\)) lifts the curve toward the top-left. If your curve sits in the lower triangle you used the CDF (left tail) instead of the complementary CDF, or you swapped the hypotheses. Practice 2021 1e: “H0 variance too high” cannot flip the ROC into the lower triangle. Official <b>a</b>.</p>
+
+  <h3>Four PDF pairs you will actually see</h3>
+  <p><b>Mean-shift Gaussians.</b> \(\mathcal H_0:\mathcal N(0,\sigma^2)\), \(\mathcal H_1:\mathcal N(A,\sigma^2)\), \(A&gt;0\). Decide \(\mathcal H_1\) on the right tail of \(\bar x\). \(P(y&gt;y_{\mathrm{th}})=\tfrac12[1-\mathrm{erf}((y_{\mathrm{th}}-\mu)/(\sigma\sqrt 2))]\). \(P_{\mathrm{FA}}\) uses \(\mu=0\). Tables of \(\mathrm{erf}\) or \(Q\) are given; do not copy one onto the A4.</p>
+  <p>January 2019 3b, first row: threshold 1, \(\mathcal H_0=\mathcal N(0,1)\), \(\mathcal H_1=\mathcal N(1,1)\). \(Z=1\), \(\mathrm{erf}(1/\sqrt 2)=0.683\), \(P_{\mathrm{FA}}=\tfrac12(1-0.683)=0.159\). Under \(\mathcal H_1\) the threshold sits on the mean, so \(P_D=0.5\). Official table: 0.5 / 0.159; 0.977 / 0.159; 0.842 / 0.159; 0.842 / 0.023. \(P_{\mathrm{FA}}\) does not depend on \(\mu_1\).</p>
+
+  <p><b>Equal-mean, unequal-variance</b> (November 2019 Q4). \(\sigma_1&gt;\sigma_0\). Statistic \(\sum x[n]^2\). H1 is the wide one, so H1 = outer tails. Official at \(x_{\mathrm{th}}=\sigma_1=3\sigma_0\): \(P_D=0.318\), \(P_{\mathrm{FA}}=0.004\). Log-LRT:</p>
+  $$\ln\frac{\sigma_0^N}{\sigma_1^N}-\frac{\sum x^2}{2\sigma_1^2}+\frac{\sum x^2}{2\sigma_0^2}\gtrless\ln\gamma$$
+
+  <p><b>Two exponentials</b> (January 2020 Q5). \(\lambda_1&gt;\lambda_0\). H1 is the faster decay, mass near 0, decide H1 for <b>small</b> \(x\). \(\mathcal L=1\) gives \(x_{\mathrm{th}}=\ln(\lambda_1/\lambda_0)/(\lambda_1-\lambda_0)\). Official \(\lambda_1=2\), \(\lambda_0=0.1\): \(x_{\mathrm{th}}=1.58\). Then \(P_D=1-e^{-\lambda_1 x_{\mathrm{th}}}\) (left of threshold). Same paper 5b, official: \(P_{\mathrm{FA}}=0.1\Rightarrow x_{\mathrm{th}}=1.05\), then \(P_D=0.9\Rightarrow\lambda_1=2.19\).</p>
+
+  <p><b>Gauss vs Laplace, or two Laplaces.</b> Heavier tails → H1 outside. Narrower Laplace → H1 in the centre, inequality flips. Resit 2022 4b–c official: Laplace vs \(\mathcal N(0,1)\), H1 = tails, \(y_{\mathrm{th}}=\pm 1.5884\), \(P_D=0.4519\), \(P_{\mathrm{FA}}=0.1118\) (uses \(Q(1.59)=0.0559\)). November 2022 4c two Laplaces, derived: \(\sum|x_n|\gtrless_{\mathcal H_1}^{\mathcal H_0}\gamma'\), H1 = small sum.</p>
+
+  <p>Matched filter MC (resit 2022 4a, official <b>a</b>): output SNR is maximised. Impulse response is \(s[-n]\) or \(s[N-1-n]\), not \(s[n]\), unless you correlate instead of convolve. It exists for coloured noise too, after whitening.</p>
+
+  <div class="drill">
+    <h3>Which tail?</h3>
+    <p>One sample. \(\mathcal H_0:\mathcal N(0,\sigma_0^2)\), \(\mathcal H_1:\mathcal N(0,\sigma_1^2)\) with \(\sigma_1&gt;\sigma_0\). Thresholds where \(\mathcal L=1\). Where do you decide \(\mathcal H_1\)? What do you shade for \(P_{\mathrm{FA}}\)?</p>
+    <details>
+      <summary>Official, Nov 2019 4a</summary>
+      <p>H1 is wider → decide H1 in the outer tails. \(P_{\mathrm{FA}}\) is the two tails of the <i>narrow</i> H0 Gaussian outside \(\pm x_{\mathrm{th}}\). \(P_D\) is the two tails of the wide H1. Statistic for \(N\) samples: \(\sum x[n]^2\).</p>
+    </details>
+  </div>
+
+  <h2 id="keys">Marking keys</h2>
+  <p>Use these after you sit the paper. <span class="tag exam">no official key</span> means there is no published letter. <span class="tag">derived</span> is computed here, never a published letter.</p>
+
+  <h3 id="jan19">Jan 2019 retake · 21 Jan · 18.00–21.00</h3>
+  <p>Four exercises. Q1 = 4 MC × 0.5, <b>one or two correct</b>, extra wrong −0.25. Q3 is SLT7 7.1. Q4 is 2-tap Wiener: legacy, not a 2026 model.</p>
   <table>
-    <tr>
-      <th>P4 · 7</th>
-      <td><b>LRT + shade \(P_D/P_{\mathrm{FA}}/P_M\) on a PDF plot.</b> Every paper. Trap: <b>which region is “decide H1”</b>. Heavier tails / larger variance \(\Rightarrow\) outer tails. Faster exponential / narrower Laplace \(\Rightarrow\) centre / small \(|x|\), and the inequality in \(\sum T(x_n)\gtrless\gamma'\) <b>flips</b>. Shade FA on H0 over the H1 set; miss is the complement on H1.</td>
-    </tr>
-    <tr>
-      <th>P5 · 3</th>
-      <td><b>Mean-shift Gaussian + erf table \(\to P_d,P_{fa}\) (+ ROC).</b> Jan19 3b · Pr21 4a. \(P(y&gt;y_{\mathrm{th}})=\tfrac12[1-\mathrm{erf}((y_{\mathrm{th}}-\mu)/(\sigma\sqrt2))]\). \(P_{fa}\) uses \(\mu=0\). Trap: using the CDF (left tail) inverts the ROC into the lower triangle. Larger \(|\mu|\) \(\Rightarrow\) steeper, upper triangle.</td>
-    </tr>
-    <tr>
-      <th>P6 · 2</th>
-      <td><b>Equal-mean unequal-variance Gaussians (energy detector).</b> Nov19 4 · Pr21 4b (log-LRT only). Statistic \(\sum x^2[n]\). H1 in the tails if \(\sigma_1&gt;\sigma_0\).
-        \(\ln(\sigma_0^N/\sigma_1^N)-\sum x^2/(2\sigma_1^2)+\sum x^2/(2\sigma_0^2)\gtrless\ln\gamma\).</td>
-    </tr>
-    <tr>
-      <th>P7 · 4</th>
-      <td><b>Two exponentials / Laplace / folded-exp, \(\mathcal L=1\) threshold.</b> Jan20 5 · Jan20r/22r 4 · Nov22 4. Set \(p_1/p_0=1\), solve \(x_{\mathrm{th}}\). Trap: \(\int_{-\infty}^{x_{\mathrm{th}}}\) vs \(\int_{x_{\mathrm{th}}}^\infty\). Jan20 hint “design so \(P_d&gt;P_{fa}\)” \(\Rightarrow\) left tail for the faster exponential.</td>
-    </tr>
-    <tr>
-      <th>P8 · 3</th>
-      <td><b>ROC operating-point arithmetic.</b> Jan20 5bc · Pr21 4a · Nov22 4e–g. Bayesian threshold is <b>not</b> \(\mathcal L=1\); it is \(P_0/P_1\) (0-1 costs). Nov22 4f plots the two <b>weighted</b> PDFs.</td>
-    </tr>
-    <tr>
-      <th>P22 · 1</th>
-      <td><b>Matched filter MC.</b> Jan20r/22r 4a. True: output SNR maximised. Impulse response is \(s[-n]\), not \(s[n]\). Exists for coloured noise too, after whitening.</td>
-    </tr>
+    <tr><th>Q</th><th>what it is</th><th>official</th></tr>
+    <tr><td>1a</td><td>discrete / continuous</td><td><b>B, C</b> dice count; phone number</td></tr>
+    <tr><td>1b</td><td>which formula is MLE</td><td><b>D</b> \(\hat\theta=\arg\max p(x\mid\theta)\)</td></tr>
+    <tr><td>1c</td><td>nonparametric SE</td><td><b>A, C</b> (Bartlett bias up; BT consistent)</td></tr>
+    <tr><td>1d</td><td>linear models</td><td><b>C, D</b>. MA ACF has \(2Q+1\) lags, not \(Q\).</td></tr>
+    <tr><td>2a</td><td>exponential MLE</td><td>\(\hat\lambda_{\mathrm{ML}}=N/\sum x_i\)</td></tr>
+    <tr><td>2b</td><td>MMSE, Unif\([0,2]\)</td><td>one-sample formula despite \(N\) in 2a. See errata.</td></tr>
+    <tr><td>2c</td><td>MAP, same prior</td><td>\(N/\sum x_i\) (= MLE). Key skips the projection onto \([0,2]\).</td></tr>
+    <tr><td>3a</td><td>LRT</td><td>inverted \(\mathcal L=p(\mathcal H_0)/p(\mathcal H_1)\). See errata.</td></tr>
+    <tr><td>3b</td><td>erf table</td><td>\((P_D,P_{\mathrm{FA}})\): 0.5 / 0.159; 0.977 / 0.159; 0.842 / 0.159; 0.842 / 0.023</td></tr>
+    <tr><td>4a</td><td>Wiener \(H=1\)</td><td>\(\mathbf w=(1,2)^\top\), \(J_{\min}=0\)</td></tr>
+    <tr><td>4b</td><td>Wiener \(H=1-2z^{-1}\)</td><td>\(\mathbf w=(-1,0)^\top\), \(J=\tfrac43\)</td></tr>
   </table>
 
-  <h3>Legacy</h3>
+  <h3 id="nov19">Nov 2019 · 4 Nov · 13.30–16.30</h3>
+  <p>Four exercises. Two keys (exam-with-answers + oldexams). Sit this for the correlogram / AR(2) pair and the energy detector.</p>
   <table>
-    <tr>
-      <th>P23 · 1</th>
-      <td><b>2-tap Wiener as a standalone design.</b> Jan19 Q4 only. Official: \(\mathbf w=(1,2)^\top\), \(J_{\min}=0\); then \(\mathbf w=(-1,0)^\top\), \(J=\tfrac43\). After 2019 the same normal equations reappear as the AR 1-step predictor. 2026–27 ILO does not name Wiener. Keep \(Rw=r\), \(J_{\min}=r_d[0]-w^\top r\) as an identity; skip a numerical 2-tap layout on the A4.</td>
-    </tr>
-    <tr>
-      <th>P24 · 1</th>
-      <td><b>Covariance vs correlation MC.</b> Pr21 1b. Cov unbounded, signed, scale-dependent; \(\rho\in[-1,1]\).</td>
-    </tr>
-  </table>
-  <p>Gone with them: the 5-exercise paper (Jan20 only), 1-or-2-correct MC (Jan19 only), a printed PMF sheet (Pr21), the five-row nonparametric table (Nov19 1c), a t-statistic MC with no key (Pr21 1f). Still live every recent paper: Bayes MC, YW AR(1), correlogram, ARMA\(\to\)ACF, factorization, MLE/MAP/MMSE, CRLB + regularity, LRT + shade, erf/Q table, inequality-direction trap.</p>
-
-  <h2 id="papers">Per-paper index</h2>
-  <p>Columns: question, skeleton, published answer. <span class="tag exam">no official key</span> is not a guess — it means there is no published letter. <span class="tag">derived</span> is computed in the brief, never a published letter.</p>
-
-  <h3 id="jan19">Jan19 · 21 Jan 2019 retake</h3>
-  <p>18.00–21.00. Four exercises. Q1 = 4 MC × 0.5, <b>1 or 2 correct</b>, extra wrong −0.25. Key: oldexams. Q3 ≡ SLT7 7.1.</p>
-  <table>
-    <tr><th>Q</th><th>skeleton</th><th>official</th></tr>
-    <tr><td>1a</td><td>P16 discrete / continuous</td><td><b>B, C</b> dice count; phone number</td></tr>
-    <tr><td>1b</td><td>P9 MLE formula</td><td><b>D</b> \(\hat\theta=\arg\max_\theta p(x\mid\theta)\)</td></tr>
-    <tr><td>1c</td><td>P15 nonparametric</td><td><b>A, C</b> (Bartlett bias up; BT consistent)</td></tr>
-    <tr><td>1d</td><td>linear models</td><td><b>C, D</b> (MA+YW nonlinear; compression). ACF of MA(\(Q\)) has \(2Q+1\) lags, not \(Q\).</td></tr>
-    <tr><td>2a</td><td>P9 exp MLE</td><td>\(\hat\lambda_{\mathrm{ML}}=N/\sum_i x_i\)</td></tr>
-    <tr><td>2b</td><td>P11 MMSE, Unif\([0,2]\)</td><td>1-sample formula despite \(N\) in 2a: \(\hat\lambda=\frac2x\bigl(1-\frac{x^2 e^{-2x}}{1-e^{-2x}(2x+1)}\bigr)\). See errata.</td></tr>
-    <tr><td>2c</td><td>P11 MAP</td><td>\(N/\sum x_i\) (= MLE). Key ignores the projection onto \([0,2]\).</td></tr>
-    <tr><td>3a</td><td>P4 LRT</td><td>inverted \(\mathcal L=p(\mathcal H_0)/p(\mathcal H_1)\). See errata.</td></tr>
-    <tr><td>3b</td><td>P5 erf table</td><td>\((P_d,P_{fa})\): 0.5 / 0.159; 0.977 / 0.159; 0.842 / 0.159; 0.842 / 0.023</td></tr>
-    <tr><td>4a</td><td>P23 Wiener \(H=1\)</td><td>\(\mathbf w=(1,2)^\top\), \(J_{\min}=0\)</td></tr>
-    <tr><td>4b</td><td>P23 \(H=1-2z^{-1}\)</td><td>\(\mathbf w=(-1,0)^\top\), \(J=\tfrac43\)</td></tr>
+    <tr><th>Q</th><th>what it is</th><th>official</th></tr>
+    <tr><td>1a</td><td>finite-record \(r_{xy}\)</td><td>exam-with-answers <b>B</b>; oldexams <b>no option is correct</b> (B lagged). See errata.</td></tr>
+    <tr><td>1b</td><td>T/F five statements</td><td><b>F F T T F</b>. A dropped as ambiguous. E is AR prediction, not MA.</td></tr>
+    <tr><td>1c</td><td>fill nonparametric table</td><td>Key fully fills periodogram only: \(\frac1N|\sum x e^{-jn\theta}|^2\); bias = FT of biased ACF; var \(\propto P^2\).</td></tr>
+    <tr><td>2a</td><td>correlogram</td><td>\(1+1.4\cos\theta+\cos 2\theta+0.6\cos 3\theta\). Can go negative.</td></tr>
+    <tr><td>2b</td><td>AR(2)</td><td>\(0.5089\big/|1-0.6863 e^{-j\theta}-0.0196 e^{-j2\theta}|^2\). Strictly positive.</td></tr>
+    <tr><td>3a</td><td>Rayleigh MLE</td><td>\(\hat\theta=\sqrt{(1/(2N))\sum x^2[n]}\)</td></tr>
+    <tr><td>3b</td><td>CRLB</td><td>key wrote \(\hat\theta^2/(4N)\). Bound is \(\theta^2/(4N)\).</td></tr>
+    <tr><td>3c</td><td>MAP, exp prior</td><td>implicit cubic in \(\theta\). Depends on \(\lambda\).</td></tr>
+    <tr><td>4a</td><td>variance detector, shade</td><td>H1 = tails. \(P_D=2\int_{x_{\mathrm{th}}}^\infty p(x;\mathcal H_1)\,dx\)</td></tr>
+    <tr><td>4b</td><td>numbers</td><td>\(P_D=0.318\), \(P_{\mathrm{FA}}=0.004\)</td></tr>
+    <tr><td>4c</td><td>log-LRT</td><td>energy detector, formula above</td></tr>
   </table>
 
-  <h3 id="nov19">Nov19 · 4 Nov 2019</h3>
-  <p>13.30–16.30. Four exercises. Two keys (exam-with-answers + oldexams).</p>
+  <h3 id="jan20">Jan 2020 · 20 Jan · 18.00–21.00</h3>
+  <p><b>Five</b> exercises. MC exactly one; options are unlettered bullets, key uses A/B/C/D = 1st/2nd/3rd/4th.</p>
   <table>
-    <tr><th>Q</th><th>skeleton</th><th>official</th></tr>
-    <tr><td>1a</td><td>P16 finite-record \(r_{xy}\)</td><td>exam-with-answers <b>B</b>; oldexams <b>no option is correct</b> (B lagged). See errata.</td></tr>
-    <tr><td>1b</td><td>T/F five statements</td><td><b>F F T T F</b>. A dropped from grading as ambiguous. E is AR linear prediction, not MA.</td></tr>
-    <tr><td>1c</td><td>P15 fill table</td><td>Descriptive. Key fully fills periodogram only: \(P=\frac1N|\sum x e^{-jn\theta}|^2\); bias = FT of biased ACF; var \(\propto P^2\).</td></tr>
-    <tr><td>2a</td><td>P2 correlogram</td><td>\(1+1.4\cos\theta+\cos 2\theta+0.6\cos 3\theta\). Can go negative.</td></tr>
-    <tr><td>2b</td><td>P3 AR(2)</td><td>\(0.5089\big/|1-0.6863 e^{-j\theta}-0.0196 e^{-j2\theta}|^2\). Strictly positive.</td></tr>
-    <tr><td>3a</td><td>P9 Rayleigh MLE</td><td>\(\hat\theta=\sqrt{(1/(2N))\sum x^2[n]}\)</td></tr>
-    <tr><td>3b</td><td>P10 CRLB</td><td>key wrote \(\mathrm{VAR}(\hat\theta)\ge\hat\theta^2/(4N)\). Bound is \(\theta^2/(4N)\).</td></tr>
-    <tr><td>3c</td><td>P11 MAP, exp prior</td><td>implicit: \(\sum(-2/\theta)+(1/\theta^3)\sum x^2-\lambda=0\). Depends on \(\lambda\).</td></tr>
-    <tr><td>4a</td><td>P6 variance detector</td><td>H1 = tails. \(P_D=2\int_{x_{\mathrm{th}}}^\infty p(x;\mathcal H_1)\,dx\), same for \(P_{FA}\) on H0.</td></tr>
-    <tr><td>4b</td><td>P6 numbers</td><td>\(P_D=0.318\), \(P_{FA}=0.004\)</td></tr>
-    <tr><td>4c</td><td>P6 log-LRT</td><td>energy detector, standard ratio this time (same formula as Pr21 4b)</td></tr>
-  </table>
-
-  <h3 id="jan20">Jan20 · 20 Jan 2020</h3>
-  <p>18.00–21.00. <b>Five</b> exercises. MC exactly one; options are unlettered bullets, key uses A/B/C/D = 1st/2nd/3rd/4th.</p>
-  <table>
-    <tr><th>Q</th><th>skeleton</th><th>official</th></tr>
-    <tr><td>1a</td><td>P16 valid ACF plots</td><td><b>A</b> only \(r_B\). \(r_C\) is even with \(r[0]\) max but \(P(\pi)&lt;0\).</td></tr>
-    <tr><td>1b</td><td>P15 Welch / WOSA</td><td><b>D</b> overlap, same \(K\): var larger than Bartlett, still below the periodogram</td></tr>
-    <tr><td>1c</td><td>P15 windowing</td><td><b>C</b> wider mainlobe, worse resolution</td></tr>
+    <tr><th>Q</th><th>what it is</th><th>official</th></tr>
+    <tr><td>1a</td><td>valid ACF plots</td><td><b>A</b> only \(r_B\). \(r_C\) even with \(r[0]\) max but \(P(\pi)&lt;0\).</td></tr>
+    <tr><td>1b</td><td>Welch / WOSA</td><td><b>D</b> overlap, same \(K\): var larger than Bartlett, still below the periodogram</td></tr>
+    <tr><td>1c</td><td>windowing</td><td><b>C</b> wider main lobe, worse resolution</td></tr>
     <tr><td>1d</td><td>expected value</td><td><b>B</b> mean over an infinite number of observations</td></tr>
-    <tr><td>2a</td><td>P1 paint machines</td><td>\(P[A]=0.819\)</td></tr>
-    <tr><td>2b</td><td>P1 posterior</td><td>\(P[M_3\mid A]=0.18\)</td></tr>
-    <tr><td>3a</td><td>P2 correlogram</td><td>\(\tfrac4{105}\cos\theta+\tfrac1{21}\)</td></tr>
-    <tr><td>3b</td><td>P12 MA(1)</td><td>identical to 3a. Min-phase \(b=\tfrac12\), not \(b=2\).</td></tr>
-    <tr><td>4a</td><td>P17 which estimator</td><td>least squares (“requires no function for the noise”)</td></tr>
-    <tr><td>4b</td><td>P17 \(\phi\) known</td><td>\(\hat A_{\mathrm{ls}}=\sum x[n]e^{\phi n}/\sum e^{2\phi n}\)</td></tr>
-    <tr><td>4c</td><td>P17 both unknown</td><td>\(J=\sum(x[n]-A e^{\phi n})^2\). Nonlinear.</td></tr>
-    <tr><td>4d</td><td>P17 Gauss–Newton</td><td>\(\theta_{k+1}=\theta_k-H^{-1}\nabla J\)</td></tr>
-    <tr><td>5a</td><td>P7 two exponentials</td><td>\(x_{\mathrm{th}}=1.58\). H1 is the faster exp \(\Rightarrow\) decide H1 for <b>small</b> \(x\). \(P_D=1-e^{-\lambda_1 x_{\mathrm{th}}}\), \(P_{FA}=1-e^{-\lambda_0 x_{\mathrm{th}}}\).</td></tr>
-    <tr><td>5b</td><td>P8 operating point</td><td>\(x_{\mathrm{th}}=1.05\), \(\lambda_1=2.19\)</td></tr>
-    <tr><td>5c</td><td>P8 ROC</td><td>larger \(\lambda_1\) \(\Rightarrow\) steeper (closer to top-left)</td></tr>
+    <tr><td>2a</td><td>paint, total P</td><td>\(P[A]=0.819\)</td></tr>
+    <tr><td>2b</td><td>paint, posterior</td><td>\(P[M_3\mid A]=0.18\)</td></tr>
+    <tr><td>3a</td><td>correlogram</td><td>\(\tfrac4{105}\cos\theta+\tfrac1{21}\)</td></tr>
+    <tr><td>3b</td><td>MA(1)</td><td>identical to 3a. Min-phase \(b=\tfrac12\), not \(b=2\).</td></tr>
+    <tr><td>4a</td><td>which estimator</td><td>least squares (no noise PDF)</td></tr>
+    <tr><td>4b</td><td>\(\phi\) known</td><td>\(\hat A_{\mathrm{ls}}=\sum x[n]e^{\phi n}/\sum e^{2\phi n}\)</td></tr>
+    <tr><td>4c</td><td>both unknown</td><td>\(J=\sum(x[n]-A e^{\phi n})^2\). Nonlinear.</td></tr>
+    <tr><td>4d</td><td>Gauss–Newton</td><td>key printed Newton on \(J\): \(\theta_{k+1}=\theta_k-H^{-1}\nabla J\)</td></tr>
+    <tr><td>5a</td><td>two exponentials</td><td>\(x_{\mathrm{th}}=1.58\). H1 = small \(x\). \(P_D=1-e^{-\lambda_1 x_{\mathrm{th}}}\)</td></tr>
+    <tr><td>5b</td><td>operating point</td><td>\(x_{\mathrm{th}}=1.05\), \(\lambda_1=2.19\)</td></tr>
+    <tr><td>5c</td><td>ROC</td><td>larger \(\lambda_1\) ⇒ steeper (closer to top-left)</td></tr>
   </table>
 
-  <h3 id="jan20r">Jan20r · resit 24 Jan 2020</h3>
-  <p>No question PDF; recover from Resit 2020 solutions. <b>Same exam as Jan22r</b> — letters below are those on the 2022 paper. 2f–h ≡ SLT4 2025–26 4.3.</p>
+  <h3 id="jan20r">Jan 2020 resit · 24 Jan · same exam as Jan 2022 resit</h3>
+  <p>No separate question PDF for 2020. Recover from Resit 2020 solutions. Letters below are those on the 2022 paper. 2f–h is SLT4 2025–26 4.3.</p>
   <table>
-    <tr><th>Q</th><th>skeleton</th><th>official</th></tr>
-    <tr><td>1a</td><td>P1 employees / experience</td><td><b>0.26 (c)</b></td></tr>
-    <tr><td>1b</td><td>P16 pixel / picture</td><td><b>b</b> each picture is a realization = a random signal</td></tr>
-    <tr><td>1c</td><td>P16 dice ensemble</td><td><b>b</b> ergodic in mean <i>and</i> variance</td></tr>
-    <tr><td>1d</td><td>P14 factorization</td><td><b>c</b> \(L(z)=(1-\tfrac14 z^{-1})/(1+\tfrac34 z^{-1})\), \(\sigma_i^2=2\). See errata.</td></tr>
-    <tr><td>2a</td><td>P10 CRLB MC</td><td><b>b</b> iid \(\Rightarrow\) CRLB decreases linearly with \(N\)</td></tr>
-    <tr><td>2b</td><td>P9 MLE MC</td><td><b>c</b> invariance</td></tr>
-    <tr><td>2c</td><td>P17 LS MC</td><td><b>a</b> some NL-LS separate / transform to linear. Key: “no longer part of the content.”</td></tr>
-    <tr><td>2d</td><td>P11 Bayesian MC</td><td><b>b</b> MMSE = mean of the posterior</td></tr>
-    <tr><td>2e</td><td>P10 regularity</td><td><b>cannot</b>. Support depends on \(\theta\).</td></tr>
-    <tr><td>2f</td><td>P11 BPSK posteriors</td><td>\(P[X=1\mid Y]\) = softmax of \(\mathcal N(\pm1,\sigma^2)\)</td></tr>
-    <tr><td>2g</td><td>P11 MMSE</td><td>\(\hat X_{\mathrm{MMSE}}=\tanh(y/\sigma^2)\)</td></tr>
-    <tr><td>2h</td><td>P11 MAP</td><td>\(\hat X_{\mathrm{MAP}}=\mathrm{sign}(y)\)</td></tr>
-    <tr><td>3a</td><td>P21 FTD / DFT plot</td><td><b>B</b> = 1B, 2D, 3C, 4A (impulses / windowed sinc / zeropad DFT / unpadded DFT)</td></tr>
-    <tr><td>3b</td><td>P12 MA(2)</td><td>\(b=r[2]=\tfrac14\), \(a=-\tfrac34\)</td></tr>
-    <tr><td>3c</td><td>P2 / P12 correlogram</td><td>\(\tfrac{13}8-\tfrac{15}8\cos\theta+\tfrac12\cos 2\theta\)</td></tr>
-    <tr><td>3d</td><td>P3 AR(1)</td><td>\(a_1=\tfrac{15}{26}\), \(\sigma_i^2=\tfrac{451}{416}\)</td></tr>
-    <tr><td>4a</td><td>P22 matched filter</td><td><b>a</b> output SNR maximised</td></tr>
-    <tr><td>4b</td><td>P7 Gauss vs Laplace, shade</td><td>H1 = tails (Laplace heavier). \(P_M\) = centre of H1; \(P_{FA}\) = H0 tails.</td></tr>
-    <tr><td>4c</td><td>P7 numbers</td><td>\(y_{\mathrm{th}}=\pm1.5884\), \(P_D=0.4519\), \(P_{FA}=0.1118\)</td></tr>
+    <tr><th>Q</th><th>what it is</th><th>official</th></tr>
+    <tr><td>1a</td><td>employees / experience</td><td><b>0.26 (c)</b></td></tr>
+    <tr><td>1b</td><td>pixel / picture</td><td><b>b</b> each picture is a realization = a random signal</td></tr>
+    <tr><td>1c</td><td>dice ensemble</td><td><b>b</b> ergodic in mean <i>and</i> variance</td></tr>
+    <tr><td>1d</td><td>factorisation</td><td><b>c</b> \(L(z)=(1-\tfrac14 z^{-1})/(1+\tfrac34 z^{-1})\), \(\sigma_i^2=2\). See errata.</td></tr>
+    <tr><td>2a</td><td>CRLB MC</td><td><b>b</b> iid ⇒ CRLB decreases linearly with \(N\)</td></tr>
+    <tr><td>2b</td><td>MLE MC</td><td><b>c</b> invariance</td></tr>
+    <tr><td>2c</td><td>LS MC</td><td><b>a</b> some NL-LS separate. Key: “no longer part of the content.”</td></tr>
+    <tr><td>2d</td><td>Bayesian MC</td><td><b>b</b> MMSE = mean of the posterior</td></tr>
+    <tr><td>2e</td><td>regularity</td><td><b>cannot</b>. Support depends on \(\theta\).</td></tr>
+    <tr><td>2f</td><td>BPSK posteriors</td><td>softmax of \(\mathcal N(\pm 1,\sigma^2)\)</td></tr>
+    <tr><td>2g</td><td>MMSE</td><td>\(\tanh(y/\sigma^2)\)</td></tr>
+    <tr><td>2h</td><td>MAP</td><td>\(\mathrm{sign}(y)\)</td></tr>
+    <tr><td>3a</td><td>FTD / DFT plot</td><td><b>B</b> = 1B, 2D, 3C, 4A</td></tr>
+    <tr><td>3b</td><td>MA(2)</td><td>\(b=r[2]=\tfrac14\), \(a=-\tfrac34\)</td></tr>
+    <tr><td>3c</td><td>correlogram</td><td>\(\tfrac{13}8-\tfrac{15}8\cos\theta+\tfrac12\cos 2\theta\)</td></tr>
+    <tr><td>3d</td><td>AR(1)</td><td>\(a_1=\tfrac{15}{26}\), \(\sigma_i^2=\tfrac{451}{416}\)</td></tr>
+    <tr><td>4a</td><td>matched filter</td><td><b>a</b> output SNR maximised</td></tr>
+    <tr><td>4b</td><td>Gauss vs Laplace, shade</td><td>H1 = tails. \(P_M\) = centre of H1; \(P_{\mathrm{FA}}\) = H0 tails.</td></tr>
+    <tr><td>4c</td><td>numbers</td><td>\(y_{\mathrm{th}}=\pm 1.5884\), \(P_D=0.4519\), \(P_{\mathrm{FA}}=0.1118\)</td></tr>
   </table>
 
-  <h3 id="pr21">Pr21 · practice 28 Oct 2021</h3>
-  <p>Part 1: 6 MC × 0.5, PMFs printed. Parts 2–4 open. Key: Q&amp;A slides part 1 + part 2. Q3 ≡ SLT6 2025–26 6.2. <b>1f has no worked slide.</b></p>
+  <h3 id="pr21">Practice · 28 Oct 2021</h3>
+  <p>Part 1: 6 MC × 0.5, PMFs printed. Parts 2–4 open. Q3 is SLT6 2025–26 6.2. <b>1f has no worked slide.</b></p>
   <table>
-    <tr><th>Q</th><th>skeleton</th><th>official</th></tr>
-    <tr><td>1a</td><td>P1 virus test</td><td><b>b) 37%</b></td></tr>
-    <tr><td>1b</td><td>P24 cov vs corr</td><td><b>d) all of the above</b></td></tr>
+    <tr><th>Q</th><th>what it is</th><th>official</th></tr>
+    <tr><td>1a</td><td>virus Bayes</td><td><b>b) 37%</b></td></tr>
+    <tr><td>1b</td><td>cov vs corr</td><td><b>d) all of the above</b></td></tr>
     <tr><td>1c</td><td>\(E[X]\) discrete</td><td><b>b</b> weighted average over outcomes</td></tr>
-    <tr><td>1d</td><td>P20 binomial</td><td><b>d) 0.2936</b></td></tr>
-    <tr><td>1e</td><td>P5 ROC lower triangle</td><td><b>a</b> “H0 variance too high” <i>cannot</i> flip the ROC</td></tr>
-    <tr><td>1f</td><td>t-statistic</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> c is false (small \(t\) is <i>more</i> consistent with H0)</td></tr>
-    <tr><td>2a</td><td>P18 CRLB \(\to\) PDF</td><td>\(\partial\ln p/\partial\theta=(N/A^2)(\bar x-\theta)\) \(\Rightarrow\) law of \(\bar x\), not the full \(N\)-sample Gaussian</td></tr>
-    <tr><td>2b</td><td>P9 Rayleigh \(\theta=\sigma^2\)</td><td>\(\hat\theta=(1/(2N))\sum x^2[n]\) (no square root)</td></tr>
-    <tr><td>3a</td><td>P13 ARMA(1,1) ACF</td><td>\(\rho[0]=\tfrac{28}{27}\), \(\rho[1]=-\tfrac4{27}\), \(\rho[\tau]=(\tfrac12)^{|\tau|-1}\rho[1]\) for \(|\tau|&gt;1\). Fallback \(\rho[1]=+5/27\) is the wrong sign on purpose.</td></tr>
-    <tr><td>3b</td><td>P3 AR(1)</td><td>\(a_1=\tfrac17\), \(\sigma_i^2=\tfrac{64}{63}\). \(P(0)=0.78\), \(P(\pi/2)=1\), \(P(\pi)=1.38\) (high-pass).</td></tr>
-    <tr><td>3c</td><td>P2 MA(1) correlogram</td><td>\(\tfrac{28}{27}-\tfrac8{27}\cos\theta\)</td></tr>
-    <tr><td>4a</td><td>P5 erf + ROC</td><td>10 rows. \(P_{fa}(y_{\mathrm{th}}=0)=0.5\), \(P_{fa}(1)=0.1585\). \(\mu=2\) ROC strictly above \(\mu=1\), both upper triangle.</td></tr>
-    <tr><td>4b</td><td>P6 log-LRT</td><td>identical to Nov19 4c</td></tr>
+    <tr><td>1d</td><td>binomial</td><td><b>d) 0.2936</b></td></tr>
+    <tr><td>1e</td><td>ROC lower triangle</td><td><b>a</b> “H0 variance too high” cannot flip the ROC</td></tr>
+    <tr><td>1f</td><td>t-statistic</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> c is false (small \(t\) is more consistent with H0)</td></tr>
+    <tr><td>2a</td><td>CRLB equality → PDF</td><td>they stop at the law of \(\bar x\), not the full \(N\)-sample Gaussian</td></tr>
+    <tr><td>2b</td><td>Rayleigh \(\theta=\sigma^2\)</td><td>\(\hat\theta=(1/(2N))\sum x^2[n]\) (no square root)</td></tr>
+    <tr><td>3a</td><td>ARMA(1,1) ACF</td><td>\(\rho[0]=\tfrac{28}{27}\), \(\rho[1]=-\tfrac4{27}\), then AR tail. Fallback \(\rho[1]=+5/27\) is the wrong sign on purpose.</td></tr>
+    <tr><td>3b</td><td>AR(1)</td><td>\(a_1=\tfrac17\), \(\sigma_i^2=\tfrac{64}{63}\). \(P(0)=0.78\), \(P(\pi)=1.38\) (high-pass).</td></tr>
+    <tr><td>3c</td><td>MA(1) correlogram</td><td>\(\tfrac{28}{27}-\tfrac8{27}\cos\theta\)</td></tr>
+    <tr><td>4a</td><td>erf + ROC</td><td>\(P_{\mathrm{fa}}(0)=0.5\), \(P_{\mathrm{fa}}(1)=0.1585\). \(\mu=2\) ROC strictly above \(\mu=1\).</td></tr>
+    <tr><td>4b</td><td>log-LRT</td><td>identical to Nov 2019 4c</td></tr>
   </table>
 
-  <h3 id="jan22r">Jan22r · resit 24 Jan 2022</h3>
-  <p>Questions = Jan20r. Grade with the table above. Cover 18.00–21.00, answers on paper. 4c uses \(Q(1.59)=0.0559\).</p>
-  <table>
-    <tr><th>Q</th><th>skeleton</th><th>official</th></tr>
-    <tr><td>1a–d</td><td>P1, P16, P16, P14 · 0.3 each</td><td>c 0.26 · b · b · c. 1a options 0.24 / 0.25 / <b>0.26</b> / 0.28.</td></tr>
-    <tr><td>2a–d</td><td>P10, P9, P17, P11 · 0.3 each</td><td>b · c · a (legacy) · b</td></tr>
-    <tr><td>2e</td><td>P10 regularity · 0.5</td><td>cannot</td></tr>
-    <tr><td>2f–h</td><td>P11 BPSK · 0.6 each</td><td>two-Gaussian posterior; \(\tanh(y/\sigma^2)\); \(\mathrm{sign}(y)\). Paper’s 2g fallback posteriors are garbled — use 2f. \(\tanh\) identity given.</td></tr>
-    <tr><td>3a</td><td>P21 · 0.3</td><td><b>(b) 1B, 2D, 3C, 4A</b>. Option (a) has a typo (two “3”s).</td></tr>
-    <tr><td>3b–d</td><td>P12, P2, P3 · 1.0 each</td><td>\(b=\tfrac14,a=-\tfrac34\); \(\tfrac{13}8-\tfrac{15}8\cos\theta+\tfrac12\cos 2\theta\); \(a_1=\tfrac{15}{26},\sigma_i^2=\tfrac{451}{416}\). Fallback \(a=\tfrac14,b=\tfrac54\) is not the true MA(2) and not min-phase.</td></tr>
-    <tr><td>4a</td><td>P22 · 0.3</td><td>a</td></tr>
-    <tr><td>4b</td><td>P7 shade · 0.7</td><td>H1 = tails</td></tr>
-    <tr><td>4c</td><td>P7 numbers · 1.0</td><td>\(y_{\mathrm{th}}=\pm1.5884\), \(P_D=0.4519\), \(P_{FA}=0.1118\)</td></tr>
-  </table>
+  <h3 id="jan22r">Jan 2022 resit · 24 Jan · 18.00–21.00</h3>
+  <p>Questions = January 2020 resit. Grade with the table above. Cover says answers on paper. 4c uses \(Q(1.59)=0.0559\). 1a options 0.24 / 0.25 / <b>0.26</b> / 0.28. 3a option (a) has a typo (two “3”s); official (b).</p>
 
-  <h3 id="nov22">Nov22 · 7 Nov 2022 <span class="tag exam">no official key</span></h3>
-  <p>13.30–16.30. Split on cover <b>1.5 / 2.75 / 3 / 2.75</b>. Closest to the current format. <b>Every cell below is derived or a lecture fact — none is a published letter.</b></p>
+  <h3 id="nov22">Nov 2022 · 7 Nov · 13.30–16.30 <span class="tag exam">no official key</span></h3>
+  <p>Split on cover <b>1.5 / 2.75 / 3 / 2.75</b>. Closest to the current format. Every cell below is derived or a lecture fact. None is a published letter.</p>
   <table>
-    <tr><th>Q</th><th>skeleton</th><th>answer</th></tr>
-    <tr><td>1a</td><td>P1 followed the course</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(0.65\cdot0.75+0.35\cdot0.4=0.6275\approx0.63\) (c)</td></tr>
-    <tr><td>1b</td><td>P19 joint \(\to\) marginal</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(p_X(0)=13/24\), \(p_X(1)=11/24\) (b)</td></tr>
-    <tr><td>1c</td><td>P16 RNG / ergodic</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> ensemble mean 0; time-variance \(A^2/3\) varies across realizations \(\Rightarrow\) not fully ergodic. Do not guess a letter.</td></tr>
-    <tr><td>1d</td><td>P14 factorization · 0.75</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(L(z)=1/(1-\tfrac13 z^{-1})\), \(\sigma_i^2=\tfrac23\)</td></tr>
-    <tr><td>2a</td><td>P10 Fisher MC</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> (a) \(N\) iid \(\Rightarrow\mathcal I=N i(\theta)\)</td></tr>
-    <tr><td>2b</td><td>P9 MLE MC</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> (c) asymptotically unbiased</td></tr>
-    <tr><td>2c</td><td>P11 Bayes MC</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> (b) Bayes risk definition. Uniform/hit-or-miss cost \(\Rightarrow\) MAP, not MMSE.</td></tr>
-    <tr><td>2d</td><td>P9 angle MLE · 0.5</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(\hat\theta_{\mathrm{ML}}=\mathrm{atan2}(x_2,x_1)\)</td></tr>
-    <tr><td>2e</td><td>P10 Fisher · 0.5</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(\mathcal I(\theta)=A^2/\sigma^2\)</td></tr>
-    <tr><td>2f</td><td>P11 MMSE · 0.5</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> posterior given: Gamma(2, \(x+a\)), \(\hat\theta_{\mathrm{MMSE}}=2/(x+a)\)</td></tr>
-    <tr><td>2g</td><td>P11 MAP · 0.5</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(\hat\theta_{\mathrm{MAP}}=1/(x+a)\)</td></tr>
-    <tr><td>3a</td><td>P15 Bartlett vs WOSA</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> (a) Bartlett var \(\propto 1/K\), bias increases. Overlap \(\Rightarrow\) not \(1/K\).</td></tr>
-    <tr><td>3b</td><td>P15 window / zeropad</td><td><span class="tag exam">no official key</span> · lecture fact: mainlobe = resolution, sidelobes = leakage. Do not guess a letter.</td></tr>
-    <tr><td>3c</td><td>P13 what process · 0.15</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> ARMA(1,1), \(a_1=-\tfrac34\), \(b_1=-1\)</td></tr>
-    <tr><td>3d</td><td>P13 \(P_x\) · 0.35</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(\frac78 |1-e^{-j\theta}|^2\big/|1-\tfrac34 e^{-j\theta}|^2\)</td></tr>
-    <tr><td>3e</td><td>P13 ACF · 0.5</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(r[0]=1\), \(r[1]=-\tfrac18\), then \(r[\tau]=\tfrac34 r[\tau-1]\) for \(|\tau|&gt;1\)</td></tr>
-    <tr><td>3f</td><td>P3 AR(1) · 0.75</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(a_1=\tfrac18\), \(\sigma_i^2=\tfrac{63}{64}\)</td></tr>
-    <tr><td>3g</td><td>P12 MA(1) · 0.75</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(1-\tfrac14\cos\theta\)</td></tr>
-    <tr><td>4a</td><td>P4 confusion-matrix labels</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> (a) 1=TN, 2=FN/miss, 3=FP/FA, 4=TP</td></tr>
-    <tr><td>4b</td><td>P4 Neyman–Pearson</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> (b) fixed \(P_{FA}\), max \(P_D\)</td></tr>
-    <tr><td>4c</td><td>P7 two Laplaces · 0.5</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(\sum|x_n|\gtrless_{\mathcal H_1}^{\mathcal H_0}\gamma'\), H1 = <b>small</b> sum (narrower Laplace). \(\gamma'=N\ln2-\ln\gamma\).</td></tr>
-    <tr><td>4d</td><td>P7 shade · 0.25</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> H1 for \(y&lt;1\). \(P_{FA}\) = H0 on \((0,1)\); \(P_M\) = H1 on \((1,\infty)\).</td></tr>
-    <tr><td>4e</td><td>P8 NP point · 0.5</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(P_{FA}=0.1\Rightarrow\gamma'=-\ln0.9\approx0.105\), \(P_D=0.19\)</td></tr>
-    <tr><td>4f</td><td>P8 Bayes threshold · 0.5</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(\gamma''=\ln3\approx1.099\)</td></tr>
-    <tr><td>4g</td><td>P8 Bayes errors · 0.5</td><td><span class="tag exam">no official key</span> · <span class="tag">derived</span> \(P_M=\tfrac19\), \(P_{FA}=\tfrac23\)</td></tr>
+    <tr><th>Q</th><th>what it is</th><th>answer</th></tr>
+    <tr><td>1a</td><td>followed the course</td><td><span class="tag">derived</span> \(0.65\cdot 0.75+0.35\cdot 0.4=0.6275\approx 0.63\) (c)</td></tr>
+    <tr><td>1b</td><td>joint → marginal</td><td><span class="tag">derived</span> \(p_X(0)=13/24\), \(p_X(1)=11/24\) (b)</td></tr>
+    <tr><td>1c</td><td>RNG / ergodic</td><td><span class="tag">derived</span> ensemble mean 0; time-variance \(A^2/3\) varies across realizations ⇒ not fully ergodic. Do not guess a letter.</td></tr>
+    <tr><td>1d</td><td>factorisation · 0.75</td><td><span class="tag">derived</span> \(L(z)=1/(1-\tfrac13 z^{-1})\), \(\sigma_i^2=\tfrac23\)</td></tr>
+    <tr><td>2a</td><td>Fisher MC</td><td><span class="tag">derived</span> (a) \(N\) iid ⇒ \(\mathcal I=N i(\theta)\)</td></tr>
+    <tr><td>2b</td><td>MLE MC</td><td><span class="tag">derived</span> (c) asymptotically unbiased</td></tr>
+    <tr><td>2c</td><td>Bayes MC</td><td><span class="tag">derived</span> (b) Bayes risk definition. Uniform cost ⇒ MAP, not MMSE.</td></tr>
+    <tr><td>2d</td><td>angle MLE · 0.5</td><td><span class="tag">derived</span> \(\hat\theta_{\mathrm{ML}}=\mathrm{atan2}(x_2,x_1)\)</td></tr>
+    <tr><td>2e</td><td>Fisher · 0.5</td><td><span class="tag">derived</span> \(\mathcal I(\theta)=A^2/\sigma^2\)</td></tr>
+    <tr><td>2f</td><td>MMSE · 0.5</td><td><span class="tag">derived</span> Gamma(2, \(x+a\)), mean \(2/(x+a)\)</td></tr>
+    <tr><td>2g</td><td>MAP · 0.5</td><td><span class="tag">derived</span> mode \(1/(x+a)\)</td></tr>
+    <tr><td>3a</td><td>Bartlett vs WOSA</td><td><span class="tag">derived</span> (a) Bartlett var \(\propto 1/K\), bias increases. Overlap ⇒ not \(1/K\).</td></tr>
+    <tr><td>3b</td><td>window / zeropad</td><td>lecture fact: main lobe = resolution, side lobes = leakage. Do not guess a letter.</td></tr>
+    <tr><td>3c</td><td>what process · 0.15</td><td><span class="tag">derived</span> ARMA(1,1), \(a_1=-\tfrac34\), \(b_1=-1\)</td></tr>
+    <tr><td>3d</td><td>\(P_x\) · 0.35</td><td><span class="tag">derived</span> \(\frac78 |1-e^{-j\theta}|^2\big/|1-\tfrac34 e^{-j\theta}|^2\)</td></tr>
+    <tr><td>3e</td><td>ACF · 0.5</td><td><span class="tag">derived</span> \(r[0]=1\), \(r[1]=-\tfrac18\), then \(r[\tau]=\tfrac34 r[\tau-1]\) for \(|\tau|&gt;1\)</td></tr>
+    <tr><td>3f</td><td>AR(1) · 0.75</td><td><span class="tag">derived</span> \(a_1=\tfrac18\), \(\sigma_i^2=\tfrac{63}{64}\)</td></tr>
+    <tr><td>3g</td><td>MA(1) · 0.75</td><td><span class="tag">derived</span> \(1-\tfrac14\cos\theta\)</td></tr>
+    <tr><td>4a</td><td>confusion-matrix labels</td><td><span class="tag">derived</span> (a) 1=TN, 2=FN/miss, 3=FP/FA, 4=TP</td></tr>
+    <tr><td>4b</td><td>Neyman–Pearson</td><td><span class="tag">derived</span> (b) fixed \(P_{\mathrm{FA}}\), max \(P_D\)</td></tr>
+    <tr><td>4c</td><td>two Laplaces · 0.5</td><td><span class="tag">derived</span> \(\sum|x_n|\gtrless_{\mathcal H_1}^{\mathcal H_0}\gamma'\), H1 = small sum. \(\gamma'=N\ln 2-\ln\gamma\).</td></tr>
+    <tr><td>4d</td><td>shade · 0.25</td><td><span class="tag">derived</span> H1 for \(y&lt;1\). \(P_{\mathrm{FA}}\) = H0 on \((0,1)\); \(P_M\) = H1 on \((1,\infty)\).</td></tr>
+    <tr><td>4e</td><td>NP point · 0.5</td><td><span class="tag">derived</span> \(P_{\mathrm{FA}}=0.1\Rightarrow\gamma'=-\ln 0.9\approx 0.105\), \(P_D=0.19\)</td></tr>
+    <tr><td>4f</td><td>Bayes threshold · 0.5</td><td><span class="tag">derived</span> \(\gamma''=\ln 3\approx 1.099\)</td></tr>
+    <tr><td>4g</td><td>Bayes errors · 0.5</td><td><span class="tag">derived</span> \(P_M=\tfrac19\), \(P_{\mathrm{FA}}=\tfrac23\)</td></tr>
   </table>
 
   <h2 id="errata">Key errata</h2>
-  <p class="aviso">Jan19 3a: the published LRT is inverted — \(\mathcal L=p(\mathcal H_0)/p(\mathcal H_1)\). Later papers and SLT7 use \(p(\mathcal H_1)/p(\mathcal H_0)\). Write the standard ratio; flag the key if you quote Jan19.</p>
-  <p class="aviso">Nov19 1a: exam-with-answers says <b>B</b>; oldexams says no option is correct (B is the sequence lagged / reversed). Direct \(r_{xy}[\tau]=\frac1N\sum x[n]y[n+\tau]\) matches shifted-B. Prefer oldexams.</p>
-  <p class="aviso">Jan19 2b: published MMSE is the <b>one-sample</b> formula despite \(N\) in 2a. The \(N\)-sample version is a truncated \(\mathrm{Gamma}(N+1,S)\), \(S=\sum x_i\).</p>
-  <p class="aviso">Nov19 3b: the key writes \(\mathrm{VAR}(\hat\theta)\ge\hat\theta^2/(4N)\) — it plugged the estimate. The bound is \(\theta^2/(4N)\).</p>
-  <p class="aviso">Jan19 2c: MAP omits the projection onto \([0,2]\). Uniform prior is flat on \((0,2)\), so MAP = MLE only if the unconstrained MLE sits inside; otherwise \(\hat\lambda=2\).</p>
-  <p class="aviso">Jan22r 1d: the key notes a possible sign typo in the printed factorization denominator. Official letter is <b>c</b>, \(L(z)=(1-\tfrac14 z^{-1})/(1+\tfrac34 z^{-1})\), \(\sigma_i^2=2\) not \(\tfrac12\). \(L(z^{-1})\) is max-phase.</p>
-
-  <h2 id="sit">How to sit a paper</h2>
-  <ol>
-    <li>Three hours. Only the <a href="./a4.html">A4</a>, calculator, dictionary. Pen, name, student-ID boxes. Formulation and order are graded — a correct number with no likelihood written is not full marks.</li>
-    <li>Sit <a href="#nov22">Nov22</a> first. Closest to the current 1.5 / 2.75 / 3 / 2.75 split. There is no official key, so you cannot mark it from a letter sheet; after the clock, compare to the <span class="tag">derived</span> column and treat those as derived.</li>
-    <li>Then <a href="#jan22r">Jan22r</a>. It is the Jan20r paper, so you have an official key. Use it.</li>
-    <li>More reps: Nov19 (two keys, 1a conflict) or Jan20 (the only 5-exercise paper, good LS/GN drill). Do not count Jan20r and Jan22r as two different papers.</li>
-  </ol>
+  <p>These are the published keys being wrong, not you.</p>
+  <p class="aviso">Jan 2019 3a: the published LRT is inverted, \(\mathcal L=p(\mathcal H_0)/p(\mathcal H_1)\). Later papers use \(p_1/p_0\). Write the standard ratio; flag the key if you quote 2019.</p>
+  <p class="aviso">Nov 2019 1a: exam-with-answers says <b>B</b>; oldexams says no option is correct (B is the sequence lagged / reversed). Direct \(r_{xy}[\tau]=\frac1N\sum x[n]y[n+\tau]\) matches shifted-B. Prefer oldexams.</p>
+  <p class="aviso">Jan 2019 2b: published MMSE is the one-sample formula despite \(N\) in 2a. The \(N\)-sample version is a truncated \(\mathrm{Gamma}(N+1,S)\), \(S=\sum x_i\).</p>
+  <p class="aviso">Nov 2019 3b: the key writes \(\mathrm{VAR}(\hat\theta)\ge\hat\theta^2/(4N)\). It plugged the estimate. The bound is \(\theta^2/(4N)\).</p>
+  <p class="aviso">Jan 2019 2c: MAP omits the projection onto \([0,2]\). Uniform prior is flat on \((0,2)\), so MAP = MLE only if the unconstrained MLE sits inside; otherwise \(\hat\lambda=2\).</p>
+  <p class="aviso">Jan 2022 resit 1d: the key notes a possible sign typo in the printed factorisation denominator. Official letter is still <b>c</b>, \(\sigma_i^2=2\) not \(1/2\). \(L(z^{-1})\) is max-phase.</p>
 
   <div class="pager">
     <a href="./a4.html">← A4 sheet</a>

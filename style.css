@@ -96,6 +96,19 @@ td b { font-weight: 600; }
   font-family: "Ibarra Real Nova", serif; font-size: 1.02rem;
 }
 .aviso.ok { border-left-color: var(--ok); }
+.why {
+  background: var(--paper-2);
+  padding: .75rem .85rem .55rem;
+  margin: 0 0 1.05rem;
+}
+.why p:last-child { margin-bottom: .2rem; }
+.fig { margin: .55rem 0 .35rem; }
+.fig svg { width: 100%; height: auto; display: block; }
+.cap {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: .62rem; letter-spacing: .03em; color: var(--muted);
+  margin: 0 0 1.05rem; line-height: 1.35;
+}
 .toc { list-style: none; padding: 0; margin: 0 0 1.2rem; }
 .toc li {
   display: flex; justify-content: space-between; gap: .8rem;

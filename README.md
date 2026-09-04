@@ -4,6 +4,6 @@ From-zero study pages for the TU/e **Statistical Signal Processing** written exa
 
 https://dkealvaro.github.io/5cta0-guia/
 
-Built from the 2023–24 course reader, video lectures, official keys 2019–2020, papers 2019–2022, and SLT 2024–26. Not a dump of the lecture notes.
+Built from the 2023–24 course reader, video lectures, official keys 2019–2020, papers 2019–2022, and SLT 2024–26. Past-paper page is a walkthrough of the four methods, not a skeleton dump.
 
 Original teaching notes. Course PDFs stay on Canvas.
