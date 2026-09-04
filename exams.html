@@ -71,7 +71,16 @@
   $$P(B\mid A)=\frac{P(A\mid B)\,P(B)}{P(A\mid B)\,P(B)+P(A\mid B^c)\,P(B^c)}$$
   <p>Name the events before you touch a calculator. \(A\) is what you observed. \(B\) is the hidden cause. The second term in the denominator is the whole point: the data can also happen when \(B\) is false.</p>
 
-  <p><b>Practice 2021, virus test.</b> Prevalence 1.8%. Sensitivity 95%. False-positive rate 3%. Probability you are infected given a positive test.</p>
+  <div class="q">
+    <p class="src">Practice exam · 28 Oct 2021 · 1a · 0.5 pt · one correct</p>
+    <p>A virus has infected 1.8% of a population. A test detects this virus 95% of the time when it is actually present, but it returns a false positive 3% of the time when the virus is not present. If a person selected at random from this population tests positive for the virus, what is the probability that this person is actually infected? Please round to the nearest percent.</p>
+    <ul>
+      <li>a) 26%</li>
+      <li>b) 37%</li>
+      <li>c) 95%</li>
+      <li>d) 92%</li>
+    </ul>
+  </div>
   <p>Let \(B=\) infected, \(A=\) positive. Then \(P(B)=0.018\), \(P(B^c)=0.982\), \(P(A\mid B)=0.95\), \(P(A\mid B^c)=0.03\).</p>
   $$
   P(B\mid A)
@@ -79,36 +88,110 @@
   =\frac{0.0171}{0.0171+0.02946}
   \approx 0.367
   $$
-  <p>Official: <b>37%</b>. Why 95% is wrong: in 10&nbsp;000 people, about 180 are infected and 171 of those test positive. About 9&nbsp;820 are healthy and 295 of those still test positive. Most of the positives are healthy. Rare disease, noisy test: the false-positive pile wins.</p>
-  <p>Same skeleton, new story, every recent paper:</p>
-  <ul>
-    <li>Jan 2020 paint machines: three machines, given pass rates, asked \(P(\text{machine 3}\mid\text{pass})\). Official \(P(\text{pass})=0.819\), then \(0.18\).</li>
-    <li>Jan 2022 resit employees: official <b>0.26</b>.</li>
-    <li>Nov 2022 “followed the course”: sometimes they only ask the denominator, i.e. total probability. Derived \(0.65\cdot 0.75+0.35\cdot 0.4=0.6275\approx 0.63\).</li>
-  </ul>
+  <p>Official: <b>b) 37%</b>. Option c is the sensitivity \(P(A\mid B)\). That is the trap. In 10&nbsp;000 people, about 180 are infected and 171 of those test positive. About 9&nbsp;820 are healthy and 295 of those still test positive. Most of the positives are healthy. Rare disease, noisy test: the false-positive pile wins.</p>
 
-  <div class="drill">
-    <h3>Do this one before you look</h3>
-    <p>Three paint machines make 30, 45 and 25 cars a day. Pass rates 0.85, 0.92, 0.60. A random car passed. Probability it came from machine 3?</p>
-    <details>
-      <summary>Official, Jan 2020</summary>
-      <p>Total pass: \((30\cdot 0.85+45\cdot 0.92+25\cdot 0.60)/100=0.819\). Then \(P(M_3\mid A)=0.25\cdot 0.60/0.819=0.18\).</p>
-    </details>
+  <div class="q">
+    <p class="src">Written exam · 20 Jan 2020 · Q2 · 2 pt</p>
+    <p>A car production company has three machines \(M_1\), \(M_2\), and \(M_3\) for painting cars. It has been observed that 85% of the cars painted by \(M_1\) pass the quality test, while for machines \(M_2\) and \(M_3\) the percentages of a car passing the quality test are 92% and 60%, respectively. Each day, machine \(M_1\) paints 30 cars, \(M_2\) paints 45 cars, and \(M_3\) paints 25 cars. All the cars are mixed at random before quality control.</p>
+    <ul>
+      <li>(a) What is the probability that a car will pass the quality test? [1 pt]</li>
+      <li>(b) What is the probability that a car that has passed the test was painted by machine \(M_3\)? [1 pt]</li>
+    </ul>
   </div>
+  <p>100 cars a day. Priors \(P(M_1)=0.30\), \(P(M_2)=0.45\), \(P(M_3)=0.25\). Let \(A=\) pass. Then \(P(A\mid M_1)=0.85\), \(P(A\mid M_2)=0.92\), \(P(A\mid M_3)=0.60\).</p>
+  <p>(a) is the denominator of Bayes, i.e. total probability:</p>
+  $$P(A)=0.30\cdot 0.85+0.45\cdot 0.92+0.25\cdot 0.60=0.255+0.414+0.150=0.819.$$
+  <p>(b) is the posterior for the worst machine:</p>
+  $$P(M_3\mid A)=\frac{0.25\cdot 0.60}{0.819}=\frac{0.150}{0.819}=0.18.$$
+  <p>Official: \(0.819\) and \(0.18\). If you skip (a) and divide \(0.60\) by something else, you lose both points.</p>
+
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 (same as resit 24 Jan 2020) · 1a · 0.3 pt · one correct</p>
+    <p>A small manufacturing company has rated 75% of its employees as satisfactory (\(S\)) and 25% as unsatisfactory (\(S^c\)). Personnel records show that 80% of the satisfactory workers had previous work experience (\(E\)) in the job they are now doing, while 15% of the unsatisfactory workers had no work experience (\(E^c\)) in the job they are now doing. If a person who has had previous work experience is hired, what is the approximate empirical probability that this person will be an unsatisfactory employee?</p>
+    <ul>
+      <li>a) 0.24</li>
+      <li>b) 0.25</li>
+      <li>c) 0.26</li>
+      <li>d) 0.28</li>
+    </ul>
+  </div>
+  <p>Read the 15% carefully. That is \(P(E^c\mid S^c)=0.15\), so \(P(E\mid S^c)=0.85\). And \(P(E\mid S)=0.80\). You want \(P(S^c\mid E)\), not \(P(E\mid S^c)\).</p>
+  $$
+  P(E)=0.80\cdot 0.75+0.85\cdot 0.25=0.600+0.2125=0.8125,
+  \qquad
+  P(S^c\mid E)=\frac{0.85\cdot 0.25}{0.8125}=0.2615\approx 0.26.
+  $$
+  <p>Official: <b>c) 0.26</b>. Option b is the prior \(P(S^c)\). The 15% is the trap if you plug it in as \(P(E\mid S^c)\).</p>
+
+  <div class="q">
+    <p class="src">Final exam · 7 Nov 2022 · 1a · 0.25 pt · one correct · no official key</p>
+    <p>About 65% of students who enroll for the exam of the course statistical signal processing have followed the course. Suppose we know that the probability of passing the exam for students who have followed the course is 0.75, while it is 0.4 for students who have not followed it. What is the probability of passing the exam?</p>
+    <ul>
+      <li>(a) 0.53</li>
+      <li>(b) 0.52</li>
+      <li>(c) 0.63</li>
+      <li>(d) 0.65</li>
+    </ul>
+  </div>
+  <p>This one only asks the denominator. Let \(F=\) followed, \(A=\) pass. \(P(F)=0.65\), \(P(A\mid F)=0.75\), \(P(A\mid F^c)=0.40\).</p>
+  $$P(A)=0.65\cdot 0.75+0.35\cdot 0.40=0.4875+0.140=0.6275\approx 0.63.$$
+  <p><span class="tag">derived</span> <b>(c) 0.63</b>. Option (d) is the prior. There is no official key for November 2022; this is the arithmetic of the printed numbers.</p>
 
   <h3>Valid ACF, WSS, ergodic, discrete vs continuous</h3>
   <p>A random variable is one number. A process is a whole waveform per outcome of the experiment. One recording is one realization, not the process.</p>
-  <p>Wide-sense stationary: constant mean, and the autocorrelation depends only on the lag, not on absolute time. Ergodic: one infinitely long realization already contains the ensemble (time average = ensemble average, <i>and</i> the variance of that estimator goes to 0). Stationary does not imply ergodic.</p>
-  <p>The standard pair: \(X(t)=A\) with \(A\) random. Every realization is a horizontal line at a random height. Mean is constant, autocorrelation is constant, so it is WSS. Time average of realization \(i\) is \(a_i\), which is not \(E[A]\). Not ergodic in the mean. You cannot learn the ensemble by watching one resistor forever.</p>
-  <p>\(X_n=A\cos(\omega_0 n)\) with fixed phase is the other trap. Mean is 0, but \(E[X_{n_1}X_{n_2}]\) still contains \(\cos(\omega_0(n_1+n_2))\). Not WSS.</p>
-  <p>Valid autocorrelation, three tests in order:</p>
-  <ol>
-    <li>Even: \(r[-\ell]=r[\ell]\) for a real process.</li>
-    <li>\(r[0]\) is the maximum: \(r[0]\ge|r[\ell]|\).</li>
-    <li>The DTFT \(P(e^{j\theta})=\sum r[\ell]e^{-j\ell\theta}\) is never negative.</li>
-  </ol>
-  <p>January 2020 1a: four plots. \(r_A\) has \(|r[1]|&gt;r[0]\). \(r_D\) is not even. \(r_C\) is even and \(r[0]\) is the max, but \(P(\pi)=2.5-4+2-1=-0.5\). Official: only \(r_B\). The third test is the one people skip.</p>
-  <p>Pixel colour 0–255 is a discrete random variable. A whole picture is one realization of a random signal. Phone number, dice count: discrete. Weight, commute time: continuous. January 2019 1a official: B and C (dice count, phone number).</p>
+  <p>Wide-sense stationary: constant mean, and the autocorrelation depends only on the lag, not on absolute time. Ergodic: one infinitely long realization already contains the ensemble (time average = ensemble average, <i>and</i> the variance of that estimator goes to 0). Stationary does not imply ergodic. The lecture counterexample is \(X(t)=A\) with \(A\) random: WSS, not ergodic in the mean, because each realization is a different horizontal line.</p>
+  <p>Valid autocorrelation, three tests in order: even (\(r[-\ell]=r[\ell]\) for a real process); \(r[0]\ge|r[\ell]|\); the DTFT \(P(e^{j\theta})=\sum r[\ell]e^{-j\ell\theta}\) never negative.</p>
+
+  <div class="q">
+    <p class="src">Written exam · 20 Jan 2020 · 1a · 0.25 pt · one correct</p>
+    <p>Looking at Figure 1, which sequences are legitimate auto-correlation functions?</p>
+    <img src="./img/jan20-acf.jpg" alt="Four stem plots r_A, r_B, r_C, r_D versus lag l from -3 to 3.">
+    <ul>
+      <li>A. Only \(r_B[l]\).</li>
+      <li>B. Only \(r_D[l]\).</li>
+      <li>C. \(r_A[l]\) and \(r_B[l]\).</li>
+      <li>D. \(r_B[l]\) and \(r_D[l]\).</li>
+      <li>E. \(r_C[l]\) and \(r_D[l]\).</li>
+      <li>F. All.</li>
+    </ul>
+  </div>
+  <p>\(r_A\): even, but \(|r[1]|&gt;r[0]\). Dead. \(r_D\): not even. Dead. \(r_C\): even and \(r[0]\) is the max, so the first two tests pass. At \(\theta=\pi\), \(P=r[0]-2r[1]+2r[2]-2r[3]=2.5-4+2-1=-0.5\). Negative spectrum, not a valid ACF. Only \(r_B\) survives. Official: <b>A</b>. The third test is the one people skip.</p>
+
+  <div class="q">
+    <p class="src">Retake · 21 Jan 2019 · 1a · 0.5 pt · one or two correct</p>
+    <p>Let \(X\) be a random variable. Which \(X\) defined below is discrete?</p>
+    <ul>
+      <li>A. Take a random student in the classroom and let \(X\) be his/her weight.</li>
+      <li>B. Roll the dice \(n\) times and let \(X\) be the number of 4s.</li>
+      <li>C. Take a person in the street and let \(X\) be his/her phone number.</li>
+      <li>D. Let \(X\) be the time it takes for you to get to university in the morning.</li>
+    </ul>
+  </div>
+  <p>Weight and commute time are continuous. A count of fours is discrete. A phone number is a discrete label (finite set of digit strings), even though it looks like a large integer. Official: <b>B and C</b>. This paper allowed two letters; extra wrong letters cost −0.25.</p>
+
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 1b · 0.3 pt · one correct</p>
+    <p>Suppose we are analyzing a infinite set of pictures. For each pixel in each picture we record its color as an integer between 0 and 255. Which of the following statements is true?</p>
+    <ul>
+      <li>a) The color of each pixel is a continuous random variable.</li>
+      <li>b) Each picture is a realization of a random process, hence a random signal.</li>
+      <li>c) The infinite set of pictures represents a wide sense stationary random process.</li>
+      <li>d) Each picture represents a random process, and the color of each pixel is a realization of the random process, hence a random signal.</li>
+    </ul>
+  </div>
+  <p>0–255 is discrete, so (a) is false. One picture is one realization of the process (the “signal”), not the process itself, so (d) swaps the words. WSS is not given. Official: <b>b</b>.</p>
+
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 1c · 0.3 pt · one correct</p>
+    <p>Suppose we have infinitely many fair dice and we define a random process as the ensemble of the random signals obtained by rolling each die infinitely many times and recording the number on the upward face. Which of the following statements is true?</p>
+    <ul>
+      <li>a) This random process is not ergodic, but it is stationary.</li>
+      <li>b) This random process is ergodic in the mean and variance.</li>
+      <li>c) This random process is ergodic in the mean, but not in the variance.</li>
+      <li>d) None of the above.</li>
+    </ul>
+  </div>
+  <p>Fair dice, iid rolls: every realization has the same statistics as the ensemble. Official: <b>b</b>. Contrast the random-constant process \(X(t)=A\), which is the “not ergodic” option on other papers.</p>
 
   <h2 id="b2">Block 2 · freeze the data, pick \(\theta\)</h2>
 
@@ -118,90 +201,290 @@
   </div>
   <p>IID samples: the joint is a product, the log is a sum. Semicolon \(p(x;\theta)\) is classical (no prior). Bar \(p(x\mid\theta)\) is Bayesian. Mixing them is a free point lost.</p>
 
-  <p><b>January 2019 2a, exponential.</b> \(p(x;\lambda)=\lambda e^{-\lambda x}\), \(N\) iid samples. Joint \(\lambda^N\exp(-\lambda\sum x_i)\). Log: \(N\ln\lambda-\lambda\sum x_i\). Derivative: \(N/\lambda-\sum x_i=0\).</p>
+  <div class="q">
+    <p class="src">Retake · 21 Jan 2019 · 2a · 1 pt</p>
+    <p>For the random variable \(x\) with distribution</p>
+    $$p(x;\lambda)=\lambda e^{-\lambda x}$$
+    <p>find the maximum likelihood estimator for \(\lambda\), given \(N\) independent identically distributed observations \(x_i\), \(i\in\{0:N-1\}\).</p>
+  </div>
+  <p>Joint \(\lambda^N\exp(-\lambda\sum x_i)\). Log: \(N\ln\lambda-\lambda\sum x_i\). Derivative: \(N/\lambda-\sum x_i=0\).</p>
   $$\hat\lambda_{\mathrm{ML}}=\frac{N}{\sum_i x_i}=\frac{1}{\bar x}$$
-  <p>Official: that formula. It is “one over the sample mean”, which is what a rate should be. For finite \(N&gt;1\) it is biased (\(E[\hat\lambda]=N\lambda/(N-1)\)). They still want the MLE, not the unbiased cousin.</p>
+  <p>Official: that formula. It is one over the sample mean, which is what a rate should be. For finite \(N&gt;1\) it is biased (\(E[\hat\lambda]=N\lambda/(N-1)\)). They still want the MLE, not the unbiased cousin.</p>
 
-  <p class="aviso">Rayleigh trap, two exams, two PDFs. November 2019: \(p=(x/\theta^2)\exp(-x^2/(2\theta^2))\) ⇒ MLE has a square root, \(\hat\theta=\sqrt{(1/(2N))\sum x^2}\). Practice 2021: \(p=(x/\theta)\exp(-x^2/(2\theta))\) ⇒ \(\theta\) is already a scale-squared, no square root, \(\hat\theta=(1/(2N))\sum x^2\). Read the exponent before you copy last year’s answer.</p>
-  <p>November 2022 2d, angle in 2-D Gaussian: maximising the likelihood is maximising \(x_1\cos\theta+x_2\sin\theta\), which peaks at \(\hat\theta_{\mathrm{ML}}=\mathrm{atan2}(x_2,x_1)\). \(\arctan(x_2/x_1)\) loses the quadrant. No official key; that is derived.</p>
-  <p>Invariance (resit 2022 2b, official <b>c</b>): if \(\alpha=\psi(\theta)\) is one-to-one, \(\hat\theta_{\mathrm{ML}}=\psi^{-1}(\hat\alpha_{\mathrm{ML}})\). You maximise in the convenient parametrization, then transform.</p>
+  <div class="q">
+    <p class="src">Written exam · 4 Nov 2019 · 3a · 1 pt</p>
+    <p>The data \(x[0],x[1],\dots,x[N-1]\) are observed, where \(x[n]\)’s are independent and identically distributed according to the PDF</p>
+    $$p(x;\theta)=\frac{x}{\theta^2}\exp\left[-\frac{x^2}{2\theta^2}\right],\qquad x\ge 0.$$
+    <p>Find the maximum likelihood estimator for the parameter \(\theta\).</p>
+  </div>
+  <p>Log-likelihood: \(\sum\ln x[n]-2N\ln\theta-\frac{1}{2\theta^2}\sum x^2[n]\). Set the \(\theta\)-derivative to 0:</p>
+  $$\hat\theta_{\mathrm{ML}}=\sqrt{\frac{1}{2N}\sum_{n=0}^{N-1}x^2[n]}.$$
+  <p>Official: that square root. Now the cousin, same family, different parametrization:</p>
+
+  <div class="q">
+    <p class="src">Practice exam · 28 Oct 2021 · 2b · 1 pt</p>
+    <p>For the data vector \(\mathbf x\) consisting of independent samples with probability density function</p>
+    $$p(x[n])=\frac{x}{\theta}\exp\left(-\frac{x^2}{2\theta}\right),\qquad n=0,1,\dots,N-1,$$
+    <p>find an estimator for the parameter \(\theta\).</p>
+  </div>
+  <p>Here \(\theta\) already sits where \(\theta^2\) sat in 2019. Official MLE: \(\hat\theta=(1/(2N))\sum x^2[n]\), no square root. Read the exponent before you copy last year’s answer.</p>
+
+  <div class="q">
+    <p class="src">Final exam · 7 Nov 2022 · 2d · 0.5 pt · no official key</p>
+    <p>Consider the observation</p>
+    $$\mathbf x=A\begin{bmatrix}\cos\theta\\\sin\theta\end{bmatrix}+\mathbf w,$$
+    <p>where \(\mathbf w\) is white Gaussian noise. The probability density function of the observation is</p>
+    $$p(\mathbf x;\theta)=\frac{1}{2\pi\sigma^2}\exp\left(-\frac{1}{2\sigma^2}\Big[(x_1-A\cos\theta)^2+(x_2-A\sin\theta)^2\Big]\right).$$
+    <p>Find the maximum likelihood estimator of the parameter \(\theta\).</p>
+  </div>
+  <p>The only \(\theta\)-dependent piece is \(x_1\cos\theta+x_2\sin\theta\). That is \(R\cos(\theta-\phi)\) with \(\phi=\mathrm{atan2}(x_2,x_1)\), so it peaks at \(\hat\theta_{\mathrm{ML}}=\mathrm{atan2}(x_2,x_1)\). \(\arctan(x_2/x_1)\) loses the quadrant. <span class="tag">derived</span></p>
+
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 2b · 0.3 pt · one correct</p>
+    <p>Which of the following statements about the maximum likelihood estimator is true?</p>
+    <ul>
+      <li>(a) The maximum likelihood estimate is the value of \(x\) that maximizes the likelihood function.</li>
+      <li>(b) For large sample sizes, the maximum likelihood estimate is uniformly distributed, i.e. \(\hat\theta_{\mathrm{ML}}\sim\mathrm{Uniform}(-a,a)\) where \(a=\mathcal I^{-1}(\theta)\).</li>
+      <li>(c) For a transformed parameter \(\alpha=\psi(\theta)\), where \(\psi(\cdot)\) is a one-to-one mapping, the maximum likelihood estimate \(\hat\theta_{\mathrm{ML}}\) can be obtained as \(\hat\theta_{\mathrm{ML}}=\psi^{-1}(\hat\alpha_{\mathrm{ML}})\) where \(\psi^{-1}(\cdot)\) is the inverse mapping of \(\psi(\cdot)\) and \(\hat\alpha_{\mathrm{ML}}\) is the maximum likelihood estimate of the transformed parameter \(\alpha\), respectively.</li>
+    </ul>
+  </div>
+  <p>Official: <b>c</b> (invariance). (a) maximises in \(\theta\), not in \(x\). (b) the asymptotic law is Gaussian, not uniform.</p>
 
   <h3>Fisher information and the CRLB</h3>
-  <p>Unbiased estimators cannot be arbitrarily sharp. Fisher information \(\mathcal I(\theta)\) is the expected curvature of the log-likelihood. The Cramér–Rao bound says \(\mathrm{Var}\ge 1/\mathcal I\), not \(\ge\mathcal I\). For \(N\) iid samples, \(\mathcal I_N=N\,i(\theta)\), so the bound shrinks as \(1/N\). Resit 2022 2a official: that linear-in-\(N\) fact is the correct MC.</p>
+  <p>Unbiased estimators cannot be arbitrarily sharp. Fisher information \(\mathcal I(\theta)\) is the expected curvature of the log-likelihood. The Cramér–Rao bound says \(\mathrm{Var}\ge 1/\mathcal I\), not \(\ge\mathcal I\). For \(N\) iid samples, \(\mathcal I_N=N\,i(\theta)\), so the bound shrinks as \(1/N\).</p>
   $$\mathcal I(\theta)=-E\left[\frac{\partial^2\ln p}{\partial\theta^2}\right],\qquad\mathrm{Var}(\hat\theta)\ge\frac1{\mathcal I(\theta)}$$
   <p>An unbiased estimator that attains the bound is efficient, hence the MVUE. Attaining the bound is the identity \(\partial\ln p/\partial\theta=\mathcal I(\theta)(g(\mathbf x)-\theta)\). If the score does not factor that way, no finite-sample efficient estimator. You can still quote the bound.</p>
-  <p class="aviso">If the support of \(p(x;\theta)\) depends on \(\theta\), the bound does not exist. Resit 2022 2e: \(p=2x/\theta\) on \([0,\theta]\). Official: cannot derive a CRLB. Do not grind Fisher. Uniform\([0,\theta]\) is the same trap; the MLE is \(\max_i x_i\), on the boundary, no derivative.</p>
-  <p>November 2019 3b, Rayleigh above: \(\mathcal I=4N/\theta^2\), so \(\mathrm{Var}\ge\theta^2/(4N)\). The published key writes \(\hat\theta^2/(4N)\). Wrong object: the bound depends on the true parameter, not on the estimate. Report \(\theta^2/(4N)\).</p>
+
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 2a · 0.3 pt · one correct</p>
+    <p>Which of the following statements about the Cramer Rao lower bound is true?</p>
+    <ul>
+      <li>(a) The Cramer Rao lower bound can always be derived.</li>
+      <li>(b) For identical and independent distributed observations, the Cramer Rao lower bound decreases linearly with the number of observations.</li>
+      <li>(c) An estimator whose variance is lower than the Cramer Rao lower bound is called efficient.</li>
+    </ul>
+  </div>
+  <p>Official: <b>b</b>. (a) is the regularity trap below. (c) is backwards: efficient means you <i>attain</i> the bound, you cannot go below it.</p>
+
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 2e · 0.5 pt</p>
+    <p>Let</p>
+    $$p(x;\theta)=\begin{cases}(2/\theta)\,x,&amp;0\le x\le\theta,\\ 0,&amp;\text{else}\end{cases}$$
+    <p>be the probability density function of an observation \(X\). Check whether or not it is possible to derive the Cramer Rao lower bound. In case it is possible, derive the Cramer Rao lower bound. If it is not possible, justify why.</p>
+  </div>
+  <p>The support is \([0,\theta]\), which depends on \(\theta\). Regularity fails: you cannot pass \(d/d\theta\) under the integral. Official: <b>cannot</b>. Do not grind Fisher. Uniform\([0,\theta]\) is the same trap; the MLE is \(\max_i x_i\), on the boundary, no derivative.</p>
+
+  <div class="q">
+    <p class="src">Written exam · 4 Nov 2019 · 3b · 1 pt</p>
+    <p>Same PDF as 3a above,</p>
+    $$p(x;\theta)=\frac{x}{\theta^2}\exp\left[-\frac{x^2}{2\theta^2}\right],\qquad x\ge 0.$$
+    <p>Find the Cramer-Rao Lower Bound for the MLE. (The paper also gives, in effect, \(\mathbb E[x^2]=2\theta^2\).)</p>
+  </div>
+  <p>Second derivative of the log-likelihood, take \(-\mathbb E\): \(\mathcal I(\theta)=4N/\theta^2\), so \(\mathrm{Var}\ge\theta^2/(4N)\). The published key writes \(\hat\theta^2/(4N)\). Wrong object: the bound depends on the true parameter, not on the estimate. Report \(\theta^2/(4N)\).</p>
 
   <h3>MMSE is the mean. MAP is the mode.</h3>
   <p>Classical: \(\theta\) is a fixed unknown. Bayesian: \(\theta\) is drawn from a prior, you update to a posterior \(p(\theta\mid x)\), then you pick one number from that posterior. Square cost → posterior mean (MMSE). Hit-or-miss / uniform cost → posterior mode (MAP). They are different functions unless the posterior is symmetric (Gaussian: mean = mode).</p>
-  <p>Resit 2022 2d official: “MMSE is the mean of the posterior.” “MMSE is the maximum of the posterior” is MAP, and it is the trap.</p>
 
-  <p><b>November 2022 2f–g, posterior handed to you</b> (no official key). \(p(\theta\mid x)=(x+a)^2\theta e^{-(x+a)\theta}\) for \(\theta\ge 0\). That is Gamma, shape 2, rate \(b=x+a\). Mean of Gamma(shape, rate) is shape/rate. Mode of Gamma(2, \(b\)) is \(1/b\).</p>
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 2d · 0.3 pt · one correct</p>
+    <p>Which of the following statements about the Bayesian estimators is true?</p>
+    <ul>
+      <li>(a) The minimum mean square error is the maximum of the aposterior PDF.</li>
+      <li>(b) The minimum mean square error is the mean of the aposterior PDF.</li>
+      <li>(c) The minimum mean square error estimator and the maximum aposterior estimator will always result in a different estimate.</li>
+    </ul>
+  </div>
+  <p>Official: <b>b</b>. (a) is MAP. (c) fails for a Gaussian posterior, where mean = mode.</p>
+
+  <div class="q">
+    <p class="src">Final exam · 7 Nov 2022 · 2f–g · 0.5 + 0.5 pt · no official key</p>
+    <p>Assume that the parameter \(\theta\ge 0\) is a random variable that admits an exponential distribution with probability density function \(p(\theta)=a e^{-a\theta}\). The conditional probability function of the observation \(x\ge 0\) is \(p(x\mid\theta)=\theta e^{-\theta x}\). Using Bayes’ theorem, the posterior distribution for the parameter \(\theta\) after observing \(x\) is</p>
+    $$p(\theta\mid x)=\begin{cases}(x+a)^2\theta e^{-(x+a)\theta}&amp;\theta\ge 0,\\ 0,&amp;\text{else.}\end{cases}$$
+    <p>2f. Find the minimum-mean square error estimator. Hint: you can use \(\int x^2 e^{-x}\,dx=-e^{-x}(x^2+2x+2)\).</p>
+    <p>2g. Find the maximum a posteriori estimator.</p>
+  </div>
+  <p>The paper already gave you the posterior. Do not re-derive Bayes. Shape 2, rate \(b=x+a\): Gamma mean is \(2/b\), mode of Gamma(2, \(b\)) is \(1/b\).</p>
   $$\hat\theta_{\mathrm{MMSE}}=\frac{2}{x+a},\qquad\hat\theta_{\mathrm{MAP}}=\frac{1}{x+a}$$
-  <p>They differ because the posterior is skewed. When the paper gives you \(p(\theta\mid x)\), do not re-derive Bayes. Read mean vs mode off the given density.</p>
+  <p>They differ because the posterior is skewed. <span class="tag">derived</span></p>
 
-  <p><b>Resit 2022 2f–h, BPSK in Gaussian noise.</b> \(Y=X+N\), \(X=\pm 1\) equally likely, \(N\sim\mathcal N(0,\sigma^2)\). Posterior mean of a discrete \(\pm 1\) is \(P(X=1\mid y)-P(X=-1\mid y)\). After cancelling exponentials that is \((e^{2y/\sigma^2}-1)/(e^{2y/\sigma^2}+1)\). The paper prints \(\tanh u=(e^{2u}-1)/(e^{2u}+1)\). Official:</p>
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 2f–h · 0.6 each</p>
+    <p>Let \(Y=X+N\) where \(X\) and \(N\) are independent random variables. \(X\) takes the values \(+1\) and \(-1\) with equal probability, and \(N\) is a zero-mean Gaussian random variable with variance \(\sigma^2\).</p>
+    <p>2f. Evaluate the aposteriori probabilities \(P[X=1\mid Y]\) and \(P[X=-1\mid Y]\).</p>
+    <p>2g. Find the minimum mean square error estimate \(\hat X_{\mathrm{MMSE}}\) of \(X\) given \(Y\). Useful identity printed on the paper:</p>
+    $$\frac{e^{2u}-1}{e^{2u}+1}=\tanh(u).$$
+    <p>(If 2f failed, the paper prints a garbled fallback for the two posteriors. Use 2f.)</p>
+    <p>2h. Find the maximum a posterior estimator \(\hat X_{\mathrm{MAP}}\) of \(X\) given \(Y\). More specifically, find a threshold \(y_{\mathrm{th}}\) such that a decision on \(X\) depends on whether or not this threshold is exceeded. Hint: \(X\) is discrete, so \(\hat X_{\mathrm{MAP}}=\arg\max_{X\in\{1,-1\}}P[X\mid Y]\). Check the ratio of the two posteriors.</p>
+  </div>
+  <p>2f is the two-Gaussian softmax. 2g: posterior mean of a discrete \(\pm 1\) is \(P(X=1\mid y)-P(X=-1\mid y)\). After cancelling exponentials that is \((e^{2y/\sigma^2}-1)/(e^{2y/\sigma^2}+1)\). Official:</p>
   $$\hat X_{\mathrm{MMSE}}=\tanh(y/\sigma^2),\qquad\hat X_{\mathrm{MAP}}=\mathrm{sign}(y)$$
-  <p>MMSE is a soft number in \((-1,1)\). MAP is a hard decision at 0. Same sign, different magnitude. The \(\tanh\) identity is usually printed; still write the two-Gaussian posterior first (that is 2f).</p>
-  <p>Uniform prior on \([0,2]\) (January 2019 2c): MAP is the MLE projected onto \([0,2]\). The published key writes only \(N/\sum x_i\) and skips the projection. If the unconstrained MLE sits outside, the maximum is the endpoint.</p>
+  <p>MMSE is a soft number in \((-1,1)\). MAP is a hard decision at 0. Same sign, different magnitude.</p>
+
+  <div class="q">
+    <p class="src">Retake · 21 Jan 2019 · 2b–c · after the exponential MLE in 2a</p>
+    <p>Additional information regarding \(\lambda\) is provided in terms of a distribution</p>
+    $$p(\lambda)=\begin{cases}1/2&amp;0\le\lambda\le 2\\ 0&amp;\text{otherwise.}\end{cases}$$
+    <p>Treat \(p(x;\lambda)\) as a conditional \(p(x\mid\lambda)\). (b) Determine the Bayesian MMSE for \(\lambda\): first write the formula specifying each density, then solve it. (c) Using the same information, find the MAP estimator for \(\lambda\). Integrals \(\int x e^{ax}\,dx\) and \(\int x^2 e^{ax}\,dx\) are printed on the paper.</p>
+  </div>
+  <p>MAP: the prior is flat on \((0,2)\), so MAP is the MLE projected onto \([0,2]\). The published key writes only \(N/\sum x_i\) and skips the projection. If the unconstrained MLE sits outside, the maximum is the endpoint \(\hat\lambda=2\). MMSE is the integral of \(\lambda\) against the truncated posterior on \([0,2]\); the published last line is the one-sample formula despite \(N\) in 2a. See errata.</p>
 
   <h3>No noise PDF → least squares</h3>
-  <p>January 2020 Q4. Signal \(s[n]=A e^{\phi n}\), noise PDF not given. Official: least squares, “requires no function for the noise.” If \(\phi\) is known the model is linear in \(A\):</p>
+  <div class="q">
+    <p class="src">Written exam · 20 Jan 2020 · Q4 · 2.5 pt</p>
+    <p>Consider the observed data \(x[0],x[1],\dots,x[n]\), which consists of independent identically distributed samples. The data comes from an experiment which generates a signal according to model \(s[n]=A e^{\phi n}\), where the amplitude \(A\) and the power term \(\phi&lt;0\) are to be estimated based on the observed data.</p>
+    <ul>
+      <li>(a) What kind of estimators can be used to solve this problem? Explain your reasoning and write down the formulations for the estimators that can be used. [0.5 pt]</li>
+      <li>(b) For the case where \(\phi\) is known but \(A\) is unknown, find an estimator for \(A\). The estimator you find must have a closed form that depends on \(\phi\) and observed data \(x[0],\dots,x[n]\). [0.5 pt]</li>
+      <li>(c) For the case where both \(\phi\) and \(A\) are unknown, write the cost function for an estimator for \(\theta=[\phi\ A]^\top\). Hint: the expression you find will be non-linear, which is why the solution in (d) is asked. [0.5 pt]</li>
+      <li>(d) Formulate the Gauss-Newton solution for the estimator cost function derived in (c). Clearly show the iterative formulation. [1 pt]</li>
+    </ul>
+  </div>
+  <p>Official (a): least squares, “requires no function for the noise.” No PDF was given, so not MLE. (b) linear in \(A\):</p>
   $$\hat A_{\mathrm{LS}}=\frac{\sum x[n]e^{\phi n}}{\sum e^{2\phi n}}$$
-  <p>Both unknown: \(J=\sum(x[n]-A e^{\phi n})^2\), nonlinear. Iterate. Gauss–Newton linearises the <i>signal</i> and takes a linear least-squares step. Newton–Raphson iterates on \(J\) itself with the Hessian. Resit 2022 2c: both are legal. The 2020 key printed the Newton form even though the question said Gauss–Newton. Write whichever they named; know the difference.</p>
-  <p>Geometry, one sentence: the residual \(\mathbf x-\mathbf H\hat\theta\) is orthogonal to the columns of \(\mathbf H\). \(\hat\theta\) itself lives <i>in</i> that span, it is not orthogonal to it. That MC is a free point if you remember which vector is which.</p>
+  <p>(c) \(J=\sum(x[n]-A e^{\phi n})^2\), nonlinear. (d) Gauss–Newton linearises the <i>signal</i> and takes a linear least-squares step. Newton–Raphson iterates on \(J\) itself with the Hessian. The 2020 key printed the Newton form even though the question said Gauss–Newton. Write whichever they named; know the difference.</p>
+
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 2c · 0.3 pt · one correct</p>
+    <p>Which of the following statements about the least-squares estimator is true?</p>
+    <ul>
+      <li>(a) Some nonlinear least-squares estimation problems can be solved analytically by either separating the problem into nonlinear and linear least-squares problems or by transforming the nonlinear problem into a linear problem.</li>
+      <li>(b) For linear signal models, the solution vector \(\hat\theta\) is orthogonal to the span of the columns of the observation matrix \(\mathbf H\).</li>
+      <li>(c) Only the Gauss-Newton method can be applied for nonlinear least-squares problems but not the Newton-Raphson method.</li>
+    </ul>
+  </div>
+  <p>Official letter: <b>a</b>, with the 2020 key adding “no longer part of the content.” (b) is the geometry trap: the <i>residual</i> \(\mathbf x-\mathbf H\hat\theta\) is orthogonal to the columns of \(\mathbf H\); \(\hat\theta\) itself lives in that span. (c) is false: both Gauss–Newton and Newton–Raphson are legal.</p>
 
   <h2 id="b3">Block 3 · three curves on \([-\pi,\pi]\)</h2>
   <p>This is about 3 of 10 points. Typical open part: they give you an autocorrelation, or a difference equation. You plot a correlogram, you fit AR(1) with Yule–Walker, you overlay an MA, you quote values at \(0,\pi/2,\pi\). There is also one MC on periodogram / Bartlett / Welch / windows.</p>
-
-  <h3>Correlogram from a given ACF</h3>
   $$P_{\mathrm{cor}}(e^{j\theta})=r[0]+2\sum_{k\ge 1}r[k]\cos(k\theta)$$
-  <p>Only use the lags the model allows. A true MA(\(q\)) has \(r[k]=0\) for \(|k|&gt;q\), so the correlogram of those lags <b>is</b> the MA spectrum.</p>
-  <p><b>November 2019 2a.</b> \(r[0]=1\), \(r[\pm 1]=0.7\), \(r[\pm 2]=0.5\), \(r[\pm 3]=0.3\), else 0. Official:</p>
-  $$P_{\mathrm{cor}}=1+1.4\cos\theta+\cos 2\theta+0.6\cos 3\theta$$
-  <p>At \(\theta=0\) that is 4. The ACF was truncated, so this cosine polynomial <b>can go negative</b> (official sketch: small negative sidelobes). An AR fit of the same lags cannot: the AR spectrum is forced positive. Label the axis \([-\pi,\pi]\) and quote min/max at \(0\) and \(\pi\).</p>
-
-  <h3>AR(\(p\)) Yule–Walker</h3>
-  <p>Course convention: \(x[n]+a_1 x[n-1]+\cdots=i[n]\), so the denominator is \(|1+a_1 e^{-j\theta}+\cdots|^2\). Getting that sign wrong wrecks the PSD.</p>
+  <p>Course AR convention: \(x[n]+a_1 x[n-1]+\cdots=i[n]\), so the denominator is \(|1+a_1 e^{-j\theta}+\cdots|^2\). Getting that sign wrong wrecks the PSD.</p>
   $$a_1=-\frac{r[1]}{r[0]},\qquad\sigma_i^2=r[0]+a_1 r[1],\qquad P_{\mathrm{AR}}=\frac{\sigma_i^2}{|1+a_1 e^{-j\theta}|^2}$$
-  <p>Negative \(r[1]\) ⇒ \(a_1&gt;0\) ⇒ high-pass (dip at 0, more power at \(\pi\)). Practice 2021 3b official: \(a_1=1/7\), \(\sigma_i^2=64/63\), \(P(0)=0.78\), \(P(\pi)=1.38\). The paper’s fallback ACF flips the sign of \(r[1]\) on purpose. If you missed 3a, the fallback draws the wrong shape.</p>
-  <p>The 2×2 Yule–Walker right-hand side is \((\sigma_i^2,0)^\top\), not \((r[1],r[2])\). AR(2) is the same idea with a 3×3 Toeplitz (November 2019 2b, official \(0.5089/|1-0.6863 e^{-j\theta}-0.0196 e^{-j2\theta}|^2\)).</p>
 
-  <h3>MA(\(q\)), and min-phase</h3>
-  <p>For MA(1): \(r[0]=\sigma_i^2(1+b^2)\), \(r[1]=\sigma_i^2 b\). Quadratic in \(b\), two real roots, reciprocals. Both give the same \(|H(e^{j\theta})|^2\). Keep the min-phase one: \(|b|&lt;1\) (zero inside the unit circle). January 2020 3b: \(b=1/2\), not \(b=2\). The MA spectrum equals the correlogram of lags \(\{0,\pm 1\}\).</p>
-  <p>Fallback \((a,b)\) printed on the 2022 resit (\(a=1/4,b=5/4\)) is not the true MA(2) and is not min-phase. They put it there so a wrong 3b still lets you do 3c.</p>
+  <div class="q">
+    <p class="src">Written exam · 4 Nov 2019 · Q2 · 2 pt</p>
+    <p>Let \(x[n]\) be a random process whose correlation is estimated. The values for the first five lags are \(r_x[0]=1\), \(r_x[\pm 1]=0.7\), \(r_x[\pm 2]=0.5\), \(r_x[\pm 3]=0.3\), and \(r_x[\pm 4]=0\).</p>
+    <ul>
+      <li>(a) Determine and plot the correlogram power spectrum estimate. [1 pt]</li>
+      <li>(b) Assume that \(x[n]\) is modeled by an AR(2) model. Determine and plot its spectrum estimate. [1 pt]</li>
+    </ul>
+  </div>
+  <p>Only lags with \(r\neq 0\) enter the correlogram, so \(r[\pm 4]=0\) does nothing. Official (a):</p>
+  $$P_{\mathrm{cor}}=1+1.4\cos\theta+\cos 2\theta+0.6\cos 3\theta$$
+  <p>At \(\theta=0\) that is 4. The ACF was truncated, so this cosine polynomial <b>can go negative</b> (official sketch: small negative sidelobes). Official (b): \(0.5089\big/|1-0.6863 e^{-j\theta}-0.0196 e^{-j2\theta}|^2\). An AR spectrum is forced positive. Label \([-\pi,\pi]\) and quote min/max at \(0\) and \(\pi\).</p>
 
-  <h3>ARMA(1,1) from a difference equation</h3>
-  <p>Practice 2021 Q3 and November 2022 3c–g. Recipe:</p>
-  <ol>
-    <li>Read \(a_1,b_1\) from \(H(z)\) or from the DE. Watch the course sign: \(x[n]=i[n]+b_1 i[n-1]-a_1 x[n-1]\).</li>
-    <li>Impulse response: \(h[0]=1\), \(h[1]=b_1-a_1\) by polynomial division.</li>
-    <li>Expand \(E[x[k]x[k-\tau]]\) at lags 0 and 1 (or modified Yule–Walker with those \(h[k]\)). That is \(r[0],r[1]\).</li>
-    <li>For \(|\tau|&gt;1\) the MA part is dead: \(r[\tau]=-a_1 r[\tau-1]\) (AR tail).</li>
-    <li>Fake AR(1): Yule–Walker on \((r[0],r[1])\) only. Fake MA(1): correlogram of lags \(\{0,\pm 1\}\) only. Sketch both on top of the true ARMA.</li>
-  </ol>
-  <p>Practice 2021 official: \(r[0]=28/27\), \(r[1]=-4/27\), then AR \(a_1=1/7\), \(\sigma_i^2=64/63\), MA correlogram \(28/27-(8/27)\cos\theta\).</p>
+  <div class="q">
+    <p class="src">Written exam · 20 Jan 2020 · Q3 · 2 pt</p>
+    <p>Let \(x[n]\) be a random process whose auto-correlation is given by</p>
+    $$r_x[l]=\begin{cases}1/21&amp;l=0\\ 2/105&amp;l=\pm 1\\ 0&amp;\text{else.}\end{cases}$$
+    <ul>
+      <li>(a) Determine and plot the correlogram power spectrum estimate. [0.8 pt]</li>
+      <li>(b) Assume that \(x[n]\) can be modeled by an MA(1) random process. Determine and plot its spectrum estimate. How does this relate to the spectrum estimate obtained in 3(a)? Motivate your answer. [1.2 pt]</li>
+    </ul>
+  </div>
+  <p>Official (a): \(P=\frac4{105}\cos\theta+\frac1{21}\). A true MA(1) has \(r[k]=0\) for \(|k|&gt;1\), so the correlogram of those lags <b>is</b> the MA spectrum. For MA(1): \(r[0]=\sigma_i^2(1+b^2)\), \(r[1]=\sigma_i^2 b\). Quadratic in \(b\), two real roots, reciprocals. Keep the min-phase one: \(|b|&lt;1\). Official: \(b=1/2\), not \(b=2\).</p>
+
+  <div class="q">
+    <p class="src">Practice exam · 28 Oct 2021 · Q3 · 2 pt · sketches on \([-\pi,\pi]\), values at critical points</p>
+    <p>The random signal \(x[k]\) is generated by filtering innovation \(i[k]\) (white, zero mean, \(\sigma_i^2=1\)) with</p>
+    $$H(z)=\frac{1-\frac23 z^{-1}}{1-\frac12 z^{-1}}.$$
+    <p>3a. Calculate the autocorrelation function of \(x[k]\). [0.75 pt]</p>
+    <p>3b. Now suppose you model the random signal as generated by an AR(1) process. Find the AR model parameters. Obtain \(P_{\mathrm{AR1}}(e^{j\theta})\) and provide a sketch. [0.75 pt] If you could not solve 3a, use</p>
+    $$\rho[0]=28/27,\quad\rho[1]=\rho[-1]=5/27,\quad\rho[\tau]=\bigl(\tfrac12\bigr)^{|\tau|-1}\rho[1]\ \text{for }|\tau|\ge 2.$$
+    <p>3c. Approximate as MA(1). Use the correlogram method to calculate \(P_{\mathrm{corrMA1}}(e^{j\theta})\) from the ACF in 3a. There is no need to calculate the MA parameters. Sketch on top of 3b. Hint: for an MA process the number of autocorrelation lags different from zero is finite and related to the order. [0.5 pt]</p>
+  </div>
+  <p>Recipe: read \(a_1=-1/2\), \(b_1=-2/3\) from \(H(z)\) (course sign: \(x[k]=i[k]+b_1 i[k-1]-a_1 x[k-1]\)). Impulse response \(h[0]=1\), \(h[1]=b_1-a_1\). Expand \(E[x[k]x[k-\tau]]\) at lags 0 and 1. For \(|\tau|&gt;1\) the MA part is dead: \(r[\tau]=-a_1 r[\tau-1]\). Fake AR(1) = Yule–Walker on \((r[0],r[1])\) only. Fake MA(1) = correlogram of lags \(\{0,\pm 1\}\) only.</p>
+  <p>Official: \(r[0]=28/27\), \(r[1]=-4/27\), then AR \(a_1=1/7\), \(\sigma_i^2=64/63\), \(P(0)=0.78\), \(P(\pi)=1.38\) (high-pass, because \(r[1]\) is negative). MA correlogram \(28/27-(8/27)\cos\theta\). The fallback ACF in 3b flips the sign of \(r[1]\) on purpose. If you missed 3a and used \(+5/27\), you draw the wrong shape.</p>
+
+  <div class="q">
+    <p class="src">Final exam · 7 Nov 2022 · 3c–g · no official key</p>
+    <p>The random signal \(x[k]\) is described by the difference equation</p>
+    $$x[k]=i[k]-i[k-1]+\tfrac34 x[k-1],$$
+    <p>with \(i[k]\) the innovation (zero mean, \(\sigma_i^2=7/8\)).</p>
+    <ul>
+      <li>3c. Which kind of process does \(x[k]\) represent? [0.15 pt]</li>
+      <li>3d. Calculate \(P_x(e^{j\theta})\). [0.35 pt]</li>
+      <li>3e. Calculate the autocorrelation \(r[\tau]\). [0.5 pt]</li>
+      <li>3f. Model \(x[k]\) as AR(1) and calculate \(P_{\mathrm{AR1}}(e^{j\theta})\). [0.75 pt]</li>
+      <li>3g. Model \(x[k]\) as MA(1) and calculate \(P_{\mathrm{MA1}}(e^{j\theta})\). Decimal numbers are allowed. [0.75 pt]</li>
+    </ul>
+  </div>
+  <p>Same recipe as 2021. <span class="tag">derived</span>: ARMA(1,1) with \(a_1=-3/4\), \(b_1=-1\); \(P_x=\frac78 |1-e^{-j\theta}|^2\big/|1-\frac34 e^{-j\theta}|^2\); \(r[0]=1\), \(r[1]=-1/8\), then \(r[\tau]=\frac34 r[\tau-1]\) for \(|\tau|&gt;1\); fake AR \(a_1=1/8\), \(\sigma_i^2=63/64\); fake MA \(1-\frac14\cos\theta\).</p>
+
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 3b–d · 1 pt each</p>
+    <p>A real MA(2) process has difference equation \(x[n]=i[n]+a\,i[n-1]+b\,i[n-2]\), with \(i[n]\) white (zero mean, unit variance). The parameters \(a\) and \(b\) are real. The following lags of the autocorrelation are known:</p>
+    $$r_x[\tau]=\begin{cases}-15/16&amp;\tau=\pm 1,\\ 1/4&amp;\tau=\pm 2.\end{cases}$$
+    <p>3b. Based on the given lags, calculate \(a\) and \(b\).</p>
+    <p>3c. Calculate the power spectral density of \(x[n]\) using the correlogram method. If you were not able to solve 3b, you may use \(a=1/4\) and \(b=5/4\). Express the PSD as a function of \(\cos\theta\). Hint: the autocorrelation of an MA process is of finite length.</p>
+    <p>3d. Now assume \(x[n]\) can be modeled as generated by an AR(1) process. Find the AR parameters and the PSD of the AR(1) (as a function of \(\cos\theta\)). Same fallback \(a=1/4\), \(b=5/4\). Hint: some parameters may result in fractions with large numbers.</p>
+  </div>
+  <p>You also need \(r[0]\). For MA(2), \(r[2]=\sigma_i^2 b=b\) (unit-variance innovation), so \(b=1/4\), and \(r[1]=\sigma_i^2(a+ab)\) gives \(a=-3/4\). Official 3b: \(b=1/4\), \(a=-3/4\). Then \(r[0]=1+a^2+b^2=13/8\). Official 3c: \(\frac{13}8-\frac{15}8\cos\theta+\frac12\cos 2\theta\). Official 3d: \(a_1=15/26\), \(\sigma_i^2=451/416\). The fallback \(a=1/4\), \(b=5/4\) is not the true MA(2) and is not min-phase. They put it there so a wrong 3b still lets you do 3c–d.</p>
 
   <h3>The nonparametric MC</h3>
-  <p>Periodogram \(\frac1N|\sum x[n]e^{-jn\theta}|^2\): Fourier transform of the biased ACF, asymptotically unbiased, variance \(\propto P^2\), <b>does not fall with \(N\)</b>, inconsistent. A longer record is not a quieter periodogram.</p>
-  <p>Bartlett: average \(K\) periodograms of <b>non-overlapping</b> length-\(M\) blocks. Variance \(\propto 1/K\). Bias goes <b>up</b> (shorter blocks, wider main lobe). January 2019 1c official: that bias statement is true.</p>
-  <p>Welch / WOSA: segments <b>overlap</b>. Variance is not \(1/K\). Course view at the same \(K\): variance larger than Bartlett, still below the raw periodogram. January 2020 1b official: D, that fact. “Welch variance decreases as \(1/K\)” is the yearly false statement.</p>
-  <p>Main lobe = resolution. Side lobes = leakage. A tapered window of the same \(N\) has a <i>wider</i> main lobe than rectangular, so worse resolution, less leakage. Zero-padding interpolates the same smeared curve on a finer grid. It does not raise resolution. January 2019 1c: zeropad-increases-resolution is false.</p>
-  <p>Blackman–Tukey (lag-window the ACF, then Fourier): consistent if the lag window grows slower than \(N\).</p>
-  <p>FTD / DFT picture (resit 2022 3a, official <b>B = 1B, 2D, 3C, 4A</b>): infinite cosine → two impulses; window → sinc; DFT = samples of that sinc; zeropad = denser samples, same envelope. Option (a) on that paper has a typo (two “3”s).</p>
+  <p>Periodogram \(\frac1N|\sum x[n]e^{-jn\theta}|^2\): Fourier transform of the biased ACF, asymptotically unbiased, variance \(\propto P^2\), <b>does not fall with \(N\)</b>, inconsistent. A longer record is not a quieter periodogram. Bartlett: average \(K\) periodograms of <b>non-overlapping</b> length-\(M\) blocks, variance \(\propto 1/K\), bias up. Welch / WOSA: segments overlap, variance is not \(1/K\). Main lobe = resolution. Side lobes = leakage. Zero-padding interpolates the same smeared curve; it does not raise resolution.</p>
+
+  <div class="q">
+    <p class="src">Retake · 21 Jan 2019 · 1c · 0.5 pt · one or two correct</p>
+    <p>In the context of non-parametric spectral estimation methods, which ones of the following statements are true?</p>
+    <ul>
+      <li>A. In Bartlett’s method, the bias of the estimated power spectrum increases as the length of the window \(M\) of each raw periodogram decreases.</li>
+      <li>B. In Welch’s periodogram with overlap of 50%, the variance of the power spectrum estimate decreases as \(1/K\), with \(K\) equal to the number of raw periodogram estimates.</li>
+      <li>C. The Blackman-Tukey correlogram is a consistent estimator of the power spectrum.</li>
+      <li>D. In general, zero-padding increases spectral resolution.</li>
+    </ul>
+  </div>
+  <p>Official: <b>A and C</b>. B is the yearly false statement (overlap ⇒ not \(1/K\)). D is false: zeropad interpolates.</p>
+
+  <div class="q">
+    <p class="src">Written exam · 20 Jan 2020 · 1b · 0.25 pt · one correct (unlettered bullets; key uses A/B/C/D = 1st/2nd/3rd/4th)</p>
+    <p>Select the correct answer regarding the Welch’s method for non-parametric spectral estimation, also known as WOSA:</p>
+    <ul>
+      <li>It consists of averaging \(K\) different periodograms, obtained from \(K\) segments of the observed random signal, not allowing overlap between the segments. The variance is lower than the periodogram, proportionally to \(1/K\).</li>
+      <li>It consists of averaging \(K\) different periodograms, obtained from \(K\) segments of the observed random signal, allowing overlap between the segments. The variance is lower than Bartlett’s method, but not proportionally to \(1/K\).</li>
+      <li>It consists of averaging \(K\) different periodograms, obtained from \(K\) segments of the observed random signal, not allowing overlap between the segments. The variance is larger than Bartlett’s method, but lower than the periodogram.</li>
+      <li>It consists of averaging \(K\) different periodograms, obtained from \(K\) segments of the observed random signal, allowing overlap between the segments. The variance is larger than Bartlett’s method, but lower than the periodogram.</li>
+    </ul>
+  </div>
+  <p>Welch allows overlap. Course view at the same \(K\): variance larger than Bartlett, still below the periodogram. Official: <b>D</b> (fourth bullet). The first bullet is Bartlett, not Welch.</p>
+
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 3a · 0.3 pt · one correct</p>
+    <p>The infinitely-long discrete-time signal \(x[n]=20\cos(2\pi \frac{f}{f_s}n)\), with \(f=25\,\mathrm{Hz}\) and \(f_s=50\,\mathrm{Hz}\), is windowed with a rectangular window of length \(N\) to obtain the windowed signal \(\tilde x[n]\). In the plots below, the following Fourier transforms are shown:</p>
+    <ol>
+      <li>The Fourier Transform for Discrete time signals (FTD) of \(x[n]\)</li>
+      <li>The FTD of \(\tilde x[n]\)</li>
+      <li>The Discrete Fourier Transform (DFT) of \(\tilde x[n]\) calculated for \(N=24\) and zero padding of \(M=12\) samples</li>
+      <li>The Discrete Fourier Transform (DFT) of \(\tilde x[n]\) calculated for \(N=24\) with no zero padding</li>
+    </ol>
+    <p>Which of the following is the correct association?</p>
+    <img src="./img/jan22-ftd.jpg" alt="Four overlaid Fourier transforms versus frequency in Hz, peaks near ±25 Hz.">
+    <ul>
+      <li>(a) 1B, 2D, 3A, 3C</li>
+      <li>(b) 1B, 2D, 3C, 4A</li>
+      <li>(c) 1C, 2A, 3D, 4B</li>
+      <li>(d) 1D, 2B, 3C, 4A</li>
+    </ul>
+  </div>
+  <p>Infinite cosine → two impulses (sharp). Window → sinc. DFT = samples of that sinc. Zeropad = denser samples, same envelope. Official: <b>b) 1B, 2D, 3C, 4A</b>. Option (a) has a typo (two “3”s).</p>
 
   <h3>Spectral factorisation</h3>
-  <p>Write \(P\) in \(\cos\theta\), replace \(\cos\theta=(z+z^{-1})/2\), factor \(P(z)=\sigma_i^2 L(z)L(z^{-1})\), put every pole <i>and</i> every zero of \(L\) inside the unit circle, scale so \(l[0]=1\). \(L(z^{-1})\) is max-phase and is the trap. Resit 2022 1d official: <b>c</b>, \(L(z)=(1-\frac14 z^{-1})/(1+\frac34 z^{-1})\), \(\sigma_i^2=2\) not \(1/2\). The key notes a possible sign typo in the printed denominator; still pick c.</p>
+  <p>Write \(P\) in \(\cos\theta\), replace \(\cos\theta=(z+z^{-1})/2\), factor \(P(z)=\sigma_i^2 L(z)L(z^{-1})\), put every pole <i>and</i> every zero of \(L\) inside the unit circle, scale so \(l[0]=1\). \(L(z^{-1})\) is max-phase and is the trap.</p>
 
-  <div class="drill">
-    <h3>Correlogram, from memory</h3>
-    <p>\(r[0]=1/21\), \(r[\pm 1]=2/105\), else 0. Write \(P(e^{j\theta})\) in \(\cos\theta\). What process is this, and which MA(1) coefficient do you keep?</p>
-    <details>
-      <summary>Official, Jan 2020 3a–b</summary>
-      <p>\(P=\frac4{105}\cos\theta+\frac1{21}\). It is MA(1), and the correlogram <i>is</i> the MA spectrum. Min-phase \(b=1/2\), not \(b=2\).</p>
-    </details>
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 1d · 0.3 pt · one correct</p>
+    <p>Random signal \(x[n]\) has power spectral density</p>
+    $$P_x(e^{j\theta})=\frac{\frac{17}{8}-\cos\theta}{\frac{25}{16}-\frac32\cos\theta},$$
+    <p>which is factorized as</p>
+    $$P_x(e^{j\theta})=2\,\frac{1-\frac14 z-1+\frac14 z^{-1}}{1+\frac34 z+1+\frac34 z^{-1}}.$$
+    <p>Which of the following statements is true?</p>
+    <ul>
+      <li>a) The provided factorization does not represent the spectral factorization of signal \(x[n]\).</li>
+      <li>b) The innovation filter is given by \(L(z^{-1})=(1-\frac14 z)/(1+\frac34 z)\).</li>
+      <li>c) The innovation filter is given by \(L(z)=(1-\frac14 z^{-1})/(1+\frac34 z^{-1})\).</li>
+      <li>d) The input variance is given by \(\sigma_i^2=1/2\).</li>
+    </ul>
   </div>
+  <p>Official: <b>c</b>, \(\sigma_i^2=2\) not \(1/2\). (b) is max-phase. The key notes a possible sign typo in the printed denominator; still pick c.</p>
 
   <h2 id="b4">Block 4 · which region is “decide \(\mathcal H_1\)”</h2>
   <div class="why">
@@ -246,31 +529,103 @@
   <p>False alarm is not “the overlap”. It is not under \(\mathcal H_1\).</p>
 
   <h3>Neyman–Pearson vs Bayes</h3>
-  <p>Neyman–Pearson: maximise \(P_D\) at a fixed \(P_{\mathrm{FA}}=\alpha\). Set the threshold from the \(\mathcal H_0\) law only. The \(\mathcal H_1\) law is not used until you compute \(P_D\).</p>
-  <p>Bayes, 0-1 costs: \(\gamma=P_0/P_1\). That is <b>not</b> \(\mathcal L=1\) unless the priors are equal. November 2022 4f plots the two <i>weighted</i> PDFs \(P_i\,p(y\mid\mathcal H_i)\); the threshold is where they cross.</p>
-  <p>ROC: \(P_D\) vs \(P_{\mathrm{FA}}\), upper triangle, through (0,0) and (1,1). Larger separation (bigger mean shift, bigger \(\lambda_1/\lambda_0\)) lifts the curve toward the top-left. If your curve sits in the lower triangle you used the CDF (left tail) instead of the complementary CDF, or you swapped the hypotheses. Practice 2021 1e: “H0 variance too high” cannot flip the ROC into the lower triangle. Official <b>a</b>.</p>
+  <p>Neyman–Pearson: maximise \(P_D\) at a fixed \(P_{\mathrm{FA}}=\alpha\). Set the threshold from the \(\mathcal H_0\) law only. The \(\mathcal H_1\) law is not used until you compute \(P_D\). Bayes, 0-1 costs: \(\gamma=P_0/P_1\). That is <b>not</b> \(\mathcal L=1\) unless the priors are equal.</p>
+  <p>ROC: \(P_D\) vs \(P_{\mathrm{FA}}\), upper triangle, through (0,0) and (1,1). Larger separation lifts the curve toward the top-left. If your curve sits in the lower triangle you used the CDF (left tail) instead of the complementary CDF, or you swapped the hypotheses.</p>
+
+  <div class="q">
+    <p class="src">Practice exam · 28 Oct 2021 · 1e · 0.5 pt · one correct</p>
+    <p>When plotting the receiver operating characteristic (ROC) curves, the common practice is to have the probability of detection \(P_d\) on the vertical axis and the probability of false alarm \(P_{fa}\) on the horizontal axis. In that case, the ROC curves should appear on the upper triangular part of the plot. Assume you are running simulations to generate ROC curves. The two hypotheses are</p>
+    $$y[n]\sim\begin{cases}\mathcal N(0,\sigma^2)&amp;\text{if }\mathcal H_0\\ \mathcal N(\mu,\sigma^2)&amp;\text{if }\mathcal H_1\end{cases},\qquad\mu&gt;0.$$
+    <p>If your curves appeared on the lower triangular part of the plot, which one of the following cannot be the reason?</p>
+    <ul>
+      <li>a) The variance of the null hypothesis \(\mathcal H_0\) is set too high.</li>
+      <li>b) \(\mathcal H_0\) and \(\mathcal H_1\) are switched in the likelihood ratio.</li>
+      <li>c) The cumulative probability density function is used to calculate \(P_d\).</li>
+      <li>d) \(P_d\) and \(P_{fa}\) are switched.</li>
+    </ul>
+  </div>
+  <p>Official: <b>a</b>. Raising \(\sigma_0^2\) moves the curve toward the diagonal; it does not flip it into the lower triangle. (b), (c) and (d) all invert the ROC.</p>
 
   <h3>Four PDF pairs you will actually see</h3>
-  <p><b>Mean-shift Gaussians.</b> \(\mathcal H_0:\mathcal N(0,\sigma^2)\), \(\mathcal H_1:\mathcal N(A,\sigma^2)\), \(A&gt;0\). Decide \(\mathcal H_1\) on the right tail of \(\bar x\). \(P(y&gt;y_{\mathrm{th}})=\tfrac12[1-\mathrm{erf}((y_{\mathrm{th}}-\mu)/(\sigma\sqrt 2))]\). \(P_{\mathrm{FA}}\) uses \(\mu=0\). Tables of \(\mathrm{erf}\) or \(Q\) are given; do not copy one onto the A4.</p>
-  <p>January 2019 3b, first row: threshold 1, \(\mathcal H_0=\mathcal N(0,1)\), \(\mathcal H_1=\mathcal N(1,1)\). \(Z=1\), \(\mathrm{erf}(1/\sqrt 2)=0.683\), \(P_{\mathrm{FA}}=\tfrac12(1-0.683)=0.159\). Under \(\mathcal H_1\) the threshold sits on the mean, so \(P_D=0.5\). Official table: 0.5 / 0.159; 0.977 / 0.159; 0.842 / 0.159; 0.842 / 0.023. \(P_{\mathrm{FA}}\) does not depend on \(\mu_1\).</p>
 
-  <p><b>Equal-mean, unequal-variance</b> (November 2019 Q4). \(\sigma_1&gt;\sigma_0\). Statistic \(\sum x[n]^2\). H1 is the wide one, so H1 = outer tails. Official at \(x_{\mathrm{th}}=\sigma_1=3\sigma_0\): \(P_D=0.318\), \(P_{\mathrm{FA}}=0.004\). Log-LRT:</p>
-  $$\ln\frac{\sigma_0^N}{\sigma_1^N}-\frac{\sum x^2}{2\sigma_1^2}+\frac{\sum x^2}{2\sigma_0^2}\gtrless\ln\gamma$$
-
-  <p><b>Two exponentials</b> (January 2020 Q5). \(\lambda_1&gt;\lambda_0\). H1 is the faster decay, mass near 0, decide H1 for <b>small</b> \(x\). \(\mathcal L=1\) gives \(x_{\mathrm{th}}=\ln(\lambda_1/\lambda_0)/(\lambda_1-\lambda_0)\). Official \(\lambda_1=2\), \(\lambda_0=0.1\): \(x_{\mathrm{th}}=1.58\). Then \(P_D=1-e^{-\lambda_1 x_{\mathrm{th}}}\) (left of threshold). Same paper 5b, official: \(P_{\mathrm{FA}}=0.1\Rightarrow x_{\mathrm{th}}=1.05\), then \(P_D=0.9\Rightarrow\lambda_1=2.19\).</p>
-
-  <p><b>Gauss vs Laplace, or two Laplaces.</b> Heavier tails → H1 outside. Narrower Laplace → H1 in the centre, inequality flips. Resit 2022 4b–c official: Laplace vs \(\mathcal N(0,1)\), H1 = tails, \(y_{\mathrm{th}}=\pm 1.5884\), \(P_D=0.4519\), \(P_{\mathrm{FA}}=0.1118\) (uses \(Q(1.59)=0.0559\)). November 2022 4c two Laplaces, derived: \(\sum|x_n|\gtrless_{\mathcal H_1}^{\mathcal H_0}\gamma'\), H1 = small sum.</p>
-
-  <p>Matched filter MC (resit 2022 4a, official <b>a</b>): output SNR is maximised. Impulse response is \(s[-n]\) or \(s[N-1-n]\), not \(s[n]\), unless you correlate instead of convolve. It exists for coloured noise too, after whitening.</p>
-
-  <div class="drill">
-    <h3>Which tail?</h3>
-    <p>One sample. \(\mathcal H_0:\mathcal N(0,\sigma_0^2)\), \(\mathcal H_1:\mathcal N(0,\sigma_1^2)\) with \(\sigma_1&gt;\sigma_0\). Thresholds where \(\mathcal L=1\). Where do you decide \(\mathcal H_1\)? What do you shade for \(P_{\mathrm{FA}}\)?</p>
-    <details>
-      <summary>Official, Nov 2019 4a</summary>
-      <p>H1 is wider → decide H1 in the outer tails. \(P_{\mathrm{FA}}\) is the two tails of the <i>narrow</i> H0 Gaussian outside \(\pm x_{\mathrm{th}}\). \(P_D\) is the two tails of the wide H1. Statistic for \(N\) samples: \(\sum x[n]^2\).</p>
-    </details>
+  <div class="q">
+    <p class="src">Retake · 21 Jan 2019 · 3b · 1.25 pt</p>
+    <p>Consider the two hypotheses</p>
+    $$p(x)\sim\begin{cases}\mathcal N(0,1)&amp;\mathcal H_0\\ \mathcal N(\mu_1,\sigma_1)&amp;\mathcal H_1.\end{cases}$$
+    <p>The CDF is given as \(p(x\le X;\mu,\sigma)=\tfrac12\bigl[1+\mathrm{erf}((X-\mu)/(\sigma\sqrt 2))\bigr]\). Using the table for \(\mathrm{erf}(X/\sqrt 2)\) below, calculate \(P_d\) and \(P_{fa}\) for the listed thresholds \(X\), means \(\mu_1\) and standard deviations \(\sigma_1\).</p>
+    <table>
+      <tr><th>\(X\)</th><th>\(\mathrm{erf}\)</th></tr>
+      <tr><td>−3</td><td>−0.997</td></tr>
+      <tr><td>−2</td><td>−0.954</td></tr>
+      <tr><td>−1</td><td>−0.683</td></tr>
+      <tr><td>0</td><td>0</td></tr>
+      <tr><td>1</td><td>0.683</td></tr>
+      <tr><td>2</td><td>0.954</td></tr>
+      <tr><td>3</td><td>0.997</td></tr>
+    </table>
+    <table>
+      <tr><th>\(X\)</th><th>\(\mu_1\)</th><th>\(\sigma_1\)</th><th>\(P_d\)</th><th>\(P_{fa}\)</th></tr>
+      <tr><td>1</td><td>1</td><td>1</td><td></td><td></td></tr>
+      <tr><td>1</td><td>3</td><td>1</td><td></td><td></td></tr>
+      <tr><td>1</td><td>3</td><td>2</td><td></td><td></td></tr>
+      <tr><td>2</td><td>3</td><td>1</td><td></td><td></td></tr>
+    </table>
   </div>
+  <p>Right-tail test: \(P(y&gt;y_{\mathrm{th}})=\tfrac12[1-\mathrm{erf}((y_{\mathrm{th}}-\mu)/(\sigma\sqrt 2))]\). \(P_{fa}\) uses \(\mu=0\), \(\sigma=1\). First row: threshold 1 sits on the \(\mathcal H_1\) mean, so \(P_d=0.5\); \(Z=1\), \(\mathrm{erf}=0.683\), \(P_{fa}=\tfrac12(1-0.683)=0.159\). Official: 0.5 / 0.159; 0.977 / 0.159; 0.842 / 0.159; 0.842 / 0.023. \(P_{fa}\) does not depend on \(\mu_1\). The erf table is printed; do not copy one onto the A4.</p>
+
+  <div class="q">
+    <p class="src">Written exam · 4 Nov 2019 · Q4 · 2 pt</p>
+    <p>Consider the binary hypothesis testing problem where the observed data \(x[0],x[1],\dots,x[n]\) consists of independent identically distributed samples and follows the PDFs</p>
+    $$\mathcal H_0:\ x[n]\sim\mathcal N(0,\sigma_0^2),\qquad\mathcal H_1:\ x[n]\sim\mathcal N(0,\sigma_1^2),\qquad\sigma_1&gt;\sigma_0.$$
+    <ul>
+      <li>(a) For a single sample, roughly plot the PDFs and mark the threshold for likelihood ratio \(\mathcal L(x[n])=1\). Write the equations for \(P_d\) and \(P_{fa}\) in terms of \(p(x[n];\mathcal H_1)\) and \(p(x[n];\mathcal H_0)\) (you don’t need to write the Gaussian PDF explicitly). [0.5 pt]</li>
+      <li>(b) Calculate \(P_d\) and \(P_{fa}\) when \(\sigma_1=3\sigma_0\) and the likelihood ratio is chosen such that the threshold is \(x_{\mathrm{th}}=\sigma_1\). Use, for \(x\sim\mathcal N(0,\sigma^2)\): \(Pr(0\le x\le\sigma)=0.341\), \(Pr(\sigma\le x\le 2\sigma)=0.136\), \(Pr(2\sigma\le x\le 3\sigma)=0.021\). [0.5 pt]</li>
+      <li>(c) Derive the log-likelihood ratio test that uses the observed data \(x[0],\dots,x[n]\), starting from \(\mathcal L(x)=p(\mathbf x;\mathcal H_1)/p(\mathbf x;\mathcal H_0)&gt;\gamma\). [1 pt]</li>
+    </ul>
+  </div>
+  <p>H1 is wider → decide H1 in the outer tails. \(P_{\mathrm{FA}}\) is the two tails of the <i>narrow</i> H0 Gaussian outside \(\pm x_{\mathrm{th}}\). Official (b): \(P_D=0.318\), \(P_{\mathrm{FA}}=0.004\). Under H1, \(x_{\mathrm{th}}=\sigma_1\) is one own-sd out: \(P_D=2(0.5-0.341)=0.318\). Under H0, \(x_{\mathrm{th}}=3\sigma_0\) is three own-sd out: \(P_{\mathrm{FA}}=2(0.5-0.341-0.136-0.021)=0.004\). Official (c):</p>
+  $$\ln\frac{\sigma_0^N}{\sigma_1^N}-\frac{\sum x^2}{2\sigma_1^2}+\frac{\sum x^2}{2\sigma_0^2}\gtrless\ln\gamma$$
+  <p>Statistic \(\sum x[n]^2\). Energy detector, not a mean detector.</p>
+
+  <div class="q">
+    <p class="src">Written exam · 20 Jan 2020 · Q5 · 2.5 pt</p>
+    <p>Consider the binary hypothesis testing problem where the observed data \(x[0],x[1],\dots,x[n]\) consists of independent identically distributed samples and follows the exponential PDFs</p>
+    $$\mathcal H_0:\ x[n]\sim\lambda_0 e^{-\lambda_0 x},\qquad\mathcal H_1:\ x[n]\sim\lambda_1 e^{-\lambda_1 x},$$
+    <p>where \(x\ge 0\), \(\lambda_1&gt;\lambda_0&gt;0\).</p>
+    <ul>
+      <li>(a) For a single sample, roughly plot the PDFs for \(\lambda_1=2\) and \(\lambda_0=0.1\). Calculate and mark the threshold \(x_{\mathrm{th}}\) for likelihood ratio \(\mathcal L(x_{\mathrm{th}})=1\). Write the equations for \(P_d\) and \(P_{fa}\) in terms of \(\lambda_0\), \(\lambda_1\) and \(x_{\mathrm{th}}\). [0.75 pt] Hint: the CDF is \(P(x&lt;x_{\mathrm{th}})=1-e^{-\lambda x}\). Design your test such that \(P_d&gt;P_{fa}\).</li>
+      <li>(b) Given \(\lambda_0=0.1\), find \(\lambda_1\) that gives \(P_d=0.9\) when \(P_{fa}=0.1\). [0.5 pt]</li>
+      <li>(c) Plot the ROC for that \(\lambda_1\), using \(P_{fa}=0.5\) and \(P_{fa}=0.9\) as reference points. Roughly sketch two more curves for \(\lambda_1\) increased and \(\lambda_1\) decreased. [1.25 pt]</li>
+    </ul>
+  </div>
+  <p>H1 is the faster decay, mass near 0, so decide H1 for <b>small</b> \(x\). The hint “\(P_d&gt;P_{fa}\)” is that left-side choice. Official (a): \(x_{\mathrm{th}}=1.58\), \(P_D=1-e^{-\lambda_1 x_{\mathrm{th}}}\) (left of threshold). Official (b): \(P_{fa}=0.1\Rightarrow x_{\mathrm{th}}=1.05\), then \(P_d=0.9\Rightarrow\lambda_1=2.19\). Larger \(\lambda_1\) lifts the ROC toward the top-left.</p>
+
+  <div class="q">
+    <p class="src">Resit · 24 Jan 2022 · 4a–c</p>
+    <p>4a. Which of the following statements about the matched filter is true? [0.3 pt]</p>
+    <ul>
+      <li>(a) The signal-to-noise ratio at the output of the matched filter is maximized.</li>
+      <li>(b) The matched filter can be implemented as a FIR filter with impulse response \(h[n]=s[n]\).</li>
+      <li>(c) The matched filter can only be applied for uncorrelated noise samples.</li>
+    </ul>
+    <p>4b. Consider hypotheses [0.7 pt]</p>
+    $$p_Y(y\mid\mathcal H_0)=\frac{1}{\sqrt{2\pi}}e^{-y^2/2},\qquad p_Y(y\mid\mathcal H_1)=\frac14 e^{-|y|/2}.$$
+    <p>Provide a sketch for the two PDFs and indicate the probability of false alarm and missed detection for a likelihood test with \(\gamma=1\).</p>
+    <p>4c. Compute \(P_D\) and \(P_{\mathrm{FA}}\) at that threshold. The 2022 paper prints a \(Q\)-table; they use \(Q(1.59)=0.0559\). [1.0 pt]</p>
+  </div>
+  <p>Official 4a: <b>a</b>. Impulse response is \(s[-n]\) or \(s[N-1-n]\), not \(s[n]\), unless you correlate instead of convolve. It exists for coloured noise too, after whitening. Official 4b–c: Laplace has heavier tails than \(\mathcal N(0,1)\), so H1 = outer tails. \(y_{\mathrm{th}}=\pm 1.5884\), \(P_D=0.4519\), \(P_{\mathrm{FA}}=2\times 0.0559=0.1118\). Shade: miss is the centre of the Laplace; false alarm is the Gaussian tails.</p>
+
+  <div class="q">
+    <p class="src">Final exam · 7 Nov 2022 · 4c–d · no official key</p>
+    <p>Under the two hypotheses a single observation \(x\) admits a zero-mean Laplacian distribution, but with different variances:</p>
+    $$p(x;\mathcal H_0)=\tfrac12 e^{-|x|},\qquad p(x;\mathcal H_1)=e^{-2|x|}.$$
+    <p>Assume the \(N\) observations are iid. 4c. Show that the likelihood ratio test takes the form</p>
+    $$\sum_{n=0}^{N-1}|x_n|\;\underset{\mathcal H_1}{\overset{\mathcal H_0}{\gtrless}}\;\gamma'$$
+    <p>and determine \(\gamma'\). Hint: pay special attention to the inequality. [0.5 pt]</p>
+    <p>4d. For \(N=1\), set \(Y=|X|\), so \(p(y;\mathcal H_0)=e^{-y}\), \(p(y;\mathcal H_1)=2e^{-2y}\), and \(y\gtrless_{\mathcal H_1}^{\mathcal H_0}\gamma'\). The two densities are plotted below. Indicate \(P_{\mathrm{FA}}\) and \(P_M\) for \(\gamma'=1\). [0.25 pt]</p>
+    <img src="./img/nov22-shade.jpg" alt="Solid H0 exponential starting at 1, dashed H1 exponential starting at 2, versus y from 0 to 5.">
+  </div>
+  <p>H1 is the <i>narrower</i> Laplace (rate 2 vs 1). Large \(|x|\) favours H0, so the inequality flips: decide H1 when the sum of absolute values is <b>small</b>. <span class="tag">derived</span> \(\gamma'=N\ln 2-\ln\gamma\). At \(\gamma'=1\), decide H1 for \(y&lt;1\): \(P_{\mathrm{FA}}\) is H0 on \((0,1)\) (under the solid curve); \(P_M\) is H1 on \((1,\infty)\) (under the dashed curve). Do not shade the usual right tail.</p>
 
   <h2 id="keys">Marking keys</h2>
   <p>Use these after you sit the paper. <span class="tag exam">no official key</span> means there is no published letter. <span class="tag">derived</span> is computed here, never a published letter.</p>

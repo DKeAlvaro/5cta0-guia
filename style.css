@@ -102,6 +102,19 @@ td b { font-weight: 600; }
   margin: 0 0 1.05rem;
 }
 .why p:last-child { margin-bottom: .2rem; }
+.q {
+  background: var(--paper-2);
+  padding: .8rem .9rem .5rem;
+  margin: 0 0 1rem;
+}
+.q .src {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: .62rem; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 .45rem;
+}
+.q p:last-child, .q ul:last-child, .q ol:last-child { margin-bottom: .25rem; }
+.q img { max-width: 100%; height: auto; display: block; margin: .4rem 0 .55rem; }
+.q ul, .q ol { margin-bottom: .45rem; }
 .fig { margin: .55rem 0 .35rem; }
 .fig svg { width: 100%; height: auto; display: block; }
 .cap {
