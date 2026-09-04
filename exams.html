@@ -64,12 +64,31 @@
 
   <h2 id="b1">Block 1 · they swapped the condition</h2>
 
+  <h3>Notation for this block</h3>
+  <p>Every Block-1 Bayes question uses the same five objects. Write them down before you touch a number:</p>
+  <table>
+    <tr><th>Object</th><th>Symbol</th><th>Example (virus question)</th></tr>
+    <tr><td>Observation</td><td>\(A\)</td><td>test is positive</td></tr>
+    <tr><td>Hidden cause</td><td>\(B\)</td><td>person is infected</td></tr>
+    <tr><td>Prior</td><td>\(P(B)\)</td><td>1.8% infected, before any test</td></tr>
+    <tr><td>Likelihood</td><td>\(P(A\mid B)\)</td><td>95% sensitivity</td></tr>
+    <tr><td>Evidence</td><td>\(P(A)\)</td><td>positives overall — the denominator</td></tr>
+  </table>
+  <p>Reading rules. \(P(A\mid B)\) is "probability of \(A\) given \(B\)" — the bar means "given", the right side is what you assume true. \(B^c\) means "not \(B\)". The two conditionals \(P(A\mid B)\) and \(P(B\mid A)\) run in opposite directions and are different numbers: the first is what the test manufacturer prints, the second is what the doctor wants. Bayes turns one into the other. Swapping them is the exam.</p>
+
   <h3>Bayes, with the complement in the denominator</h3>
   <div class="why">
     <p>You are given how the data look <i>if</i> a cause is true (sensitivity, pass rate of a machine). You are asked how likely the cause is, <i>given</i> the data. Those are not the same number. Bayes unswaps them. The distractors are always the sensitivity, or \(P(\text{data})\) with no cause.</p>
   </div>
   $$P(B\mid A)=\frac{P(A\mid B)\,P(B)}{P(A\mid B)\,P(B)+P(A\mid B^c)\,P(B^c)}$$
-  <p>Name the events before you touch a calculator. \(A\) is what you observed. \(B\) is the hidden cause. The second term in the denominator is the whole point: the data can also happen when \(B\) is false.</p>
+  <p><b>Method, every time — write these four lines on the script:</b></p>
+  <ol>
+    <li><b>Name.</b> One line: "let \(A =\) [what you observed], \(B =\) [hidden cause]".</li>
+    <li><b>List.</b> Prior \(P(B)\); likelihood \(P(A\mid B)\); false-positive rate \(P(A\mid B^c)\). Translate words to symbols first — half the errors happen here, not in the arithmetic.</li>
+    <li><b>Denominator.</b> Total probability: the data happen <i>with</i> the cause plus <i>without</i> it. Both terms. This line alone is often worth 1 pt (machines Q2a, Nov22 1a).</li>
+    <li><b>Divide.</b> Numerator = the "with the cause" pile; denominator = everything.</li>
+  </ol>
+  <p>Distractor map: the option equal to the sensitivity skipped the denominator. The option equal to the prior ignored the test. If your answer equals either printed number, you fell for it.</p>
 
   <div class="q">
     <p class="src">Practice exam · 28 Oct 2021 · 1a · 0.5 pt · one correct</p>
@@ -81,14 +100,17 @@
       <li>d) 92%</li>
     </ul>
   </div>
-  <p>Let \(B=\) infected, \(A=\) positive. Then \(P(B)=0.018\), \(P(B^c)=0.982\), \(P(A\mid B)=0.95\), \(P(A\mid B^c)=0.03\).</p>
+  <p><b>Step 1 — name.</b> \(A =\) "tests positive" (observed). \(B =\) "infected" (hidden). You want \(P(B\mid A)\), not \(P(A\mid B)\).</p>
+  <p><b>Step 2 — list.</b> "Infected 1.8%" is the prior: \(P(B)=0.018\), so \(P(B^c)=0.982\). "Detects 95% when present" is the sensitivity: \(P(A\mid B)=0.95\). "False positive 3% when not present": \(P(A\mid B^c)=0.03\). Note the 95% and the 3% condition on <i>opposite</i> causes — they live on different rows, never add them.</p>
+  <p><b>Step 3 — denominator.</b> Positives come from two piles:</p>
   $$
-  P(B\mid A)
-  =\frac{0.95\cdot 0.018}{0.95\cdot 0.018+0.03\cdot 0.982}
-  =\frac{0.0171}{0.0171+0.02946}
-  \approx 0.367
+  P(A)=\underbrace{0.95\cdot 0.018}_{\text{sick, detected}}+\underbrace{0.03\cdot 0.982}_{\text{healthy, false alarm}}=0.0171+0.02946=0.04656.
   $$
-  <p>Official: <b>b) 37%</b>. Option c is the sensitivity \(P(A\mid B)\). That is the trap. In 10&nbsp;000 people, about 180 are infected and 171 of those test positive. About 9&nbsp;820 are healthy and 295 of those still test positive. Most of the positives are healthy. Rare disease, noisy test: the false-positive pile wins.</p>
+  <p><b>Step 4 — divide.</b></p>
+  $$
+  P(B\mid A)=\frac{0.0171}{0.04656}\approx 0.367.
+  $$
+  <p>Official: <b>b) 37%</b>. Option c is the sensitivity \(P(A\mid B)\) — step 2 without steps 3–4. Sanity in people, not decimals: in 10&nbsp;000 people, about 180 are infected and 171 of those test positive. About 9&nbsp;820 are healthy and 295 of those still test positive. Most of the positives are healthy — rare disease, noisy test, the false-positive pile wins. Whenever the prior is tiny, expect the posterior far below the sensitivity.</p>
 
   <div class="q">
     <p class="src">Written exam · 20 Jan 2020 · Q2 · 2 pt</p>
@@ -98,12 +120,13 @@
       <li>(b) What is the probability that a car that has passed the test was painted by machine \(M_3\)? [1 pt]</li>
     </ul>
   </div>
-  <p>100 cars a day. Priors \(P(M_1)=0.30\), \(P(M_2)=0.45\), \(P(M_3)=0.25\). Let \(A=\) pass. Then \(P(A\mid M_1)=0.85\), \(P(A\mid M_2)=0.92\), \(P(A\mid M_3)=0.60\).</p>
-  <p>(a) is the denominator of Bayes, i.e. total probability:</p>
+  <p><b>Step 1 — name.</b> \(A =\) "passes". Causes \(M_1,M_2,M_3\) (three, not two — the denominator gets three terms).</p>
+  <p><b>Step 2 — priors from counts.</b> 30 + 45 + 25 = 100 cars a day, so \(P(M_1)=0.30\), \(P(M_2)=0.45\), \(P(M_3)=0.25\). Likelihoods: \(P(A\mid M_1)=0.85\), \(P(A\mid M_2)=0.92\), \(P(A\mid M_3)=0.60\). ("85% of cars painted by M1 pass" conditions on the machine: \(P(A\mid M_1)\), not \(P(M_1\mid A)\).)</p>
+  <p><b>(a) is step 3 of the method — total probability:</b></p>
   $$P(A)=0.30\cdot 0.85+0.45\cdot 0.92+0.25\cdot 0.60=0.255+0.414+0.150=0.819.$$
-  <p>(b) is the posterior for the worst machine:</p>
-  $$P(M_3\mid A)=\frac{0.25\cdot 0.60}{0.819}=\frac{0.150}{0.819}=0.18.$$
-  <p>Official: \(0.819\) and \(0.18\). If you skip (a) and divide \(0.60\) by something else, you lose both points.</p>
+  <p><b>(b) is step 4 — and it reuses (a).</b> Never recompute the denominator:</p>
+  $$P(M_3\mid A)=\frac{0.25\cdot 0.60}{0.819}=\frac{0.150}{0.819}\approx 0.18.$$
+  <p>Official: \(0.819\) and \(0.18\). Exam tactic: (a) and (b) are one Bayes split across two subparts — (b) without (a) is impossible, so if you blank on (a), write the denominator formula anyway for method marks.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 (same as resit 24 Jan 2020) · 1a · 0.3 pt · one correct</p>
@@ -115,13 +138,17 @@
       <li>d) 0.28</li>
     </ul>
   </div>
-  <p>Read the 15% carefully. That is \(P(E^c\mid S^c)=0.15\), so \(P(E\mid S^c)=0.85\). And \(P(E\mid S)=0.80\). You want \(P(S^c\mid E)\), not \(P(E\mid S^c)\).</p>
+  <p><b>Step 1 — name.</b> Observed \(E =\) "has experience". Hidden \(S^c =\) "unsatisfactory". You want \(P(S^c\mid E)\).</p>
+  <p><b>Step 2 — translate, carefully.</b> "80% of satisfactory had experience" is straight: \(P(E\mid S)=0.80\). But "15% of unsatisfactory had <i>no</i> experience" is \(P(E^c\mid S^c)=0.15\) — the <i>complement</i> of what the formula needs. Convert immediately:</p>
+  $$P(E\mid S^c)=1-P(E^c\mid S^c)=1-0.15=0.85.$$
+  <p>Priors: \(P(S)=0.75\), \(P(S^c)=0.25\). Rule: whenever the paper says "had no X" / "did not", flip it to the positive event before listing — plugging 0.15 in as \(P(E\mid S^c)\) is the designed trap.</p>
+  <p><b>Steps 3–4.</b></p>
   $$
   P(E)=0.80\cdot 0.75+0.85\cdot 0.25=0.600+0.2125=0.8125,
   \qquad
   P(S^c\mid E)=\frac{0.85\cdot 0.25}{0.8125}=0.2615\approx 0.26.
   $$
-  <p>Official: <b>c) 0.26</b>. Option b is the prior \(P(S^c)\). The 15% is the trap if you plug it in as \(P(E\mid S^c)\).</p>
+  <p>Official: <b>c) 0.26</b>. Option b is the prior \(P(S^c)\) — ignoring the evidence entirely.</p>
 
   <div class="q">
     <p class="src">Final exam · 7 Nov 2022 · 1a · 0.25 pt · one correct · no official key</p>
@@ -133,14 +160,20 @@
       <li>(d) 0.65</li>
     </ul>
   </div>
-  <p>This one only asks the denominator. Let \(F=\) followed, \(A=\) pass. \(P(F)=0.65\), \(P(A\mid F)=0.75\), \(P(A\mid F^c)=0.40\).</p>
+  <p>This one asks <i>only</i> the denominator — steps 1–3, then stop. \(F =\) followed, \(A =\) pass. \(P(F)=0.65\), \(P(A\mid F)=0.75\), \(P(A\mid F^c)=0.40\):</p>
   $$P(A)=0.65\cdot 0.75+0.35\cdot 0.40=0.4875+0.140=0.6275\approx 0.63.$$
-  <p><span class="tag">derived</span> <b>(c) 0.63</b>. Option (d) is the prior. There is no official key for November 2022; this is the arithmetic of the printed numbers.</p>
+  <p><span class="tag">derived</span> <b>(c) 0.63</b>. Option (d) is the prior \(P(F)\) — no weighting by pass rates. Lesson: some years the whole question is step 3. There is no official key for November 2022; this is the arithmetic of the printed numbers.</p>
 
   <h3>Valid ACF, WSS, ergodic, discrete vs continuous</h3>
-  <p>A random variable is one number. A process is a whole waveform per outcome of the experiment. One recording is one realization, not the process.</p>
-  <p>Wide-sense stationary: constant mean, and the autocorrelation depends only on the lag, not on absolute time. Ergodic: one infinitely long realization already contains the ensemble (time average = ensemble average, <i>and</i> the variance of that estimator goes to 0). Stationary does not imply ergodic. The lecture counterexample is \(X(t)=A\) with \(A\) random: WSS, not ergodic in the mean, because each realization is a different horizontal line.</p>
-  <p>Valid autocorrelation, three tests in order: even (\(r[-\ell]=r[\ell]\) for a real process); \(r[0]\ge|r[\ell]|\); the DTFT \(P(e^{j\theta})=\sum r[\ell]e^{-j\ell\theta}\) never negative.</p>
+  <p><b>Words first — they are the MC options.</b> A random variable is one number. A random process is a whole waveform per outcome of the experiment. One recording is one <i>realization</i> — one picture is one realization, not the process. Wide-sense stationary (WSS): constant mean, and autocorrelation depending only on the lag, not on absolute time. Ergodic: one infinitely long realization already contains the ensemble — time average equals ensemble average <i>and</i> the variance of that time-average estimator goes to 0. Stationary does <i>not</i> imply ergodic. The lecture counterexample is \(X(t)=A\) with \(A\) random: WSS, but not ergodic in the mean, because each realization is a different flat line and no single line learns the ensemble mean.</p>
+  <p><b>Notation.</b> Autocorrelation at lag \(l\): \(r[l]=E[x[n]\,x[n-l]]\). So \(r[0]=E[x^2]\) is the average power, and \(r[1]\) is how much a sample resembles its neighbour. On a stem plot the horizontal axis is the lag \(l\); the center stem (\(l=0\)) is the power.</p>
+  <p><b>Three tests, in order, each with its why:</b></p>
+  <ol>
+    <li><b>Even.</b> \(r[-l]=E[x[n]x[n+l]]=r[l]\) — shift the time index and it is the same expectation. For a real process the plot must mirror. No mirror: dead on sight.</li>
+    <li><b>Max at zero.</b> \(|r[l]|\le r[0]\) (Cauchy–Schwarz: a signal resembles a shifted copy of itself at most as much as it resembles itself). The center stem must be the tallest. Any taller side stem: dead.</li>
+    <li><b>Spectrum never negative.</b> \(P(e^{j\theta})=\sum_l r[l]e^{-jl\theta}\ge 0\) — it is power per frequency, and negative power is impossible. Hand check at \(\theta=\pi\): \(e^{-jl\pi}=(-1)^l\), and \(\pm l\) pair up, so \(P(\pi)=r[0]-2r[1]+2r[2]-2r[3]+\cdots\). If that alternating sum is negative: dead.</li>
+  </ol>
+  <p>Apply in order, stop at the first failure — that is the fastest path through six options.</p>
 
   <div class="q">
     <p class="src">Written exam · 20 Jan 2020 · 1a · 0.25 pt · one correct</p>
@@ -155,7 +188,12 @@
       <li>F. All.</li>
     </ul>
   </div>
-  <p>\(r_A\): even, but \(|r[1]|&gt;r[0]\). Dead. \(r_D\): not even. Dead. \(r_C\): even and \(r[0]\) is the max, so the first two tests pass. At \(\theta=\pi\), \(P=r[0]-2r[1]+2r[2]-2r[3]=2.5-4+2-1=-0.5\). Negative spectrum, not a valid ACF. Only \(r_B\) survives. Official: <b>A</b>. The third test is the one people skip.</p>
+  <p><b>\(r_D\): fails test 1.</b> Not a mirror — invalid before any arithmetic. That kills B, D, E immediately.</p>
+  <p><b>\(r_A\): passes test 1, fails test 2.</b> Even, but a side stem is taller than the center (\(|r[1]|&gt;r[0]\)). This is the option that punishes "even is enough" — checking the mirror and stopping. That kills C and F.</p>
+  <p><b>\(r_C\): passes tests 1–2, fails test 3.</b> Even, center tallest — so the first two tests say yes. Read the stems (\(r[0]=2.5\), \(r[1]=2\), \(r[2]=1\), \(r[3]=0.5\)) and run the \(\theta=\pi\) check:</p>
+  $$P(\pi)=2.5-2\cdot 2+2\cdot 1-2\cdot 0.5=2.5-4+2-1=-0.5&lt;0.$$
+  <p>Negative power: impossible, not a valid ACF. This is the option that punishes "two tests are enough".</p>
+  <p><b>\(r_B\): passes all three.</b> Only survivor. Official: <b>A</b>. What to write: one line per candidate naming the test it fails — that is the full answer.</p>
 
   <div class="q">
     <p class="src">Retake · 21 Jan 2019 · 1a · 0.5 pt · one or two correct</p>
@@ -167,7 +205,8 @@
       <li>D. Let \(X\) be the time it takes for you to get to university in the morning.</li>
     </ul>
   </div>
-  <p>Weight and commute time are continuous. A count of fours is discrete. A phone number is a discrete label (finite set of digit strings), even though it looks like a large integer. Official: <b>B and C</b>. This paper allowed two letters; extra wrong letters cost −0.25.</p>
+  <p><b>Rule.</b> Discrete = the values form a countable list (each outcome has its own probability bar). Continuous = any value in an interval (only intervals have probability). Weight (A) and commute time (D) are intervals: continuous. Count of fours (B) is \(0,1,\dots,n\): discrete.</p>
+  <p><b>The trap is C.</b> A phone number <i>looks</i> like a huge integer but it is a label from a finite list of digit strings — countable, so discrete. "Large" is not "continuous". Official: <b>B and C</b>. This paper allowed two letters with −0.25 per extra wrong letter: mark both only if sure of both; a sure single letter beats a guessed pair.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 1b · 0.3 pt · one correct</p>
@@ -179,7 +218,7 @@
       <li>d) Each picture represents a random process, and the color of each pixel is a realization of the random process, hence a random signal.</li>
     </ul>
   </div>
-  <p>0–255 is discrete, so (a) is false. One picture is one realization of the process (the “signal”), not the process itself, so (d) swaps the words. WSS is not given. Official: <b>b</b>.</p>
+  <p>Map the vocabulary first: the process = the whole infinite set with its statistics; one picture = one realization = one random signal. Then kill: <b>(a)</b> 0–255 integers are a finite list → discrete, not continuous. <b>(d)</b> swaps the words — it calls each picture a process. <b>(c)</b> WSS needs a constant mean and lag-only correlation, and nothing in the stem gives you either. Leftover: official <b>b</b>. When a question is pure vocabulary, define the three words first and the options kill themselves.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 1c · 0.3 pt · one correct</p>
@@ -191,15 +230,36 @@
       <li>d) None of the above.</li>
     </ul>
   </div>
-  <p>Fair dice, iid rolls: every realization has the same statistics as the ensemble. Official: <b>b</b>. Contrast the random-constant process \(X(t)=A\), which is the “not ergodic” option on other papers.</p>
+  <p>Fair dice, iid rolls: every single infinite sequence has the same statistics (mean 3.5, same variance) as the ensemble across dice — one realization teaches you everything, so ergodic in mean <i>and</i> variance. Official: <b>b</b>. Memorize the pair, not the letter: <b>iid rolls → ergodic; random constant \(X(t)=A\) → stationary but not ergodic.</b> The exam alternates which one it shows you.</p>
 
-  <h2 id="b2">Block 2 · freeze the data, pick \(\theta\)</h2>
+
+<h2 id="b2">Block 2 · freeze the data, pick \(\theta\)</h2>
+
+  <h3>Notation for this block</h3>
+  <table>
+    <tr><th>Object</th><th>Symbol</th><th>Meaning</th></tr>
+    <tr><td>Parameter</td><td>\(\theta\) (or \(\lambda, A\))</td><td>classical: a fixed unknown number — <i>not</i> random, <i>not</i> a function of the data</td></tr>
+    <tr><td>Data</td><td>\(\mathbf{x}=(x_0,\dots,x_{N-1})\)</td><td>random: what you observed</td></tr>
+    <tr><td>Likelihood</td><td>\(p(\mathbf{x};\theta)\)</td><td>the PDF as a <i>function of \(\theta\)</i> with the data frozen. Semicolon = classical, no prior</td></tr>
+    <tr><td>Log-likelihood</td><td>\(\ln p(\mathbf{x};\theta)\)</td><td>what you differentiate (log is monotone, same maximizer)</td></tr>
+    <tr><td>Score</td><td>\(\partial\ln p/\partial\theta\)</td><td>its zero is the likelihood equation</td></tr>
+    <tr><td>MLE</td><td>\(\hat\theta_{\mathrm{ML}}\)</td><td>the \(\theta\) that maximizes the likelihood — a recipe in the data, hence random</td></tr>
+  </table>
+  <p>Bar vs semicolon: \(p(\mathbf{x};\theta)\) is classical (no prior exists). \(p(\mathbf{x}\mid\theta)\) is Bayesian (a prior \(p(\theta)\) exists, next section). Same formula, different claim about \(\theta\). Mixing them on the script is a free point lost.</p>
+  <p>The word "support" means where the PDF is nonzero (e.g. \(x\ge 0\)). If the support <i>moves with \(\theta\)</i> (e.g. \([0,\theta]\)), the maximizer sits on the boundary and the derivative is not zero — look at the function instead. If the support is fixed, differentiate.</p>
 
   <h3>Maximum likelihood</h3>
   <div class="why">
-    <p>You never see \(\theta\). You see noisy data that depend on \(\theta\). Freeze the dataset you actually got. The PDF as a function of \(\theta\) is the likelihood. Pick the \(\theta\) that makes this dataset most plausible. In practice: write the joint, take \(\ln\), differentiate, set to 0. If the support of the PDF moves with \(\theta\), do not differentiate. Look at the function.</p>
+    <p>You never see \(\theta\). You see noisy data that depend on \(\theta\). Freeze the dataset you actually got. The PDF as a function of \(\theta\) is the likelihood. Pick the \(\theta\) that makes this dataset most plausible.</p>
   </div>
-  <p>IID samples: the joint is a product, the log is a sum. Semicolon \(p(x;\theta)\) is classical (no prior). Bar \(p(x\mid\theta)\) is Bayesian. Mixing them is a free point lost.</p>
+  <p><b>Method, every time — four lines on the script:</b></p>
+  <ol>
+    <li><b>Joint.</b> IID \(\Rightarrow\) product: \(p(\mathbf{x};\theta)=\prod_n p(x_n;\theta)\). Write it — they mark formulation.</li>
+    <li><b>Log.</b> Product \(\Rightarrow\) sum. Drop constants that do not depend on \(\theta\).</li>
+    <li><b>Score = 0.</b> Differentiate in \(\theta\) (the data are frozen numbers), set to 0, solve.</li>
+    <li><b>Max check.</b> Second derivative &lt; 0 (interior max), or boundary argument if the support moves with \(\theta\).</li>
+  </ol>
+  <p>Sanity per family: a rate is one over a mean time (\(\lambda=1/\bar x\)); a scale of \(x^2\) comes with a square root. If your answer has the wrong shape, re-derive — do not box it.</p>
 
   <div class="q">
     <p class="src">Retake · 21 Jan 2019 · 2a · 1 pt</p>
@@ -216,7 +276,7 @@
   \qquad\Rightarrow\qquad
   \hat\lambda_{\mathrm{ML}}=\frac{N}{\sum_i x_i}=\frac{1}{\bar x}.$$
   <p><b>Step 4 — max check.</b> Second derivative \(-N/\lambda^2&lt;0\), so it is a maximum, and it is interior (\(\lambda&gt;0\), support \(x\ge 0\) does not move with \(\lambda\)).</p>
-  <p>Official: that formula. Sanity: a rate is one over a mean time, so \(1/\bar x\) is what you expect. For finite \(N&gt;1\) it is biased (\(E[\hat\lambda]=N\lambda/(N-1)\), because \(1/\sum x_i\) is inverse-gamma). They still want the MLE, not the unbiased cousin \((N-1)/\sum x_i\). What loses the point here is writing the joint as a sum, or differentiating \(e^{-\lambda x}\) without the \(N\ln\lambda\) term.</p>
+  <p>Official: that formula. Sanity holds (rate = 1/mean). For finite \(N&gt;1\) it is biased (\(E[\hat\lambda]=N\lambda/(N-1)\), because \(1/\sum x_i\) is inverse-gamma) — they still want the MLE, not the unbiased cousin \((N-1)/\sum x_i\). What loses the point here is writing the joint as a sum, or differentiating \(e^{-\lambda x}\) without the \(N\ln\lambda\) term.</p>
 
   <div class="q">
     <p class="src">Written exam · 4 Nov 2019 · 3a · 1 pt</p>
@@ -224,14 +284,14 @@
     $$p(x;\theta)=\frac{x}{\theta^2}\exp\left[-\frac{x^2}{2\theta^2}\right],\qquad x\ge 0.$$
     <p>Find the maximum likelihood estimator for the parameter \(\theta\).</p>
   </div>
-  <p><b>Step 1 — log-likelihood, term by term.</b> Take \(\ln\) of one sample: \(\ln x-2\ln\theta-x^2/(2\theta^2)\). Sum over \(N\) iid samples (the \(\sum\ln x[n]\) pile does not depend on \(\theta\), so it dies on differentiation, but write it — they mark formulation):</p>
+  <p><b>Step 1–2 — log-likelihood, term by term.</b> Take \(\ln\) of one sample: \(\ln x-2\ln\theta-x^2/(2\theta^2)\). Sum over \(N\) iid samples. The \(\sum\ln x[n]\) pile does not depend on \(\theta\) so it dies on differentiation — but <i>write it</i>, they mark formulation:</p>
   $$\ln p(\mathbf{x};\theta)=\sum_{n=0}^{N-1}\ln x[n]-2N\ln\theta-\frac{1}{2\theta^2}\sum_{n=0}^{N-1}x^2[n].$$
-  <p><b>Step 2 — score.</b> Differentiate in \(\theta\):</p>
+  <p><b>Step 3 — score.</b> Differentiate in \(\theta\) (watch the chain rule on \(1/\theta^2\)):</p>
   $$\frac{\partial}{\partial\theta}\ln p=-\frac{2N}{\theta}+\frac{1}{\theta^3}\sum_n x^2[n]\stackrel{!}{=}0.$$
-  <p><b>Step 3 — solve.</b> Multiply by \(\theta^3\) (\(\theta&gt;0\)): \(-2N\theta^2+\sum x^2[n]=0\), so</p>
+  <p><b>Solve.</b> Multiply by \(\theta^3\) (\(\theta&gt;0\)): \(-2N\theta^2+\sum x^2[n]=0\), so</p>
   $$\hat\theta_{\mathrm{ML}}=\sqrt{\frac{1}{2N}\sum_{n=0}^{N-1}x^2[n]}.$$
-  <p>Keep the positive root (\(\theta&gt;0\) is a scale). Second derivative at the solution is negative — interior max, support \(x\ge 0\) does not move with \(\theta\).</p>
-  <p>Official: that square root. Now the cousin, same family, different parametrization — read the exponent before you copy last year’s answer:</p>
+  <p><b>Step 4.</b> Keep the positive root (\(\theta&gt;0\) is a scale). Second derivative at the solution is negative — interior max, support \(x\ge 0\) fixed.</p>
+  <p>Official: that square root. Sanity holds (\(\theta^2\) sits under a mean square). Now the cousin below — same family, different parametrization. Read the exponent before you copy last year's answer.</p>
 
   <div class="q">
     <p class="src">Practice exam · 28 Oct 2021 · 2b · 1 pt</p>
@@ -239,9 +299,9 @@
     $$p(x[n])=\frac{x}{\theta}\exp\left(-\frac{x^2}{2\theta}\right),\qquad n=0,1,\dots,N-1,$$
     <p>find an estimator for the parameter \(\theta\).</p>
   </div>
-  <p>Here \(\theta\) already sits where \(\theta^2\) sat in 2019: \(p=x/\theta\cdot\exp(-x^2/(2\theta))\). Same three steps — joint, \(\ln\), score:</p>
+  <p><b>Compare with 2019 first.</b> There: \(\theta^2\) in the denominator and in the exponent. Here: bare \(\theta\) in both. Same three steps — joint, \(\ln\), score:</p>
   $$\ln p=\sum\ln x[n]-N\ln\theta-\frac{1}{2\theta}\sum x^2[n],\qquad -\frac{N}{\theta}+\frac{\sum x^2[n]}{2\theta^2}=0,$$
-  <p>so official MLE \(\hat\theta=(1/(2N))\sum x^2[n]\), <b>no square root</b>. If you memorised “Rayleigh → square root” you lose this point. The exam deliberately re-parametrises the same family to test whether you derive or recall. Also note: \(\mathbb{E}[x^2]=2\theta\) here vs \(2\theta^2\) in the 2019 version — that is what feeds the CRLB differently.</p>
+  <p>so official MLE \(\hat\theta=(1/(2N))\sum x^2[n]\), <b>no square root</b>. If you memorised "Rayleigh → square root" you lose this point: the exam deliberately re-parametrises the same family to test whether you derive or recall. Side effect for the CRLB: \(\mathbb{E}[x^2]=2\theta\) here vs \(2\theta^2\) in the 2019 version — different Fisher, different bound.</p>
 
   <div class="q">
     <p class="src">Final exam · 7 Nov 2022 · 2d · 0.5 pt · no official key</p>
@@ -251,13 +311,13 @@
     $$p(\mathbf x;\theta)=\frac{1}{2\pi\sigma^2}\exp\left(-\frac{1}{2\sigma^2}\Big[(x_1-A\cos\theta)^2+(x_2-A\sin\theta)^2\Big]\right).$$
     <p>Find the maximum likelihood estimator of the parameter \(\theta\).</p>
   </div>
-  <p><b>Step 1 — expand the square.</b> \(A&gt;0\), \(\sigma^2\) known, so the prefactor \(1/(2\pi\sigma^2)\) is a constant. Inside the exponent:</p>
+  <p><b>Step 1 — isolate the \(\theta\) piece.</b> \(A&gt;0\), \(\sigma^2\) known, so the prefactor is a constant. Expand the square:</p>
   $$(x_1-A\cos\theta)^2+(x_2-A\sin\theta)^2=x_1^2+x_2^2+A^2-2A(x_1\cos\theta+x_2\sin\theta).$$
-  <p>Only the last term depends on \(\theta\). Maximising the likelihood \(\Leftrightarrow\) minimising that quadratic \(\Leftrightarrow\) <b>maximising</b> \(x_1\cos\theta+x_2\sin\theta\).</p>
+  <p>Only the last term depends on \(\theta\). Maximising the likelihood \(\Leftrightarrow\) minimising that quadratic \(\Leftrightarrow\) <b>maximising</b> \(x_1\cos\theta+x_2\sin\theta\). Everything else is a constant — cross it out mentally.</p>
   <p><b>Step 2 — phasor form.</b> Any \(a\cos\theta+b\sin\theta\) is \(R\cos(\theta-\phi)\) with \(R=\sqrt{a^2+b^2}\), \(\phi=\mathrm{atan2}(b,a)\). Here \(a=x_1\), \(b=x_2\):</p>
   $$x_1\cos\theta+x_2\sin\theta=R\cos(\theta-\phi),\qquad R=\sqrt{x_1^2+x_2^2},\ \phi=\mathrm{atan2}(x_2,x_1).$$
   <p><b>Step 3 — peak.</b> \(\cos\) peaks at 0, so \(\hat\theta_{\mathrm{ML}}=\phi=\mathrm{atan2}(x_2,x_1)\). <span class="tag">derived</span></p>
-  <p><b>Trap.</b> Setting \(\partial/\partial\theta=0\) gives \(-x_1\sin\theta+x_2\cos\theta=0\), i.e. \(\tan\theta=x_2/x_1\). That equation has <b>two</b> solutions \(\phi\) and \(\phi+\pi\) (one is the max, one the min). \(\arctan(x_2/x_1)\) returns one number in \((-\pi/2,\pi/2]\) and loses the quadrant — e.g. \((x_1,x_2)=(-1,-1)\) is angle \(-3\pi/4\), but \(\arctan(1)=\pi/4\). Two-argument \(\mathrm{atan2}\) keeps the signs. On the script, write the \(R\cos(\theta-\phi)\) line: that is the line they mark.</p>
+  <p><b>Trap — why not \(\arctan\).</b> Setting \(\partial/\partial\theta=0\) gives \(\tan\theta=x_2/x_1\), which has <b>two</b> solutions \(\phi\) and \(\phi+\pi\) (max and min). \(\arctan(x_2/x_1)\) returns one number in \((-\pi/2,\pi/2]\) and loses the quadrant: e.g. \((x_1,x_2)=(-1,-1)\) is angle \(-3\pi/4\), but \(\arctan(1)=\pi/4\) — off by \(\pi\). Two-argument \(\mathrm{atan2}\) keeps the signs of \(x_1,x_2\). On the script, the \(R\cos(\theta-\phi)\) line is the line they mark; it proves you picked the max, not just a stationary point.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 2b · 0.3 pt · one correct</p>
@@ -268,12 +328,15 @@
       <li>(c) For a transformed parameter \(\alpha=\psi(\theta)\), where \(\psi(\cdot)\) is a one-to-one mapping, the maximum likelihood estimate \(\hat\theta_{\mathrm{ML}}\) can be obtained as \(\hat\theta_{\mathrm{ML}}=\psi^{-1}(\hat\alpha_{\mathrm{ML}})\) where \(\psi^{-1}(\cdot)\) is the inverse mapping of \(\psi(\cdot)\) and \(\hat\alpha_{\mathrm{ML}}\) is the maximum likelihood estimate of the transformed parameter \(\alpha\), respectively.</li>
     </ul>
   </div>
-  <p>Official: <b>c</b> (invariance). (a) maximises in \(\theta\), not in \(x\). (b) the asymptotic law is Gaussian, not uniform.</p>
+  <p>Three claims, three verdicts. <b>(a)</b> maximises in the wrong variable: the likelihood is maximised over \(\theta\) with the data frozen, not over \(x\). <b>(b)</b> wrong law: asymptotically the MLE is <i>Gaussian</i> \(\mathcal{N}(\theta,\mathcal{I}^{-1})\), not uniform. <b>(c)</b> is invariance — maximise in the convenient parametrization, then transform. Official: <b>c</b>. Invariance in one sentence: if \(\alpha=e^A\) and \(\hat A=\bar x\), then \(\hat\alpha=e^{\bar x}\) with no new likelihood needed.</p>
 
   <h3>Fisher information and the CRLB</h3>
-  <p>Unbiased estimators cannot be arbitrarily sharp. Fisher information \(\mathcal I(\theta)\) is the expected curvature of the log-likelihood. The Cramér–Rao bound says \(\mathrm{Var}\ge 1/\mathcal I\), not \(\ge\mathcal I\). For \(N\) iid samples, \(\mathcal I_N=N\,i(\theta)\), so the bound shrinks as \(1/N\).</p>
-  $$\mathcal I(\theta)=-E\left[\frac{\partial^2\ln p}{\partial\theta^2}\right],\qquad\mathrm{Var}(\hat\theta)\ge\frac1{\mathcal I(\theta)}$$
-  <p>An unbiased estimator that attains the bound is efficient, hence the MVUE. Attaining the bound is the identity \(\partial\ln p/\partial\theta=\mathcal I(\theta)(g(\mathbf x)-\theta)\). If the score does not factor that way, no finite-sample efficient estimator. You can still quote the bound.</p>
+  <p><b>Notation.</b> Fisher information \(\mathcal{I}(\theta)\) is the expected curvature of the log-likelihood — how sharply the likelihood peaks at the truth. Sharp peak = informative data = low bound. Two forms, same number:</p>
+  $$\mathcal{I}(\theta)=\mathbb{E}\left[\left(\frac{\partial\ln p}{\partial\theta}\right)^2\right]=-\mathbb{E}\left[\frac{\partial^2\ln p}{\partial\theta^2}\right].$$
+  <p>The second is almost always easier: differentiate twice, take expectation, flip sign. \(\mathcal{I}(\theta)\ge 0\) — Fisher is a positive number. (The <i>expected second derivative itself</i> is negative; the 2022 2a trap calls Fisher "strictly negative".) The Cramér–Rao bound: every unbiased estimator has</p>
+  $$\mathrm{Var}[\hat\theta]\ge\frac{1}{\mathcal{I}(\theta)}\qquad\text{(not }\ge\mathcal{I}\text{ — the reciprocal).}$$
+  <p>For \(N\) iid samples Fisher adds: \(\mathcal{I}_N=N\cdot i(\theta)\), so the bound shrinks as \(1/N\). An unbiased estimator that <i>attains</i> the bound is <b>efficient</b>, hence the MVUE. The attainment test is the identity \(\partial\ln p/\partial\theta=\mathcal{I}(\theta)(g(\mathbf{x})-\theta)\): if the score factors that way, \(g\) is efficient; if not, no finite-sample efficient estimator exists (you still quote the bound).</p>
+  <p><b>Regularity — read before grinding.</b> The proof passes \(d/d\theta\) under the integral, which needs the support fixed. If you see \(x\in[0,\theta]\) or \(x\ge\theta\): stop. No CRLB, MLE is \(\max\)/\(\min\) on the boundary (previous section's uniform). Writing Fisher there earns zero.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 2a · 0.3 pt · one correct</p>
@@ -284,7 +347,7 @@
       <li>(c) An estimator whose variance is lower than the Cramer Rao lower bound is called efficient.</li>
     </ul>
   </div>
-  <p>Official: <b>b</b>. (a) is the regularity trap below. (c) is backwards: efficient means you <i>attain</i> the bound, you cannot go below it.</p>
+  <p><b>(a)</b> is the regularity trap: \([0,\theta]\) support kills the bound (next question). <b>(c)</b> is backwards: efficient means you <i>attain</i> the bound — below it is impossible under regularity. <b>(b)</b>: \(\mathcal{I}_N=N\,i\) so the bound is \(1/(Ni)\) — linear in \(1/N\). Official: <b>b</b>.</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 2e · 0.5 pt</p>
@@ -292,7 +355,7 @@
     $$p(x;\theta)=\begin{cases}(2/\theta)\,x,&amp;0\le x\le\theta,\\ 0,&amp;\text{else}\end{cases}$$
     <p>be the probability density function of an observation \(X\). Check whether or not it is possible to derive the Cramer Rao lower bound. In case it is possible, derive the Cramer Rao lower bound. If it is not possible, justify why.</p>
   </div>
-  <p>The support is \([0,\theta]\), which depends on \(\theta\). Regularity fails: you cannot pass \(d/d\theta\) under the integral. Official: <b>cannot</b>. Do not grind Fisher. Uniform\([0,\theta]\) is the same trap; the MLE is \(\max_i x_i\), on the boundary, no derivative.</p>
+  <p><b>Step 1 — look at the support, not the formula.</b> The PDF lives on \([0,\theta]\) — the upper limit <i>is</i> the parameter. Regularity fails: \(d/d\theta\int_0^\theta\neq\int_0^\theta\partial/\partial\theta\) (Leibniz leaves boundary terms). <b>Step 2 — write the one sentence.</b> Official: <b>"cannot — the domain of integration depends on \(\theta\), regularity violated."</b> That sentence is the full 0.5 pt; any Fisher computation after it earns nothing. Same trap as \(\mathrm{Unif}[0,\theta]\) (MLE \(=\max_i x_i\), boundary, no derivative).</p>
 
   <div class="q">
     <p class="src">Written exam · 4 Nov 2019 · 3b · 1 pt</p>
@@ -300,14 +363,17 @@
     $$p(x;\theta)=\frac{x}{\theta^2}\exp\left[-\frac{x^2}{2\theta^2}\right],\qquad x\ge 0.$$
     <p>Find the Cramer-Rao Lower Bound for the MLE.</p>
   </div>
-  <p><b>Step 1 — second derivative.</b> From 3a, score \(-2N/\theta+(1/\theta^3)\sum x^2[n]\). Differentiate again:</p>
+  <p><b>Step 0 — regularity passes</b> (support \(x\ge 0\) fixed), so proceed. <b>Step 1 — second derivative.</b> From 3a, score \(-2N/\theta+(1/\theta^3)\sum x^2[n]\). Differentiate again:</p>
   $$\frac{\partial^2}{\partial\theta^2}\ln p=\frac{2N}{\theta^2}-\frac{3}{\theta^4}\sum_n x^2[n].$$
-  <p><b>Step 2 — expectation.</b> Fisher is \(-\mathbb{E}[\cdot]\). You need \(\mathbb{E}[x^2]\). Either integrate \(\int_0^\infty x^2\cdot(x/\theta^2)e^{-x^2/(2\theta^2)}dx=2\theta^2\), or notice \(x/\theta\) is standard Rayleigh (scale 1), whose second moment is 2. So \(\mathbb{E}[\sum x^2]=N\cdot 2\theta^2\):</p>
+  <p><b>Step 2 — expectation.</b> Fisher is \(-\mathbb{E}[\cdot]\). You need \(\mathbb{E}[x^2]\): either integrate \(\int_0^\infty x^2\cdot(x/\theta^2)e^{-x^2/(2\theta^2)}dx=2\theta^2\), or notice \(x/\theta\) is standard Rayleigh (scale 1), whose second moment is 2. So \(\mathbb{E}[\sum x^2]=N\cdot 2\theta^2\):</p>
   $$\mathcal{I}(\theta)=-\frac{2N}{\theta^2}+\frac{3}{\theta^4}\cdot 2N\theta^2=\frac{4N}{\theta^2},\qquad\mathrm{Var}[\hat\theta]\ge\frac{\theta^2}{4N}.$$
-  <p>The published key writes \(\hat\theta^2/(4N)\). <b>Wrong object:</b> the bound is a function of the <i>true</i> parameter, which sets the curvature of the likelihood — you cannot compute it from the estimate. Report \(\theta^2/(4N)\). Bonus: the score is \(-2N/\theta+(1/\theta^3)\sum x^2\), which cannot be factored as \(\mathcal{I}(\theta)(g-\theta)\) with \(g\) free of \(\theta\), so this MLE is <b>not</b> finite-sample efficient (it is only asymptotically efficient).</p>
+  <p><b>Notation trap.</b> The published key writes \(\hat\theta^2/(4N)\) — plugged the <i>estimate</i>. The bound is a function of the <i>true</i> parameter (it is the curvature at the truth; you cannot compute it from data). Report \(\theta^2/(4N)\). <b>Efficiency bonus:</b> the score \(-2N/\theta+(1/\theta^3)\sum x^2\) cannot be factored as \(\mathcal{I}(\theta)(g-\theta)\) with \(g\) free of \(\theta\) — so this MLE is <b>not</b> finite-sample efficient, only asymptotically. That one line is how you answer "is it efficient?" anywhere.</p>
 
   <h3>MMSE is the mean. MAP is the mode.</h3>
-  <p>Classical: \(\theta\) is a fixed unknown. Bayesian: \(\theta\) is drawn from a prior, you update to a posterior \(p(\theta\mid x)\), then you pick one number from that posterior. Square cost → posterior mean (MMSE). Hit-or-miss / uniform cost → posterior mode (MAP). They are different functions unless the posterior is symmetric (Gaussian: mean = mode).</p>
+  <p><b>Notation shift — the bar appears.</b> Classical: \(\theta\) fixed, \(p(\mathbf{x};\theta)\) with a semicolon. Bayesian: \(\theta\) is drawn from a <i>prior</i> \(p(\theta)\), the same formula becomes a <i>likelihood</i> \(p(\mathbf{x}\mid\theta)\) with a bar, and you update:</p>
+  $$p(\theta\mid\mathbf{x})=\frac{p(\mathbf{x}\mid\theta)\,p(\theta)}{p(\mathbf{x})}.$$
+  <p>The denominator does not depend on \(\theta\) — drop it for optimisation. From the posterior you return one number. Which one depends on the cost: square cost → posterior <b>mean</b> (MMSE, \(\mathbb{E}[\theta\mid\mathbf{x}]\)); hit-or-miss/uniform cost → posterior <b>mode</b> (MAP, \(\arg\max p(\theta\mid\mathbf{x})\)). Different functions — unless the posterior is symmetric (Gaussian: mean = median = mode, all three coincide).</p>
+  <p><b>Method.</b> MMSE: integrate (or sum, if \(\theta\) discrete) \(\theta\) against the posterior. MAP: differentiate \(\ln p(\mathbf{x}\mid\theta)+\ln p(\theta)\); if the unconstrained peak falls outside the prior's support, the max is the <i>boundary</i> (project the MLE onto the support).</p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 2d · 0.3 pt · one correct</p>
@@ -318,7 +384,7 @@
       <li>(c) The minimum mean square error estimator and the maximum aposterior estimator will always result in a different estimate.</li>
     </ul>
   </div>
-  <p>Official: <b>b</b>. (a) is MAP. (c) fails for a Gaussian posterior, where mean = mode.</p>
+  <p><b>(a)</b> describes MAP (the mode), not MMSE. <b>(c)</b> says "always differ" — one counterexample kills it: a Gaussian posterior has mean = mode. Official: <b>b</b>. ("Aposterior" is the paper's word for posterior.)</p>
 
   <div class="q">
     <p class="src">Final exam · 7 Nov 2022 · 2f–g · 0.5 + 0.5 pt · no official key</p>
@@ -327,12 +393,12 @@
     <p>2f. Find the minimum-mean square error estimator. Hint: you can use \(\int x^2 e^{-x}\,dx=-e^{-x}(x^2+2x+2)\).</p>
     <p>2g. Find the maximum a posteriori estimator.</p>
   </div>
-  <p>The paper already gave you the posterior — do not re-derive Bayes, start from it. Recognise the shape: \(b^2\theta e^{-b\theta}\) with \(b=x+a\) is Gamma(shape 2, rate \(b\)). Check it integrates to 1: \(\int_0^\infty\theta e^{-b\theta}d\theta=1/b^2\) (substitute \(u=b\theta\)), so \(b^2\) is the normaliser.</p>
+  <p><b>Start from the given posterior — do not re-derive Bayes.</b> Recognise the shape: \(b^2\theta e^{-b\theta}\) with \(b=x+a\) is Gamma(shape 2, rate \(b\)). Check the normaliser: \(\int_0^\infty\theta e^{-b\theta}d\theta=1/b^2\) (substitute \(u=b\theta\)), so \(b^2\) makes it a PDF.</p>
   <p><b>2f — MMSE = mean.</b> Gamma mean is shape/rate. Or grind it with the printed hint (\(\int\theta^2 e^{-b\theta}d\theta=2/b^3\) after \(u=b\theta\)):</p>
   $$\hat\theta_{\mathrm{MMSE}}=\mathbb{E}[\theta\mid x]=b^2\cdot\frac{2}{b^3}=\frac{2}{b}=\frac{2}{x+a}.$$
   <p><b>2g — MAP = mode.</b> \(\ln p(\theta\mid x)=\mathrm{const}+\ln\theta-b\theta\), derivative \(1/\theta-b=0\):</p>
   $$\hat\theta_{\mathrm{MAP}}=\frac{1}{x+a}.$$
-  <p>Mode of Gamma(2, \(b\)) is \(1/b\). They differ because the posterior is <b>skewed</b> (long right tail pulls the mean right of the peak). If the posterior were Gaussian, mean = mode and both answers would coincide — that is the 2d-MCQ connection. <span class="tag">derived</span></p>
+  <p>Mode of Gamma(2, \(b\)) is \(1/b\). They differ because the posterior is <b>skewed</b> (long right tail pulls the mean right of the peak) — and that is exactly the 2d-MCQ connection: symmetric posterior → same answer; skewed → different. <span class="tag">derived</span></p>
 
   <div class="q">
     <p class="src">Resit · 24 Jan 2022 · 2f–h · 0.6 each</p>
@@ -343,16 +409,12 @@
     <p>(If 2f failed, the paper prints a garbled fallback for the two posteriors. Use 2f.)</p>
     <p>2h. Find the maximum a posterior estimator \(\hat X_{\mathrm{MAP}}\) of \(X\) given \(Y\). More specifically, find a threshold \(y_{\mathrm{th}}\) such that a decision on \(X\) depends on whether or not this threshold is exceeded. Hint: \(X\) is discrete, so \(\hat X_{\mathrm{MAP}}=\arg\max_{X\in\{1,-1\}}P[X\mid Y]\). Check the ratio of the two posteriors.</p>
   </div>
-  <p><b>2f — posteriors.</b> Bayes with equal priors \(P(X=1)=P(X=-1)=1/2\). Likelihoods: \(Y\mid X=1\sim\mathcal{N}(1,\sigma^2)\), \(Y\mid X=-1\sim\mathcal{N}(-1,\sigma^2)\). The 1/2 priors cancel:</p>
+  <p><b>2f — posteriors.</b> Bayes with equal priors \(P(X=1)=P(X=-1)=1/2\). Likelihoods: \(Y\mid X=1\sim\mathcal{N}(1,\sigma^2)\), \(Y\mid X=-1\sim\mathcal{N}(-1,\sigma^2)\). The 1/2 priors cancel, so each posterior is its likelihood over the sum — a two-class softmax:</p>
   $$P[X=1\mid Y=y]=\frac{e^{-(y-1)^2/(2\sigma^2)}}{e^{-(y-1)^2/(2\sigma^2)}+e^{-(y+1)^2/(2\sigma^2)}},$$
-  <p>and symmetrically for \(-1\). This is a two-class softmax: the posterior is the likelihood of that class over the sum. (If 2f failed, the paper prints a garbled fallback — use your 2f, not theirs.)</p>
-  <p><b>2g — MMSE = posterior mean, discrete version.</b> \(X\) takes values \(\pm 1\), so the “integral” is a sum:</p>
-  $$\hat X_{\mathrm{MMSE}}=\mathbb{E}[X\mid y]=(+1)P_1+(-1)P_{-1}=P_1-P_{-1}=\frac{e^{-(y-1)^2/(2\sigma^2)}-e^{-(y+1)^2/(2\sigma^2)}}{e^{-(y-1)^2/(2\sigma^2)}+e^{-(y+1)^2/(2\sigma^2)}}.$$
-  <p>Divide top and bottom by \(e^{-(y+1)^2/(2\sigma^2)}\). The exponent difference: \((y-1)^2-(y+1)^2=-4y\), so the ratio is \(e^{2y/\sigma^2}\). Then the printed identity with \(u=y/\sigma^2\):</p>
+  <p>and symmetrically for \(-1\). (If 2f failed, the paper prints a garbled fallback — trust your 2f, not theirs.)</p>
+  <p><b>2g — MMSE = posterior mean, discrete version.</b> \(X\) takes values \(\pm 1\), so the "integral" is a sum: \(\mathbb{E}[X\mid y]=(+1)P_1+(-1)P_{-1}=P_1-P_{-1}\). Divide top and bottom by \(e^{-(y+1)^2/(2\sigma^2)}\); the exponent difference is \((y-1)^2-(y+1)^2=-4y\), so the ratio is \(e^{2y/\sigma^2}\). Then the printed identity with \(u=y/\sigma^2\):</p>
   $$\hat X_{\mathrm{MMSE}}=\frac{e^{2y/\sigma^2}-1}{e^{2y/\sigma^2}+1}=\tanh(y/\sigma^2).$$
-  <p><b>2h — MAP = argmax, threshold.</b> Compare posteriors by their ratio (denominators cancel):</p>
-  $$\frac{P_1}{P_{-1}}=\frac{e^{-(y-1)^2/(2\sigma^2)}}{e^{-(y+1)^2/(2\sigma^2)}}=e^{2y/\sigma^2}\gtrless 1\iff y\gtrless 0.$$
-  <p>So \(\hat X_{\mathrm{MAP}}=\mathrm{sign}(y)\), threshold \(y_{\mathrm{th}}=0\). Official for both. <b>Read the two answers against each other:</b> MMSE is a <i>soft</i> number in \((-1,1)\) (saturates at \(\pm 1\) for large \(|y|/\sigma^2\), near 0 when \(y\approx 0\) — “I am unsure”); MAP is a <i>hard</i> \(\pm 1\) decision. Same sign, different magnitude. That soft-vs-hard contrast is the whole point of asking both.</p>
+  <p><b>2h — MAP = argmax, threshold.</b> Compare posteriors by their ratio (denominators cancel): \(P_1/P_{-1}=e^{2y/\sigma^2}\gtrless 1\iff y\gtrless 0\). So \(\hat X_{\mathrm{MAP}}=\mathrm{sign}(y)\), threshold \(y_{\mathrm{th}}=0\). Official for both. <b>Read the two against each other:</b> MMSE is <i>soft</i> — a number in \((-1,1)\), near 0 when \(y\approx 0\) ("unsure"), saturating at \(\pm 1\) for large \(|y|/\sigma^2\). MAP is <i>hard</i> — \(\pm 1\), decided at 0. Same sign, different magnitude. That soft-vs-hard contrast is the whole point of asking both.</p>
 
   <div class="q">
     <p class="src">Retake · 21 Jan 2019 · 2b–c · after the exponential MLE in 2a</p>
@@ -360,11 +422,12 @@
     $$p(\lambda)=\begin{cases}1/2&amp;0\le\lambda\le 2\\ 0&amp;\text{otherwise.}\end{cases}$$
     <p>Treat \(p(x;\lambda)\) as a conditional \(p(x\mid\lambda)\). (b) Determine the Bayesian MMSE for \(\lambda\): first write the formula specifying each density, then solve it. (c) Using the same information, find the MAP estimator for \(\lambda\). Integrals \(\int x e^{ax}\,dx\) and \(\int x^2 e^{ax}\,dx\) are printed on the paper.</p>
   </div>
-  <p><b>(c) MAP — project, don’t just copy the MLE.</b> The prior is flat (\(1/2\)) on \((0,2)\), so inside that interval maximising the posterior \(\Leftrightarrow\) maximising the likelihood. For one sample, \(\ln p(x\mid\lambda)=\ln\lambda-\lambda x\), score \(1/\lambda-x=0\), unconstrained MLE \(1/x\) (second derivative \(-1/\lambda^2&lt;0\)). Now the boundary: \(\ln\lambda-\lambda x\) is increasing for \(\lambda&lt;1/x\). If \(1/x&gt;2\) (i.e. \(x&lt;1/2\)), it is still increasing on the whole \((0,2]\), so the constrained max is the right endpoint:</p>
+  <p><b>(c) MAP — project, don't just copy the MLE.</b> The prior is flat (\(1/2\)) on \((0,2)\), so inside that interval maximising the posterior \(\Leftrightarrow\) maximising the likelihood. For one sample, \(\ln p(x\mid\lambda)=\ln\lambda-\lambda x\), score \(1/\lambda-x=0\), unconstrained MLE \(1/x\) (second derivative \(-1/\lambda^2&lt;0\)). Now the boundary: \(\ln\lambda-\lambda x\) is increasing for \(\lambda&lt;1/x\). If \(1/x&gt;2\) (i.e. \(x&lt;1/2\)), it is still increasing on the whole \((0,2]\), so the constrained max is the right endpoint:</p>
   $$\hat\lambda_{\mathrm{MAP}}=\begin{cases}2 & x&lt;1/2,\\ 1/x & x\ge 1/2.\end{cases}$$
   <p>For \(N\) samples the unconstrained MLE is \(N/\sum x_i\); project that onto \([0,2]\). The published key writes only \(N/\sum x_i\) and skips the projection — that answer is MAP <i>only when it already lies in</i> \([0,2]\). <b>(b) MMSE</b> is the posterior mean on \([0,2]\): \(\int_0^2\lambda^2 e^{-x\lambda}d\lambda\big/\int_0^2\lambda e^{-x\lambda}d\lambda\). Closed form in ch. 05-bayes; the published last line has \((x+1)^2\) where \(2x^2+2x+1\) should be. See errata — and note the key answers 2b with a one-sample formula despite \(N\) in 2a.</p>
 
   <h3>No noise PDF → least squares</h3>
+  <p><b>Decision rule — which estimator family.</b> The paper gives a signal model \(s[n]\) but <b>no noise PDF</b>: no \(p(\mathbf{x};\theta)\), so MLE, MAP and BLUE are all off the table (each needs a PDF, or at least a covariance). LS needs only the model: minimise residual energy \(J=\sum(x[n]-s[n])^2\). That choice + the one sentence "requires no function for the noise" (official wording) is the 0.5 pt of (a).</p>
   <div class="q">
     <p class="src">Written exam · 20 Jan 2020 · Q4 · 2.5 pt</p>
     <p>Consider the observed data \(x[0],x[1],\dots,x[n]\), which consists of independent identically distributed samples. The data comes from an experiment which generates a signal according to model \(s[n]=A e^{\phi n}\), where the amplitude \(A\) and the power term \(\phi&lt;0\) are to be estimated based on the observed data.</p>
@@ -375,11 +438,10 @@
       <li>(d) Formulate the Gauss-Newton solution for the estimator cost function derived in (c). Clearly show the iterative formulation. [1 pt]</li>
     </ul>
   </div>
-  <p><b>(a) LS, and why.</b> The paper gives a signal model \(s[n]=Ae^{\phi n}\) but <b>no noise PDF</b> — no \(p(\mathbf{x};\theta)\), so MLE/MAP/BLUE are all off the table (each needs a PDF, or at least a covariance). LS needs only the model: minimise residual energy \(J=\sum(x[n]-s[n])^2\). That is the 0.5 pt: name LS + the one sentence “requires no function for the noise” (official wording).</p>
   <p><b>(b) \(\phi\) known → linear in \(A\).</b> One unknown multiplying a known waveform \(h[n]=e^{\phi n}\). Scalar normal equation \(\hat A=(\mathbf{h}^\top\mathbf{x})/(\mathbf{h}^\top\mathbf{h})\):</p>
   $$\hat A_{\mathrm{LS}}=\frac{\sum x[n]e^{\phi n}}{\sum e^{2\phi n}}$$
-  <p>(Key sums \(n=0..N\); match the paper’s indexing, not the reader’s \(N-1\).)</p>
-  <p><b>(c) Both unknown → nonlinear.</b> \(J(\phi,A)=\sum(x[n]-A e^{\phi n})^2\). Nonlinear because \(\phi\) sits inside the exponential — no change of variables linearises both parameters at once. Write the gradient too (it is part d’s input): \(\partial J/\partial A=-2\sum e^{\phi n}(x[n]-Ae^{\phi n})\), \(\partial J/\partial\phi=-2\sum Ane^{\phi n}(x[n]-Ae^{\phi n})\).</p>
+  <p>(Key sums \(n=0..N\); match the paper's indexing, not the reader's \(N-1\).)</p>
+  <p><b>(c) Both unknown → nonlinear.</b> \(J(\phi,A)=\sum(x[n]-A e^{\phi n})^2\). Nonlinear because \(\phi\) sits inside the exponential — no change of variables linearises both parameters at once. Write the gradient too (it is part d's input): \(\partial J/\partial A=-2\sum e^{\phi n}(x[n]-Ae^{\phi n})\), \(\partial J/\partial\phi=-2\sum Ane^{\phi n}(x[n]-Ae^{\phi n})\).</p>
   <p><b>(d) Gauss–Newton vs what the key printed.</b> Gauss–Newton linearises the <i>signal</i> \(\mathbf{s}(\theta)\) about \(\theta_k=(\phi_k,A_k)\): Jacobian row \(n\) is \([A_k n e^{\phi_k n},\ e^{\phi_k n}]\) (derivatives of \(Ae^{\phi n}\) in \(\phi,A\)), then one linear-LS step \(\theta_{k+1}=\theta_k+(H_k^\top H_k)^{-1}H_k^\top(\mathbf{x}-\mathbf{s}(\theta_k))\). Newton–Raphson instead iterates on \(J\) with its Hessian: \(\theta_{k+1}=\theta_k-(\nabla^2 J)^{-1}\nabla J\). The 2020 key printed the <b>Newton</b> form even though the question said Gauss–Newton. On your script, write the one they name; if they name Gauss–Newton, the Jacobian row is the line they mark. Know both — resit 2022 2c explicitly says both are legal.</p>
 
   <div class="q">
@@ -391,9 +453,10 @@
       <li>(c) Only the Gauss-Newton method can be applied for nonlinear least-squares problems but not the Newton-Raphson method.</li>
     </ul>
   </div>
-  <p>Official letter: <b>a</b>, with the 2020 key adding “no longer part of the content.” (b) is the geometry trap: the <i>residual</i> \(\mathbf x-\mathbf H\hat\theta\) is orthogonal to the columns of \(\mathbf H\); \(\hat\theta\) itself lives in that span. (c) is false: both Gauss–Newton and Newton–Raphson are legal.</p>
+  <p><b>(b) is the geometry trap — picture it.</b> The columns of \(\mathbf{H}\) span a subspace; the fitted signal \(\hat{\mathbf{s}}=\mathbf{H}\hat\theta\) <i>lies in</i> it. The <i>residual</i> \(\mathbf{x}-\mathbf{H}\hat\theta\) is what sticks out orthogonally — that orthogonality \(\mathbf{H}^\top(\mathbf{x}-\mathbf{H}\hat\theta)=0\) <i>is</i> the normal equation. So \(\hat\theta\) being "orthogonal to the span" is nonsense; the residual is. <b>(c)</b> is false: both Gauss–Newton and Newton–Raphson are legal. Official letter: <b>a</b> (with the 2020 key noting that topic is "no longer part of the content" — Gauss–Newton itself still is).</p>
 
-  <h2 id="b3">Block 3 · three curves on \([-\pi,\pi]\)</h2>
+
+<h2 id="b3">Block 3 · three curves on \([-\pi,\pi]\)</h2>
   <p>This is about 3 of 10 points. Typical open part: they give you an autocorrelation, or a difference equation. You plot a correlogram, you fit AR(1) with Yule–Walker, you overlay an MA, you quote values at \(0,\pi/2,\pi\). There is also one MC on periodogram / Bartlett / Welch / windows.</p>
   $$P_{\mathrm{cor}}(e^{j\theta})=r[0]+2\sum_{k\ge 1}r[k]\cos(k\theta)$$
   <p>Course AR convention: \(x[n]+a_1 x[n-1]+\cdots=i[n]\), so the denominator is \(|1+a_1 e^{-j\theta}+\cdots|^2\). Getting that sign wrong wrecks the PSD.</p>
